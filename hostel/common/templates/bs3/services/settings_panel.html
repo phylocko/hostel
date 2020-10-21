@@ -1,0 +1,64 @@
+{% load hostel_filters %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Настройки <span id="settings_panel_trigger" class="pull-right">
+            <span class="glyphicon glyphicon-list" aria-hidden="true">
+        </span></h3>
+    </div>
+
+    <div class="panel-body" id="settings_panel">
+
+        <pre id="settings_container">{{ settings|default:'' }}</pre>
+
+        <div class="text-right">
+
+            {% if service.rt and settings %}
+                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">
+                    <span class="glyphicon glyphicon-envelope"></span> Выслать через RT
+                </button>
+
+                <div class="modal fade text-left" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Отправка настроек клиенту</h4>
+                            </div>
+                            <div class="modal-body">
+                                <label>Следующий текст будет добавлен ответом в тикет {{ service.rt|ticket }}:</label>
+                                <pre>{{ settings }}</pre>
+                            </div>
+                            <div class="modal-footer">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Я еще подумаю...</button>
+                                    <button type="submit" class="btn btn-primary" name="action" value="send_settings">
+                                        <span class="glyphicon glyphicon-envelope"></span> Отправить
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <button class="btn btn-default btn-sm" data-clipboard-target="#settings_container">
+                <span class="glyphicon glyphicon-copy"></span>
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    var clipboard = new ClipboardJS('.btn');
+
+    // $('#settings_panel_container').slideToggle();
+    $('#settings_panel_trigger').click(function () {
+        $('#settings_panel_container').slideToggle();
+    })
+
+
+</script>

@@ -1,0 +1,38 @@
+{% extends 'bs3/base.html' %}
+{% block title %}*Создать vlan для {{ service }}{% endblock %}
+{% block content %}
+
+
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'client' service.client.pk %}">{{ service.client }}</a></li>
+            <li><a href="{% url 'service' service.pk %}">{{ service }}</a></li>
+            <li><a href="{% url 'subservice' service.pk subservice.pk %}?tab=leases">{{ subservice }}</a></li>
+            <li class="active">Создать лизу для подуслуги</li>
+        </ol>
+
+
+        <button type="submit" form="lease_form" class="btn btn-primary pull-right">Создать лизу</button>
+
+
+        <div class="row">
+
+            <div class="col-md-4"></div>
+
+            <div class="col-md-4">
+
+                <form id="lease_form" method="POST">
+                    {% csrf_token %}
+                    {% include 'bs3/lease/lease_form.html' %}
+                </form>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+{% endblock %}

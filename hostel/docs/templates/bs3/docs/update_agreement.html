@@ -1,0 +1,42 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Договор {{ agreement }}{% endblock %}
+{% block content %}
+
+    {% include 'bs3/docs/docs_tabs.html' %}
+
+    <div class="container-fluid">
+        <br>
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'agreements' %}">Документы</a></li>
+            <li class="active">{{ agreement }}</li>
+        </ol>
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>
+                    <div class="color-marker color-agreement"></div>
+                    {{ agreement }}
+                </h4>
+            </div>
+            <div class="col-md-4 text-right">
+                {% if perms.docs.change_agreement %}
+                    <a class="btn btn-default" href="{% url 'agreement' agreement.pk %}">Отмена</a>
+                    <button type="submit" form="agreement_data" class="btn btn-danger">Сохранить</button>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <form id="agreement_data" METHOD="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ agreement.pk }}">
+                    {% include 'bs3/docs/agreement_form.html' %}
+                </form>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>
+
+{% endblock %}

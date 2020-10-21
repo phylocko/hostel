@@ -1,0 +1,54 @@
+{% widthratio completed_service_count all_service_count 100 as width %}
+
+<div class="panel panel-primary">
+    <div class="panel-heading"><h3 class="panel-title">Актуальность привязки портов услуг</h3></div>
+
+    <div class="panel-body text-muted">
+
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="{{ width }}"
+                 aria-valuemin="0" aria-valuemax="100" style="width: {{ width }}%;">
+            {{ width }}%
+            </div>
+        </div>
+
+        <b>Коллеги, помощь по привязке портов к услугам приветствуется.</b>
+
+        <div class="text-right"><button class="btn btn-sm btn-default" id="why_button">Зачем?</button></div>
+
+        <div id="why_block">
+
+            Данный прогресс-бар служит для визуализации успеха.
+            Когда полоска доползет до 100%, мы сможем делать крутые штуки.
+            Например:
+            <ul>
+                <li>Строить кастомные наборы графиков по клиентам</li>
+                <li>Рассылать оповещения с указанием влияния.</li>
+                <li>Просто быть в курсе что куда подано</li>
+                <li>Сопрячь мониторинг с API Хостела.</li>
+                <li>Считать берсты</li>
+            </ul>
+
+            С твоей помощью, {{ user.first_name }}, мы актуализируем хостел и будем предоставлять лучший сервис!
+
+        </div>
+
+    </div>
+
+    <div class="panel-footer text-right">
+        <b><a href="{% url 'services' %}?service=homeix">Список услуг</a></b>
+    </div>
+
+</div>
+
+<script>
+    $("#why_block").hide();
+
+    $("#why_button").click( function() {
+        if ($("#why_button").html() == "Зачем?") {
+            $("#why_block").slideDown( function () { $("#why_button").html("Понятно!") });
+        } else {
+            $("#why_block").slideUp( function () { $("#why_button").html("Зачем?") } );
+        }
+    })
+</script>

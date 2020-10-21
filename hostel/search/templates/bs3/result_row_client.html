@@ -1,0 +1,8 @@
+<tr>
+    <td style="width: 60px;" class="hidden-xs hidden-sm text-muted">
+        {{ client.pk }}
+    </td>
+    <td style="width: 180px;"><div class="color-marker color-client"></div><b><a href="{% url 'client' client.pk %}">{{ client.netname }}</a></b></td>
+    <td style="width: 150px;"><b>{{ client.city|default:'' }}</b></td>
+    <td>{{ client.clientname }}</td>
+</tr>

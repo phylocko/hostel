@@ -1,0 +1,14 @@
+{% if warnings %}
+    <div class="alert alert-warning" role="alert">
+
+        <ul class="list-unstyled">
+            {% for warning in warnings %}
+                <li>— {{ warning }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% else %}
+    <div class="alert alert-success" role="alert">
+        <span class="glyphicon glyphicon-ok"></span> Похоже, все нужные поля указаны
+    </div>
+{% endif %}

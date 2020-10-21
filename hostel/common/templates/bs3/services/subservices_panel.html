@@ -1,0 +1,28 @@
+{% include 'bs3/tab_search_form.html' %}
+
+<div class="panel panel-default">
+    <div class="panel-heading" style="padding-right: 8px;">
+        <h4 class="panel-title">Подуслуги
+
+            {% if perms.common.add_service %}
+                <div class="dropdown pull-right">
+                    <a href="{% url 'create_subservice' service.pk %}" class="btn btn-primary btn-xs" type="button">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    </a>
+                </div>
+            {% endif %}
+
+        </h4>
+
+    </div>
+
+    <table class="table table-striped">
+        {% for subservice in subservices %}
+            {% include 'bs3/services/table_rows/subservice_row.html' %}
+        {% empty %}
+            <tr>
+                <td colspan="6" class="text-center text-muted">Услуг нет</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>

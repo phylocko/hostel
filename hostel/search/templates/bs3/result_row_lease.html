@@ -1,0 +1,18 @@
+<tr>
+    <td style="width: 60px;" class="hidden-xs hidden-sm text-muted">{{ lease.pk }}</td>
+    <td style="width: 180px;">
+        <div class="color-marker color-lease"></div>
+        <a href="{% url 'lease' lease.pk %}"><b>{{ lease }}</b></a></td>
+    <td style="width: 150px;">
+        <small>
+        {% for city in lease.cities.all %}
+            {{ city }}
+        {% endfor %}
+        </small>
+    </td>
+    <td>
+        {{ lease.identity}}
+        {% if lease.addresses %}<span class="text-muted">{{ lease.addresses }}</span>{% endif %}<br>
+        <small><div class="text-muted">{{ lease.agreement|default:'' }}</div></small>
+    </td>
+</tr>

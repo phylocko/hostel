@@ -1,0 +1,25 @@
+<ol class="breadcrumb">
+    <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+
+    {% if net.service %}
+        <li><a href="{% url 'clients' %}{{ net.service.client.pk }}">{{ net.service.client.netname }}</a></li>
+
+        {% if net.service.asn %}
+        <li><a href="{% url 'autonomous_systems' %}{{ net.service.asn.pk }}">AS{{ net.service.asn }}</a></li>
+        {% endif %}
+
+        <li><a href="{% url 'services' %}{{ net.service.pk }}">{{ net.service }}</a></li>
+
+    {% else %}
+
+        <li><a href="{% url 'nets' %}">Сети</a></li>
+
+        {% for parent in parents %}
+            <li><a href="{% url 'view_net' parent.pk %}">{{ parent }}</a></li>
+        {% endfor %}
+
+
+    {% endif %}
+
+    <li class="active">{{ net.address }}/{{ net.netmask }}</li>
+</ol>

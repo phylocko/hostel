@@ -1,0 +1,50 @@
+{% extends 'bs3/base.html' %}
+{% block title %}{{ shown_user }}{% endblock %}
+{% block content %}
+    {% load static %}
+
+    {% include 'bs3/users/tabs.html' %}
+
+
+    <div class="container">
+        <br>
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>{{ shown_user.username }}</h4>
+            </div>
+            <div class="col-md-4 text-right">
+                <a class="btn btn-primary" href="{% url 'update_user' shown_user.pk %}">
+                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Редактировать
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 text-center">
+                {% if shown_user.photo %}
+                    <img class="img-thumbnail" src="{{ shown_user.photo.url }}" style="width: 50%;">
+                {% else %}
+                    <img class="img-circle" src="{% static '/i/' %}no-photo.png" style="width: 50%;">
+                {% endif %}
+            </div>
+            <div class="col-md-4">
+
+                {% include 'bs3/users/user_data.html' %}
+
+                {% with manager as object %}
+                    {% include 'bs3/common/created_updated.html' %}
+                {% endwith %}
+            </div>
+        </div>
+
+        <div class="well well-sm text-right">
+
+            {% include 'bs3/users/set_password_button.html' %}
+            {% include 'bs3/users/delete_user_button.html' %}
+
+        </div>
+    </div>
+
+    {% include 'bs3/spy/object_log.html' %}
+
+{% endblock %}

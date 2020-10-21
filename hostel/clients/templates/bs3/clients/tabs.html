@@ -1,0 +1,15 @@
+<ul class="nav nav-tabs">
+    <li role="presentation" {% if tab == "filter" %}class="active"{% endif %}>
+        <a href="{% url 'clients' %}">
+            <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
+        </a>
+    </li>
+
+    {% if perms.clients.add_client %}
+        <li role="presentation" {% if tab == "add" %}class="active"{% endif %}>
+            <a href="{% url 'add_client' %}">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </a>
+        </li>
+    {% endif %}
+</ul>

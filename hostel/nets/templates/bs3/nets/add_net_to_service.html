@@ -1,0 +1,43 @@
+{% extends 'bs3/base.html' %}
+{% block title %}*Создать ip-адрес для {{ service }}{% endblock %}
+{% block content %}
+
+    <ul class="nav nav-tabs">
+        <li role="presentation"><a href="index.php?page=nets">Адреса</a></li>
+    </ul>
+
+
+    <div class="container">
+
+    <br>
+    <!-- Заголовок, кнопка редактирования -->
+    <div class="row" style="margin-bottom: 16px;">
+        <div class="col-md-8">
+            <h4>Создание сети для услуги {{ service }} клиента {{ service.client.netname }}</h4>
+        </div>
+        <div class="col-md-4 text-right">
+            <button type="submit" form="netData" class="btn btn-primary pull-right">Создать сеть</button>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-4">
+            <form id="netData" METHOD="POST">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ net.pk }}">
+                <input type="hidden" name="service_id" value="{{ service.pk }}">
+                {% include 'bs3/nets/net_form_short.html' %}
+            </form>
+
+        </div>
+        <div class="col-md-8">
+
+            {% include 'bs3/nets/free_nets_dropdown.html' %}
+
+        </div>
+    </div>
+
+
+
+{% endblock %}

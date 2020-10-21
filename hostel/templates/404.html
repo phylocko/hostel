@@ -1,0 +1,37 @@
+{% extends 'bs3/base_minimal.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container text-center">
+    {% if user.is_authenticated %}
+        <h3 class="text-center">
+                {% if user.profile.gender == 'female' %}
+                    Ты все сломала!
+                {% else %}
+                    Ты все сломал!
+                {% endif %}
+        </h3>
+    {% else %}
+        <h3 class="text-center">Страница не найдена</h3>
+    {% endif %}
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+    </div>
+
+
+
+
+
+    <div class="col-md-4">
+		<img width="100%" style="max-height: 400px;" src="{% static '/i/404.svg' %}">
+		<h3 class="text-center">400 + 4 = ?</h3>
+    </div>
+
+    <div class="col-md-4">
+    </div>
+
+</div>
+
+{% endblock %}

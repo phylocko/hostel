@@ -1,0 +1,46 @@
+{% load hostel_filters %}
+
+<tr id="ins_{{ incident.pk }}">
+    <td style="width:80px;">
+        <b><a href="{% url 'ins' %}{{ incident.pk }}">INS-{{ incident.pk }}</a></b>
+    </td>
+
+    <td>
+        {% if incident.provider %}
+            <b><a href="{% url 'clients' %}{{ incident.provider.pk }}">
+                {{ incident.provider.netname }}</a></b>
+        {% endif %}
+    </td>
+
+    <td> {{ incident.time_start|date:'Y-m-d H:i' }} </td>
+    <td> {{ incident.time_end|date:'Y-m-d H:i' }} </td>
+    <td class="active"> {{ incident.period }} </td>
+    <td>{{ incident.ticket|ticket }}</td>
+    <td>
+        {% if incident.provider_tt %}
+            {{ incident.provider_tt }}
+        {% endif %}
+    </td>
+
+    <td class="text-muted">
+        <small>
+            {% for lease in incident.leases.all %}
+                <a href="{% url 'lease' lease.pk %}">{{ lease.identity|default:'' }}</a><br>
+                {% if lease.agreement %}{{ lease.agreement }}<br>{% endif %}
+
+            {% empty %}
+                {{ incident.fiber|default:''|linebreaksbr }}
+            {% endfor %}
+        </small>
+    </td>
+    <td>
+        {% for service in incident.services.all %}
+            <div class="color-marker color-service"></div>
+            <a href="{% url 'service' service.pk %}"><b>{{ service }}</b></a> {{ service.client.netname }}<br>
+        {% endfor %}
+        {% for subservice in incident.subservices.all %}
+            <div class="color-marker color-subservice"></div>
+            <a href="{% url 'subservice' subservice.service.pk subservice.pk %}"><b>{{ subservice }}</b></a> {{ subservice.service.client.netname }}<br>
+        {% endfor %}
+    </td>
+</tr>

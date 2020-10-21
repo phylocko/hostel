@@ -1,0 +1,4 @@
+<ul class="nav nav-tabs">
+    <li role="presentation" {% if tab == "search" %}class="active"{% endif %}><a href="{% url 'search_bundles' %}">Поиск</a></li>
+    <li role="presentation" {% if tab == "latest" %}class="active"{% endif %}><a href="{% url 'bundles' %}?tab=latest">Свежие</a></li>
+</ul>

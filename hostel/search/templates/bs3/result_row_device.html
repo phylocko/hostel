@@ -1,0 +1,15 @@
+<tr>
+    <td style="width: 60px;" class="hidden-xs hidden-sm text-muted">{{ device.pk }}</td>
+    <td style="width: 180px;">
+        <div class="color-marker color-device"></div>
+        <b>
+            <a class="{% if device.status == '+' %}text-success{% else %}text-danger{% endif %}" href="{% url 'device' device.pk %}">
+            {{ device.netname }}
+            </a>
+        </b>
+    </td>
+    <td style="width: 150px;"><b>{{ device.type }}</b></td>
+    <td>
+        <small><div class="text-muted">{{ device.datacenter|default:'' }}</div></small>
+    </td>
+</tr>

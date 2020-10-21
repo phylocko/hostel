@@ -1,0 +1,60 @@
+{% extends 'bs3/base.html' %}
+{% load hostel_filters %}
+{% block title %}Leases{% endblock %}
+{% block content %}
+
+    <div class="container-fluid">
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'leases' %}">Лизы</a></li>
+            <li class="active">Группы</li>
+        </ol>
+    </div>
+
+    <div class="container-fluid text-right">
+    <a class="btn btn-primary" href="{% url 'create_lease_group' %}">
+        <span class="glyphicon glyphicon-plus"></span> Создать
+    </a>
+    </div>
+
+    <table class="table">
+
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Группа</th>
+            <th>RT#</th>
+            <th>Лизы</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for lease_group in lease_groups %}
+            <tr>
+                <td class="text-muted">{{ lease_group.pk }}</td>
+                <td class="active">
+                    <a href="{% url 'lease_group' lease_group.pk %}">
+                        <div class="color-marker color-leasegroup"></div>
+                        <b>{{ lease_group.description }}</b>
+                    </a>
+                </td>
+                <td>{{ lease_group.rt|ticket }}</td>
+                <td class="text-muted">
+                    {% for lease in lease_group.leases.all %}
+                        <div class="color-marker color-lease"></div>
+                            <b><a href="{% url 'lease' lease.pk %}">{{ lease }}</a></b>
+                            <small>{{ lease.identity }}</small><br>
+                    {% endfor %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="4" class="text-muted text-center">Пусто</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}
+

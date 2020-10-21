@@ -1,0 +1,12 @@
+<ul class="nav nav-tabs">
+    <li role="presentation" {% if tab == "all" %}class="active"{% endif %}><a href="{% url 'cities' %}">Все города</a>
+    </li>
+
+    {% if perms.common.add_city %}
+        <li role="presentation" {% if tab == "add" %}class="active"{% endif %}>
+            <a href="{% url 'create_city' %}">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </a>
+        </li>
+    {% endif %}
+</ul>

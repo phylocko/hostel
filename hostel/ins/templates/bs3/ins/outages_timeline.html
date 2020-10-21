@@ -1,0 +1,47 @@
+<div id="timeline"></div>
+<script type="text/javascript">
+    var container = document.getElementById('timeline');
+
+    var groups = [
+        {
+            id: 'failure',
+            content: 'Аварии',
+            style: 'background-color: #ffc1b7; color: #777777;'
+        }
+    ];
+
+    var items = new vis.DataSet([
+        {% for e in incidents %}
+            {
+                id: {{ e.pk }},
+                content: '<b>{% if e.provider %}{{ e.provider.netname }}{% else %}<не указан>{% endif %}</b>',
+                start: new Date({{ e.time_start|date:'Y' }}, {{ e.time_start|date:'m'|add:'-1' }}, {{ e.time_start|date:'d' }}, {{ e.time_start|date:'H' }}, {{ e.time_start|date:'i' }}),
+                end: new Date({{ e.time_end|date:'Y' }}, {{ e.time_end|date:'m'|add:'-1' }}, {{ e.time_end|date:'d' }}, {{ e.time_end|date:'H' }}, {{ e.time_end|date:'i' }}),
+                group: '{{ e.type }}',
+                title: '[INS-{{ e.pk }}] {{ e.name }}',
+                type: 'range'
+            },
+        {% endfor %}
+    ]);
+
+    var options = {
+        locale: 'ru',
+        min: new Date({{ time_start|date:'Y' }}, {{ time_start|date:'m'|add:'-1' }}, 1, 0, 0),
+        max: new Date({{ time_end|date:'Y' }}, {{ time_end|date:'m'|add:'-1' }}, 4, 0, 0)
+    };
+
+    var timeline = new vis.Timeline(container, items, groups, options);
+
+    timeline.on('itemover', function (properties) {
+        var row = $("#ins_" + properties.item);
+        row.addClass("active");
+    });
+    timeline.on('itemout', function (properties) {
+        var row = $("#ins_" + properties.item);
+        row.removeClass("active");
+    });
+    timeline.on('doubleClick', function (properties) {
+        var row = $("#ins_" + properties.item);
+        row.addClass("success");
+    });
+</script>

@@ -1,0 +1,169 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Сеть {{ net }}{% endblock %}
+{% block content %}
+
+    <div class="container">
+
+        {% include 'bs3/nets/broadcrumbs_net.html' %}
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8"><h4>
+                <div class="color-marker color-net"></div>
+                {{ net.address }}/{{ net.netmask }}</h4></div>
+            <div class="col-md-4 text-right">
+                {% if perms.nets.change_net %}
+                    <a class="btn btn-primary" href="{% url 'update_net' net.pk %}">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Редактировать
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-4">
+
+                {% include 'bs3/nets/net_data.html' %}
+
+                <h4>Технические данные</h4>
+                <table class="table text-muted">
+                    <tr>
+                        <th>ID</th>
+                        <td>{{ net.pk }}</td>
+                    </tr>
+                    <tr>
+                        <th>IP Address value</th>
+                        <td>{{ net.ipaddress_from }}</td>
+                    </tr>
+                    <tr>
+                        <th>Broadcast value</th>
+                        <td>{{ net.ipaddress_to}}</td>
+                    </tr>
+
+                </table>
+
+                {% with net as object %}
+                    {% include 'bs3/common/created_updated.html' %}
+                {% endwith %}
+
+
+            </div>
+
+            <div class="col-md-8">
+
+                {% if net.managed_device %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><h3 class="panel-title">Управляемый девайс</h3></div>
+                        <table class="table">
+                            <tr>
+                                <th>Девайс</th>
+                                <th>Вендор</th>
+                                <th>Площадка</th>
+                            </tr>
+                            {% with net.managed_device as device %}
+                                <tr>
+                                    <td>
+                                        <div class="color-marker color-device"></div>
+                                        <b>
+                                            <a href="{% url 'device' device.pk %}">{{ device.netname }}</a>
+                                        </b>
+                                    </td>
+                                    <td>{{ device.vendor|default:'' }}</td>
+                                    <td>{{ device.datacenter|default:'' }}</td>
+                                </tr>
+                            {% endwith %}
+                        </table>
+                    </div>
+                {% endif %}
+
+
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h3 class="panel-title">Подсети</h3></div>
+
+                    {% if children %}
+
+                        <table class="table">
+                            <tr>
+                                <th style="min-width: 160px;">Сеть</th>
+                                <th>Vlan</th>
+                                <th>Девайс</th>
+                                <th>Дескрипшн</th>
+                            </tr>
+
+
+                            {% for node in children %}
+                                {% if node.data.is_free %}
+                                    <tr class="active text-muted">
+                                        <td>
+                                            <div class="color-marker color-net"></div>
+                                            {{ node.prefix }}
+                                        </td>
+                                        <td>
+
+                                            <a href="{% url 'add_net' %}?address={{ node.network }}&mask={{ node.prefixlen }}&vlan={{ net.vlan.pk  }}&device={{ net.device.pk }}&return_to=net&return_net={{ net.pk }}"
+                                               class="net-free">Создать сеть</a>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td class="text-muted"></td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td>
+                                            <div class="color-marker color-net"></div>
+                                            <b>
+                                                <a href="{% url 'view_net' node.data.hostel_net.pk %}">
+                                                    {{ node.prefix }}
+                                                </a>
+                                            </b>
+                                        </td>
+                                        <td>
+                                            {% if node.data.hostel_net.vlan %}
+                                                <div class="color-marker color-vlan"></div>
+                                                <a href="{% url 'vlan' node.data.hostel_net.vlan.pk %}">
+                                                    {{ node.data.hostel_net.vlan }}
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if node.data.hostel_net.device %}
+                                                <div class="color-marker color-device"></div>
+                                                <a href="{% url 'devices' %}{{ node.data.hostel_net.device.pk }}">
+                                                    {{ node.data.hostel_net.device }}
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-muted">{{ node.data.hostel_net.description }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </table>
+
+                    {% else %}
+
+                        <div class="panel-body text-center text-muted">
+                            Подсетей нет.
+                            {% if net.netmask < 32 %}
+                                <a href="{% url 'add_net' %}?address={{ net.address }}&mask=32&vlan={{ net.vlan.pk  }}&device={{ net.device.pk }}&return_to=net&return_net={{ net.pk }}">Создать</a>
+                            {% endif %}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+        </div>
+
+        {% if perms.nets.delete_net and not net.protected %}
+            <div class="well text-right">
+                {% include 'bs3/nets/delete_button.html' %}
+            </div>
+        {% endif %}
+
+    </div>
+
+    {% include 'bs3/spy/object_log.html' %}
+
+{% endblock %}

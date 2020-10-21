@@ -1,0 +1,44 @@
+{% include 'bs3/tab_search_form.html' %}
+
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h3 class="panel-title">Лизы [{{ leases.count }}]</h3>
+    </div>
+
+    {% include 'bs3/services/leases_table_inpanel.html' %}
+
+
+    {% if perms.common.change_service %}
+        <div class="panel-footer">
+
+            <div class="text-right">
+                <a class="btn btn-sm btn-default" href="{% url 'choose-lease-for-service' %}?service={{ service.pk }}">Выбрать
+                    Lease</a>
+
+                <button id="create_lease_trigger" type="button" class="btn btn-default btn-sm">
+                    Создать Lease <span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
+                </button>
+            </div>
+
+            <form id="lease_form_container" action="{% url 'create_lease' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="service_id" value="{{ service.pk }}">
+                {% with lease_form as form %}
+                    {% include 'bs3/lease/lease_form.html' %}
+                {% endwith %}
+                <input class="btn btn-success btn-sm" type="submit" value="Создать Lease">
+            </form>
+
+        </div>
+    {% endif %}
+
+</div>
+
+<script>
+
+    $('#lease_form_container').slideToggle();
+
+    $('#create_lease_trigger').click(function () {
+        $('#lease_form_container').slideToggle()
+    });
+</script>

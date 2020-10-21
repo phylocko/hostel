@@ -1,0 +1,170 @@
+<div class="tab-pane active" id="params">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Бандлы для рассчета Burst</h3>
+        </div>
+        <table class="table">
+            <tr>
+                <th class="text-center">Тип</th>
+                <th>Бандл</th>
+                <th class="text-center">Порты</th>
+                <th class="text-center">Вланы</th>
+                <th></th>
+            </tr>
+            {% for bundle in burst_set.bundles.all %}
+                <tr>
+                    <td class="success text-center"><span class="glyphicon glyphicon-plus text-success"></span></td>
+                    <td>
+                        <div class="color-marker color-bundle"></div>
+                        <b>{{ bundle.device }}</b> <a class="" href="{% url 'bundle' bundle.pk %}">{{ bundle }}</a>
+                    </td>
+                    <td class="active text-center">
+                        <label class="label label-primary">{{ bundle.ports.count }}</label>
+                    </td>
+                    <td class="text-center">
+                        <label class="label label-default">{{ bundle.bundlevlan_set.count }}</label>
+                    </td>
+                    <td class="text-center">
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="bundle_id" value="{{ bundle.pk }}">
+                            <button class="btn btn-xs btn-warning"
+                                    type="submit"
+                                    name="action"
+                                    value="remove_bundle">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4" class="active text-center text-muted">Суммируемых интерфейсов нет</td>
+                </tr>
+            {% endfor %}
+
+            {% for bundle in burst_set.extract_bundles.all %}
+                <tr>
+                    <td class="warning text-center"><span class="glyphicon glyphicon-minus text-warning"></span></td>
+                    <td>
+                        <div class="color-marker color-bundle"></div>
+                        <b>{{ bundle.device }}</b> <a class="" href="{% url 'bundle' bundle.pk %}">{{ bundle }}</a>
+                    </td>
+                    <td class="active text-center">
+                        <label class="label label-primary">{{ bundle.ports.count }}</label>
+                    </td>
+                    <td class="text-center">
+                        <label class="label label-default">{{ bundle.bundlevlan_set.count }}</label>
+                    </td>
+                    <td class="text-center">
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="bundle_id" value="{{ bundle.pk }}">
+                            <button class="btn btn-xs btn-warning"
+                                    type="submit"
+                                    name="action"
+                                    value="remove_bundle">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4" class="active text-center text-muted">Вычитаемых интерфейсов нет</td>
+                </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Доступные клиентские бандлы</h3>
+        </div>
+
+        <table class="table table-hover">
+            <thead>
+            <th>Bundle</th>
+            <th>Дескрипшн</th>
+            <th>Порты</th>
+            <th>Услуги</th>
+            <th></th>
+            </thead>
+
+            <tbody>
+            {% for bundle in burst_set.client.bundles %}
+                {% if bundle not in burst_set.bundles.all and bundle not in burst_set.extract_bundles.all %}
+                    <tr>
+                    <td>
+                        <div class="color-marker color-bundle"></div>
+                        <b>{{ bundle.device }}</b> <a class="" href="{% url 'bundle' bundle.pk %}">{{ bundle }}</a>
+                    </td>
+                    <td class="active text-center">
+                        <label class="label label-primary">{{ bundle.ports.count }}</label>
+                    </td>
+                    <td class="text-center">
+                        <label class="label label-default">{{ bundle.bundlevlan_set.count }}</label>
+                    </td>
+
+                        <td class="text-right">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="bundle_id" value="{{ bundle.pk }}">
+
+                                <button class="btn btn-xs btn-success" type="submit" name="action"
+                                        value="add_positive">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                </button>
+
+                                <button class="btn btn-xs btn-danger" type="submit" name="action"
+                                        value="add_negative">
+                                    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                                </button>
+
+                            </form>
+                        </td>
+
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Добавить кастомный интерфейс</h3>
+        </div>
+        <div class="panel-body">
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input class="form-control" type="text" name="bundle_id" placeholder="Bundle ID">
+                </div>
+                <div class="form-group">
+                    <button name="action" value="add_positive" class="btn btn-primary btn-sm form-control">
+                        Добавить для суммирования
+                    </button>
+                </div>
+                <div class="form-group">
+                    <button name="action" value="add_negative" class="btn btn-warning btn-sm form-control">
+                        Добавить для вычитания
+                    </button>
+                </div>
+            </form>
+
+            <div class="help-block">
+                <small>
+                    Чтобы добавить интерфейс к сложению или вычитанию, воспользуйтесь поиском,
+                    и скопируйте ID бандла в поле Bundle ID.
+                </small>
+            </div>
+        </div>
+    </div>
+
+</div>

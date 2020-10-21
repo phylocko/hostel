@@ -1,0 +1,49 @@
+{% extends 'bs3/base.html' %}
+{% block title %}*Создать инцидент{% endblock %}
+{% block content %}
+
+{% include 'bs3/ins/ins_tabs.html' %}
+
+<div class="container">
+
+    <br>
+    <!-- Заголовок, кнопка редактирования -->
+    <div class="row" style="margin-bottom: 16px;">
+        <div class="col-md-8">
+            <h4>
+                <div class="color-marker color-ins"></div>
+                Создание нового инцидента
+            </h4>
+        </div>
+        <div class="col-md-4 text-right">
+            <button type="submit" form="ins_form" class="btn btn-primary">Создать</button>
+        </div>
+    </div>
+
+    <!-- Колонка с общими данными -->
+    <div class="row">
+
+
+        <div class="col-md-2">
+        </div>
+
+
+        <div class="col-md-8">
+
+
+            <!-- Данные -->
+            <form id="ins_form" METHOD="POST">
+                {% csrf_token %}
+                {% include 'bs3/ins/ins_form.html' %}
+            </form>
+
+
+        </div>
+
+        <div class="col-md-2">
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

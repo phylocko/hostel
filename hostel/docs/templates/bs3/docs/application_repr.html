@@ -1,0 +1,20 @@
+{% if application.filename %}
+    <span class="glyphicon glyphicon-file text-success" aria-hidden="true"></span>
+{% else %}
+    <span class="glyphicon glyphicon-file text-danger" aria-hidden="true"></span>
+{% endif %}
+
+<a href="{% url 'application' application.pk %}">
+    {% if application.application_type == 'order' %}
+        {{ application }}
+        <small class="text-muted">{{ application.name|default:'' }}</small>
+    {% elif application.application_type == 'application' %}
+        {{ application }}
+        <small class="text-muted">{{ application.name|default:'' }}</small>
+    {% elif application.application_type == 'akt' %}
+        {{ application }}
+        <small class="text-muted">{{ application.name|default:'' }}</small>
+    {% else %}
+        {{ application|truncatechars:100 }}
+    {% endif %}
+</a>

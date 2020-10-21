@@ -1,0 +1,63 @@
+<div class="form-group {% if filter_form.types.errors %}has-error{% endif %}">
+    <label>Тип</label><br>
+    {% if filter_form.types.errors %}
+    {{ filter_form.types.errors }}
+    {% endif %}
+    {{ filter_form.types }}
+</div>
+
+<div class="form-group {% if filter_form.cities.errors %}has-error{% endif %}">
+    <label>Содержит города</label><br>
+    {% if filter_form.cities.errors %}
+        {{ filter_form.cities.errors }}
+    {% endif %}
+    {{ filter_form.cities }}
+</div>
+<div class="form-group {% if filter_form.provider.errors %}has-error{% endif %}">
+    <label>Поставщик</label><br>
+    {% if filter_form.provider.errors %}
+        {{ filter_form.provider.errors }}
+    {% endif %}
+    {{ filter_form.provider }}
+</div>
+<div class="form-group {% if filter_form.is_ours.errors %}has-error{% endif %}">
+    <label>Для нас</label><br>
+    {% if filter_form.is_ours.errors %}
+        {{ filter_form.is_ours.errors }}
+    {% endif %}
+    {{ filter_form.is_ours }}
+</div>
+<div class="form-group {% if filter_form.is_bought.errors %}has-error{% endif %}">
+    <label>Выкуплен</label><br>
+    {% if filter_form.is_bought.errors %}
+        {{ filter_form.is_bought.errors }}
+    {% endif %}
+    {{ filter_form.is_bought }}
+</div>
+<div class="form-group {% if filter_form.search_string.errors %}has-error{% endif %}">
+    <label>Ключевые слова</label><br>
+    {% if filter_form.search_string.errors %}
+        {{ filter_form.search_string.errors }}
+    {% endif %}
+    {{ filter_form.search_string }}
+</div>
+<div class="form-group">
+    <label>&nbsp;</label><br>
+    <button type="submit" class="btn btn-primary form-control">
+        <span class="glyphicon glyphicon-filter"></span>
+        {{ leases.count|default:0 }}
+    </button>
+</div>
+<div class="form-group">
+    <label>&nbsp;</label><br>
+    <a href="{% url 'leases' %}" class="btn btn-default form-control">
+        <span class="glyphicon glyphicon-erase"></span>
+    </a>
+</div>
+
+<script>
+    $('#id_types').select2({width: 200});
+    $('#id_cities').select2({width: 200});
+    $('#id_provider').select2({width: 200});
+    $('#id_search_string').focus();
+</script>

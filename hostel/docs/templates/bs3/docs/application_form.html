@@ -1,0 +1,84 @@
+<div class="form-group {% if form.application_type.errors %}has-error{% endif %}">
+    <label class="control-label">Тип документа</label><br>
+    {{ form.application_type }}
+    {% for error in form.application_type.errors %}
+        <p class="error">{{ error }}</p>
+    {% endfor %}
+</div>
+
+<div id="order_number_group" class="form-group {% if form.order_number.errors %}has-error{% endif %}">
+    <label class="control-label">Номер заказа/приложения</label><br>
+    {{ form.order_number }}
+    {% for error in form.order_number.errors %}
+        <p class="text-danger">{{ error }}</p>
+    {% endfor %}
+    <span class="help-block">Обязательно для заказов, актов и приложений</span>
+</div>
+<script>
+
+    function update_fields() {
+        var app_type = $("#id_application_type").val();
+
+        if (app_type == 'akt' || app_type == 'order' || app_type == 'application') {
+            $("#order_number_group").slideDown();
+        } else {
+            $("#order_number_group").slideUp();
+        }
+    }
+
+    update_fields();
+
+    $("#id_application_type").change(function () {
+        update_fields();
+    });
+</script>
+
+<div class="form-group {% if form.name.errors %}has-error{% endif %}">
+    <label>Название</label><br>
+    {{ form.name }}
+    {% for error in form.name.errors %}
+        <p class="text-danger">{{ error }}</p>
+    {% endfor %}
+</div>
+
+<div class="form-group {% if form.date.errors %}has-error{% endif %}">
+    <label class="control-label">Дата</label><br>
+    {{ form.date }}
+    {% for error in form.date.errors %}
+        <p class="help-block">{{ error }}</p>
+    {% endfor %}
+    <span class="help-block">Пример: 20.01.2019</span>
+</div>
+
+{% if not doc.filename %}
+    <div class="form-group {% if form.file.errors %}has-error{% endif %}">
+        <label>Скан документа</label>
+        {{ form.file.errors }}
+        <input id="id_file" class="form-control input-lg" type="file" name="file">
+    </div>
+{% endif %}
+
+<div class="form-group {% if form.comment.errors %}has-error{% endif %}">
+    <label>Комментарий</label>
+    {{ form.comment.errors }}
+    {{ form.comment }}
+</div>
+
+<script>
+
+    $name = $("#id_name");
+    $file = $("#id_file");
+    $file.change(function () {
+        $filename = $file.val().replace("C\:\\fakepath\\", "")
+        // $name.val($filename)
+    });
+
+    $("#id_application_type").change(function () {
+        if (this.value == 'akt' || this.value == 'order' || this.value == 'application') {
+            $("#id_order_number").get(0).focus();
+        } else {
+            $("#id_name").get(0).focus();
+        }
+    })
+
+</script>

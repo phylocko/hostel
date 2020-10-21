@@ -1,0 +1,58 @@
+{% if form.non_field_errors %}
+    <div class="alert alert-danger">
+        <ul class="list-unstyled">
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+<div class="form-group {% if form.name.errors %}has-error{% endif %}">
+    <label for="id_name">Наименовение</label><br>
+    {{ form.name.errors }}
+    {{ form.name }}
+</div>
+
+<div class="form-group {% if form.client.errors %}has-error{% endif %}">
+    <label for="id_client">Клиент</label>
+    {{ form.client.errors }}
+    {{ form.client }}
+</div>
+<script>
+    $("#id_client").select2();
+</script>
+
+<div class="form-group {% if form.city.errors %}has-error{% endif %}">
+    <label for="id_city">Город</label>
+    {{ form.city.errors }}
+    {{ form.city }}
+</div>
+<script>
+    $("#id_city").select2();
+</script>
+
+<div class="form-group {% if form.rt.errors %}has-error{% endif %}">
+    <label for="id_rt">#RT</label>
+    {{ form.rt.errors }}
+    {{ form.rt }}
+</div>
+
+<div class="form-group">
+    <label class="control-label">
+        {{ form.edm }}
+        Электронный документооборот
+    </label>
+</div>
+
+<div class="form-group {% if form.contacts.errors %}has-error{% endif %}">
+    <label for="id_contacts">Контакты</label>
+    {{ form.contacts.errors }}
+    {{ form.contacts }}
+</div>
+
+<div class="form-group {% if form.comment.errors %}has-error{% endif %}">
+    <label for="id_comment">Комментарий</label>
+    {{ form.comment.errors }}
+    {{ form.comment }}
+</div>

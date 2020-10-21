@@ -1,0 +1,46 @@
+<tr>
+    <td class="active">
+        <div class="color-marker color-device"></div>
+        <b>
+            <a class="{% if device.status == '+' %}text-success{% else %}text-danger{% endif %}"
+               href="{% url 'devices' %}{{ device.pk }}">
+                {{ device.netname }}
+            </a>
+        </b>
+    </td>
+
+    <td class="hidden-xs">
+        {% if device.management_net %}
+            <div class="color-marker color-net"></div>
+            <a href="{% url 'nets' %}{{ device.management_net.pk }}">{{ device.management_net.address|default:"" }}</a>
+        {% endif %}
+    </td>
+
+    <td class="hidden-sm hidden-xs text-muted">
+        {% if device.store_entry %}
+            <b>{{ device.store_entry.vendor|title }}</b> {{ device.store_entry.model|upper|default:'' }}
+        {% endif %}
+    </td>
+
+    <td class="hidden-sm hidden-xs">
+        {% if device.hardware %}
+            <a href="{% url 'hardware' device.hardware.pk %}">
+                <b>{{ device.hardware.vendor|title }}</b> {{ device.hardware.model|upper }}
+            </a>
+        {% endif %}
+    </td>
+
+    <td>
+        {% if device.datacenter %}
+            <div class="color-marker color-datacenter"></div>
+            <a href="{% url 'datacenter' device.datacenter.pk %}">{{ device.datacenter.name }}</a>
+        {% endif %}
+    </td>
+
+    <td class="hidden-sm hidden-xs">
+        {% if device.datacenter %}
+            <span>{{ device.datacenter.city }}, {{ device.datacenter.address }}</span>
+        {% endif %}
+    </td>
+
+</tr>

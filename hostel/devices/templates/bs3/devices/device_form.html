@@ -1,0 +1,159 @@
+<div class="form-group input-group-lg {% if form.netname.errors %}has-error{% endif %}">
+    <label>Netname</label>
+    {{ form.netname.errors }}
+    {{ form.netname }}
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Управление</h3>
+    </div>
+
+    <div class="panel-body">
+
+        <div class="form-group {% if form.status.errors %}has-error{% endif %}">
+            <label>Статус</label>
+            {{ form.status.errors }}
+            {{ form.status }}
+        </div>
+
+        <hr>
+
+        <div class="form-group {% if form.type.errors %}has-error{% endif %}">
+            <label>Адрес управления</label>
+            {{ form.management_net.errors }}
+            {{ form.management_net }}
+        </div>
+
+        <hr>
+
+        <div class="form-group {% if form.type.errors %}has-error{% endif %}">
+            <label>Тип устройства</label>
+            {{ form.type.errors }}
+            {{ form.type }}
+        </div>
+
+        <hr>
+
+        <div class="form-group">
+            <label>{{ form.is_managed }} Управление и мониторинг</label>
+        </div>
+
+        <hr>
+
+        <div class="form-group {% if form.community.errors %}has-error{% endif %}">
+            <label>SNMP-community</label>
+            {{ form.community.errors }}
+            {{ form.community }}
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Железо</h3>
+    </div>
+    <div class="panel-body">
+
+        <div class="form-group {% if form.type.errors %}has-error{% endif %}">
+
+            <label>Складской юнит</label>
+            {% if mode == "edit" %}
+                {{ form.store_entry.errors }}
+                {{ form.store_entry }}
+
+            {% else %}
+                <div class="well well-sm text-center">
+                    <a href="{% url 'store' %}{{ device.store_entry.pk }}">{{ device.store_entry }}</a>
+                </div>
+            {% endif %}
+            <div class="help-block">
+                Поле необходимо для:
+                <br>— Расчет Burst
+                <br>— Отображение графиков на страницах Hostel
+
+            </div>
+
+            <div class="form-group {% if form.place.errors %}has-error{% endif %}">
+                <label>Информация о прошивке и версии</label>
+                {{ form.version.errors }}
+                {{ form.version }}
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Размещение</h3>
+    </div>
+    <div class="panel-body">
+
+        <div class="form-group {% if form.datacenter.errors %}has-error{% endif %}">
+            <label>Площадка</label>
+            {{ form.datacenter.errors }}
+            {{ form.datacenter }}
+
+        </div>
+
+        <hr>
+
+        <div class="form-group {% if form.rack.errors %}has-error{% endif %}">
+            <label class="control-label">Стойка</label><br>
+            {{ form.rack }}
+            {% for error in form.rack.errors %}
+                <p class="error">{{ error }}</p>
+            {% endfor %}
+        </div>
+        <script>
+            $('#id_rack').select2();
+        </script>
+
+        <div class="form-group {% if form.start_unit.errors %}has-error{% endif %}">
+            <label class="control-label">Начальный юнит в стойке</label><br>
+            {{ form.start_unit }}
+            {% for error in form.start_unit.errors %}
+                <p class="error text-danger">{{ error }}</p>
+            {% endfor %}
+            <div class="help-block">Меньший по номеру юнит, независимо от направления нумерации в стойке</div>
+        </div>
+
+        <div class="form-group {% if form.rack_placement.errors %}has-error{% endif %}">
+            <label class="control-label">Расположение в стойке</label><br>
+            {{ form.rack_placement }}
+            {% for error in form.rack_placement.errors %}
+                <p class="error">{{ error }}</p>
+            {% endfor %}
+        </div>
+
+        <div class="form-group {% if form.whole_rack_depth.errors %}has-error{% endif %}">
+            <div class="checkbox">
+                <label class="control-label">{{ form.whole_rack_depth }} Занимает всю глубину стойки</label>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="form-group {% if form.comment.errors %}has-error{% endif %}">
+    <label>Комментарий</label>
+    {{ form.comment.errors }}
+    {{ form.comment }}
+</div>
+
+
+<script>
+    $("#id_datacenter").select2();
+    $("#id_store_entry").select2();
+    $('#id_hardware').select2();
+
+</script>

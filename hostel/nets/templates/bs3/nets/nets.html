@@ -1,0 +1,54 @@
+{% extends 'bs3/base.html' %}
+{% block title %}IP-адреса{% endblock %}
+{% block content %}
+
+{% include 'bs3/nets/tabs.html' %}
+
+<style>
+.net_table {width: 100%;}
+.net_table th {padding: 2px;}
+.net_table td {padding-right: 8px;}
+.net_table tr {border-bottom: solid 1px #d3d3d3;}
+.net_tr_margin_1 { background-color: #ebebeb;}
+.net_margin_1 { padding-left: 20px !important; }
+
+.net_tr_margin_2 { background-color: #e4e4e4;}
+.net_margin_2 { padding-left: 40px !important;}
+
+.net_tr_margin_3 { background-color: #dfdfdf;}
+.net_margin_3 { padding-left: 60px !important;}
+
+.net_tr_margin_4 { background-color: #dadada;}
+.net_margin_4 { padding-left: 80px !important;}
+
+.net_tr_margin_5 { background-color: #d5d5d5;}
+.net_margin_5 { padding-left: 80px !important;}
+
+</style>
+
+{% if nodes %}
+
+    <table class="net_table table-hover">
+
+        {% include 'bs3/nets/nodes_table_header.html' %}
+
+        <tbody>
+        {% for node in nodes %}
+            {% with node.data.hostel_net as net %}
+                {% include 'bs3/nets/nodes_table_row.html' %}
+            {% endwith %}
+        {% endfor %}
+        </tbody>
+
+    </table>
+
+{% else %}
+
+    <div class="container text-center">
+        <h3 class="text-center">Сетей [почему-то] нет</h3>
+    </div>
+
+{% endif %}
+
+{% endblock %}
+

@@ -1,0 +1,80 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Карта магистральной сети iHome{% endblock %}
+{% block content %}
+
+    <div class="container-fluid">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Карта магистральной сети {% if switches %}с коммутаторами{% endif %}
+
+                    {% if switches %}
+                        <a class="pull-right btn btn-default btn-xs" href="{% url 'map' %}">Без коммутаторов</a>
+                    {% else %}
+                        <a class="pull-right btn btn-default btn-xs" href="{% url 'map' %}?switches=1">С коммутаторами</a>
+                    {% endif %}
+
+                </h3>
+            </div>
+            <div class="panel-body" id="graph_container"></div>
+        </div>
+
+    </div>
+
+    <script type="text/javascript">
+
+        {% if switches %}
+        let url = '/api/map/?switches=1'
+        {% else %}
+        let url = '/api/map/'
+        {% endif %}
+
+        $.ajax({
+            url: url,
+            success: function (data) {
+
+                devices = data['nodes'];
+                edges = data['edges'];
+
+                var nodes = new vis.DataSet(devices);
+                var edges = new vis.DataSet(edges);
+
+                // create a network
+                var container = document.getElementById('graph_container');
+
+                // provide the data in the vis format
+                var data = {
+                    nodes: nodes,
+                    edges: edges
+                };
+
+                var options = {
+                    layout: {
+                        improvedLayout: true,
+                    },
+                    physics: {
+                        stabilization: true
+                    },
+                    edges: {
+                        scaling: {
+                            label: true,
+                        },
+                        smooth: true,
+                        color: {
+                            color: '#666666',
+                            highlight: '#6b89e3',
+                            hover: '#848484',
+                            inherit: 'from',
+                            opacity: 1.0
+                        },
+                    },
+                }
+
+                var network = new vis.Network(container, data, options);
+            }
+        });
+
+    </script>
+
+{% endblock %}

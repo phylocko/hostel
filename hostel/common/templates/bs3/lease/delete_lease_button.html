@@ -1,0 +1,29 @@
+<a class="btn btn-danger" data-toggle="modal" data-target="#delete_lease">
+    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+</a>
+
+<div class="modal fade text-left" id="delete_lease" tabindex="-1" role="dialog">
+    <form method="POST" action="{% url 'delete_lease' %}">
+        {% csrf_token %}
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Удалить информацию о {{ lease }}?</h4>
+                </div>
+                <div class="modal-body">
+
+                    <input type="hidden" name="id" placeholder="tech id" value="{{ lease.pk }}">
+                    <p>Действие необратимо</p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Я еще подумаю...</button>
+                    <input type="submit" class="btn btn-danger" value="Удалить">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

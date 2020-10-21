@@ -1,0 +1,114 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Burst-набор {{ burst_set }}{% endblock %}
+{% load hostel_filters %}
+{% block content %}
+    <style>
+        .service_block {
+            border: solid 1px #cccccc;
+            padding: 4px;
+            padding-left: 10px;
+            border-radius: 3px;
+            margin-bottom: 4px;
+            background-color: #ebebeb;
+        }
+    </style>
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'burst_sets' %}">Burst-наборы</a></li>
+            <li class="active">{{ burst_set.name }}</li>
+        </ol>
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>
+                    <div class="color-marker color-device"></div>
+                    Burst-набор "{{ burst_set.name }}"
+                </h4>
+            </div>
+
+            <div class="col-md-4 text-right">
+                {% if mode == 'edit' %}
+                    <a class="btn btn-default" href="{% url 'burst_set' burst_set.pk %}">Отмена</a>
+                    <button type="submit" form="deviceData" class="btn btn-primary">Сохранить</button>
+
+                {% else %}
+                    <a class="btn btn-primary" href="{% url 'burst_set_update' burst_set.pk %}">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                        Редактировать
+                    </a>
+
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-4">
+
+                <form method="post">
+                    {% csrf_token %}
+                    {% include 'bs3/burst/burst_set_data.html' %}
+                </form>
+
+                <br>
+
+                {% with burst_set as object %}
+                    {% include 'bs3/common/created_updated.html' %}
+                {% endwith %}
+
+            </div>
+
+
+            <div class="col-md-8">
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs">
+                    <li {% if tab == 'interfaces' %}class="active"{% endif %}>
+                        <a href="{% url 'burst_set' burst_set.pk %}">Интерфейсы</a>
+                    </li>
+                    <li {% if tab == 'calculate' %}class="active"{% endif %}>
+                        <a href="{% url 'burst_set_calculate' burst_set.pk %}">Посчитать</a>
+                    </li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+
+                    <br>
+
+                    {% if tab == 'interfaces' %}
+                        {% include 'bs3/burst/tab_interfaces.html' %}
+
+                    {% elif tab == 'calculate' %}
+                        {% include 'bs3/burst/tab_calculate.html' %}
+
+                    {% endif %}
+
+                </div>
+
+
+            </div>
+
+
+            <div class="col-md-12">
+                <div class="well well-sm text-right">
+                    {% if perms.common.delete_burstset %}
+                        {% include 'bs3/burst/delete_burst_button.html' %}
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <script>
+        $('#id_client').select2()
+    </script>
+
+{% endblock %}

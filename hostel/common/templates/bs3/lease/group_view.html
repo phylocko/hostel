@@ -1,0 +1,84 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Lease {{ lease }}{% endblock %}
+{% block content %}
+
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'leases' %}">Лизы</a></li>
+            <li><a href="{% url 'lease_groups' %}">Группы</a></li>
+            <li class="active">{{ lease_group }}</li>
+        </ol>
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>
+                    <div class="color-marker color-leasegroup"></div>
+                    {{ lease_group }}
+                </h4>
+            </div>
+            <div class="col-md-4 text-right">
+                {% if mode == 'edit' %}
+                    <a class="btn btn-default" href="{% url 'lease_group' lease_group.pk %}">Отмена</a>
+                    <button type="submit" form="lease_group_form" class="btn btn-primary">Сохранить</button>
+                {% else %}
+                    {% if perms.common.change_lease %}
+                        <a class="btn btn-primary" href="{% url 'update_lease_group' lease_group.pk %}"><span class="glyphicon glyphicon-edit"></span> Редактировать</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-4">
+
+                {% if mode == "edit" %}
+                    <form method="POST" id="lease_group_form">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" placeholder="lease_id" value="{{ lease.pk }}">
+                        {% include 'bs3/lease/lease_group_form.html' %}
+                    </form>
+                {% else %}
+                    {% include 'bs3/lease/lease_group_data.html' %}
+                {% endif %}
+
+                {% with lease_group as object %}
+                    {% include 'bs3/common/created_updated.html' %}
+                {% endwith %}
+
+            </div>
+
+            <div class="col-md-8">
+
+                {% with lease_group.leases.all as leases %}
+
+                    {% include 'bs3/lease/leases_panel.html' %}
+
+                {% endwith %}
+
+            </div>
+
+
+        </div>
+
+        {% if mode == 'view' %}
+
+            <div class="well text-right">
+
+                {% if perms.common.delete_lease %}
+                    {% include 'bs3/lease/delete_lease_group_button.html' %}
+                {% endif %}
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+    {% include 'bs3/spy/object_log.html' %}
+
+{% endblock %}

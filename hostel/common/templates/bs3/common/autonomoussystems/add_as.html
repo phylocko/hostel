@@ -1,0 +1,56 @@
+{% extends 'bs3/base.html' %}
+{% block title %}*Создать AS для {{ client.netname }}{% endblock %}
+{% block content %}
+
+
+<div class="container">
+
+
+<ol class="breadcrumb">
+    <li><a href="{% url 'clients' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+    <li><a href="{% url 'clients' %}{{ client.pk }}">{{ client }}</a></li>
+    <li class="active">Создание автономной системы</li>
+</ol>
+
+
+
+
+    <!-- Заголовок, кнопка редактирования -->
+    <div class="row" style="margin-bottom: 16px;">
+        <div class="col-md-8">
+	<h4>Добавление автономки для {{ client.netname }}</h4>
+        </div>
+        <div class="col-md-4 text-right">
+            <button type="submit" form="techData" class="btn btn-primary pull-right">Создать</button>
+        </div>
+    </div>
+
+
+
+    <form id="techData" METHOD="POST">
+
+        {% csrf_token %}
+        <input type="hidden" name="client_id" placeholder="client" value="{{ client.pk }}">
+
+        <div class="row">
+
+            <div class="col-md-4">
+            </div>
+
+
+            <div class="col-md-4">
+                {% include 'bs3/common/autonomoussystems/as_form.html' %}
+
+            </div>
+
+
+            <div class="col-md-4">
+            </div>
+
+
+        </div>
+
+
+    </form>
+
+    {% endblock %}

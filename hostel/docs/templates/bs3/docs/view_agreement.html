@@ -1,0 +1,258 @@
+{% extends 'bs3/base.html' %}
+{% load static %}
+{% block title %}Договор {{ agreement }}{% endblock %}
+{% block content %}
+
+    {% include 'bs3/docs/docs_tabs.html' %}
+
+    <div class="container-fluid">
+    <br>
+    <ol class="breadcrumb">
+        <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+        <li><a href="{% url 'agreements' %}">Документы</a></li>
+        <li class="active">{{ agreement }}</li>
+    </ol>
+    <!-- Заголовок, кнопка редактирования -->
+    <div class="row" style="margin-bottom: 16px;">
+        <div class="col-md-8">
+            <h4>
+                <div class="color-marker color-agreement"></div>
+                {{ agreement }}
+            </h4>
+        </div>
+        <div class="col-md-4 text-right">
+            {% if perms.docs.change_agreement %}
+                <a class="btn btn-primary" href="{% url 'update_agreement' agreement.pk %}">
+                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                    Редактировать/загрузить скан
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+    <div class="col-md-4">
+        {% include 'bs3/docs/agreement_data.html' %}
+
+
+        {% with agreement as object %}
+            {% include 'bs3/common/created_updated.html' %}
+        {% endwith %}
+    </div>
+    <div class="col-md-8">
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+
+            <li role="presentation" {% if tab == 'orders' %}class="active"{% endif %}>
+                <a href="{% url 'agreement_orders' agreement.pk %}">
+                    <span class="glyphicon glyphicon-paperclip"></span>
+                    Заказы — приложения
+                </a>
+            </li>
+
+            <li role="presentation" {% if tab == 'applications' %}class="active"{% endif %}>
+                <a href="{% url 'agreement_applications' agreement.pk %}">
+                    <span class="glyphicon glyphicon-list"></span>
+                    Все документы
+                </a>
+            </li>
+
+            <li role="presentation" {% if tab == 'preview' %}class="active"{% endif %}>
+                <a href="{% url 'agreement_preview' agreement.pk %}">
+                    <span class="glyphicon glyphicon-eye-open"></span>
+                    Просмотр документа
+                </a>
+            </li>
+
+        </ul>
+
+        <br>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+
+            <div class="tab-pane active">
+
+                {% if tab == 'orders' %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="padding-right: 8px;">
+                            <h4 class="panel-title">Таблица заказов и актов к договору
+
+                                <div class="dropdown pull-right">
+                                    <button class="btn btn-primary btn-xs dropdown-toggle"
+                                            type="button" id="dropdownMenu1" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="true">
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                        <li>
+                                            <a href="{% url 'add_application' agreement.pk %}">
+                                                Загрузить приложение, заказ или акт
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </h4>
+                        </div>
+
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>Заказ/приложение</th>
+                                <th>Акт к заказу/приложению</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for group in groups|dictsort:'order_number' %}
+                                <tr>
+                                    <td class="{% if group.data.orders and group.data.akts %}success{% else %}danger{% endif %}">
+                                        <h4>
+                                            {{ group.order_number }}
+                                        </h4>
+                                    </td>
+                                    <td>
+                                        {% for order in group.data.orders %}
+                                            <div>
+                                                <a href="{% url 'application' order.pk %}">
+                                                    {% if order.filename %}
+                                                        <span class="glyphicon glyphicon-file text-success" aria-hidden="true"></span>
+                                                    {% else %}
+                                                        <span class="glyphicon glyphicon-file text-danger" aria-hidden="true"></span>
+                                                    {% endif %}
+
+                                                    {{ order }}
+                                                </a>
+                                                {% if order.name %}
+                                                    <br>
+                                                    <small style="margin-left: 18px;">
+                                                        <span class="text-muted">{{ order.name|truncatechars:50 }}</span>
+                                                    </small>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        {% for akt in group.data.akts %}
+                                            <div>
+
+                                                {% if akt.filename %}
+                                                    <span class="glyphicon glyphicon-file text-success" aria-hidden="true"></span>
+                                                {% else %}
+                                                    <span class="glyphicon glyphicon-file text-danger" aria-hidden="true"></span>
+                                                {% endif %}
+
+
+                                                <a href="{% url 'application' akt.pk %}">{{ akt }}</a>
+                                                {% if akt.name %}
+                                                    <br>
+                                                    <small style="margin-left: 18px;">
+                                                        <span class="text-muted">{{ akt.name|truncatechars:50 }}</span>
+                                                    </small>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="3" class="text-muted text-center">Пусто</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+
+                {% if tab == 'applications' %}
+
+                    <div class="well well-sm">
+                        <form method="get" class="form-inline">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="search_string" value="{{ search_string|default:'' }}">
+                                <button type="submit" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                    Найти
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="padding-right: 8px;">
+                            <h4 class="panel-title">Приложения к договору [{{ applications.count }}]
+                                <div class="dropdown pull-right">
+                                    <button class="btn btn-primary btn-xs dropdown-toggle"
+                                            type="button" id="dropdownMenu1" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="true">
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                        <li>
+                                            <a href="{% url 'add_application' agreement.pk %}">Загрузить приложение к
+                                                договору</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </h4>
+                        </div>
+
+                        <table class="table table-striped">
+                            {% for application in applications %}
+                                <tr>
+                                    <td>
+                                        {% include 'bs3/docs/application_repr.html' %}
+                                    </td>
+                                    <td class="text-right text-muted">{{ application.date|date:'d.m.Y' }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr class="text-muted text-center">
+                                    <td colspan="2">Приложений нет</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                {% endif %}
+
+                {% if tab == 'preview' %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Просмотр файла документа</h3>
+                        </div>
+
+                        {% if agreement.filename %}
+                            <div class="panel-body text-right">
+
+                                <a href="{% static 'docs/' %}{{ agreement.FILE_FOLDER }}/{{ agreement.filename }}"
+                                   class="btn btn-primary">
+                                    <span class="glyphicon glyphicon-download"></span>
+                                    Скачать файл
+                                </a>
+
+                                {% if perms.docs.change_agreement %}
+                                    {% include 'bs3/docs/delete_agreement_file_button.html' %}
+                                {% endif %}
+
+                            </div>
+                            <iframe width="100%" height="1000"
+                                    src="{% static 'docs/' %}{{ agreement.FILE_FOLDER }}/{{ agreement.filename }}">
+                            </iframe>
+                        {% else %}
+                            <div class="panel-body text-muted text-center">Файл не загружен</div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+
+            </div>
+        </div>
+
+        {% if perms.docs.delete_agreement %}
+            {% include 'bs3/docs/delete_agreement_button.html' %}
+        {% endif %}
+    </div>
+
+    {% include 'bs3/spy/object_log.html' %}
+
+{% endblock %}

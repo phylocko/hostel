@@ -1,0 +1,80 @@
+<div class="form-group {% if form.address.errors %}has-error{% endif %}">
+    <label>Адрес</label>
+    {{ form.address.errors }}
+
+    {{ form.netmask.errors }}
+    <div style="overflow: hidden;">
+    {{ form.address }} {{ form.netmask }}
+    </div>
+
+    <style>
+        .netmask { width: 40px; border-bottom-left-radius: 0px; border-top-left-radius: 0px; border-left: None; }
+        .ipaddress { width: 140px; border-bottom-right-radius: 0px; border-top-right-radius: 0px; float: left;}
+    </style>
+</div>
+
+<div class="form-group">
+    <label>Vlan</label>
+    {{ form.vlan.errors }}
+    {{ form.vlan }}
+</div>
+
+<div class="form-group">
+    <label>Девайс</label>
+    {{ form.device.errors }}
+    {{ form.device }}
+    <div class="help-block">Где висит этот адрес (для /32)</div>
+</div>
+
+<div class="form-group">
+    <label>Описание</label>
+    {{ form.description.errors }}
+    {{ form.description }}
+</div>
+
+<div class="form-group">
+    <label>Статус</label>
+    {{ form.status.errors }}
+    {{ form.status }}
+    <div class="help-block">Если статус "—", адрес игнорируется в конфиге RS</div>
+</div>
+
+<div class="form-group {% if form.mac.errors %}has-error{% endif %}">
+    <label class="control-label">MAC-Адрес</label>
+    {{ form.mac.errors }}
+    {{ form.mac }}
+</div>
+
+<div class="form-group">
+    <label>Город</label>
+    {{ form.city.errors }}
+    {{ form.city }}
+    <div class="help-block">Влияет на BGP Community на RS для W-IX и Inet2</div>
+</div>
+
+<div class="form-group">
+    <label>#RT</label>
+    {{ form.rt.errors }}
+    {{ form.rt }}
+</div>
+
+<div class="form-group">
+    <label>PTR</label>
+    {{ form.ptr.errors }}
+    {{ form.ptr }}
+    <div class="help-block">Обратная DNS-запись</div>
+</div>
+
+<div class="form-group">
+    <label>Комментарий</label>
+    {{ form.comment.errors }}
+    {{ form.comment }}
+</div>
+
+<script>
+$(document).ready(function() {
+    $("#id_device").select2();
+    $("#id_vlan").select2();
+    $("#id_city").select2();
+})
+</script>

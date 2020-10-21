@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Список услуг для {{ client.clientname }}</title>
+
+    <!-- Bootstrap -->
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+<h3>&nbsp;{{ client.clientname }}. Список услуг.</h3>
+
+<table class="table">
+    <tr>
+        <th>SID</th>
+        <th>Тип</th>
+        <th>AS</th>
+        <th>Vlan</th>
+        <th>IP</th>
+        <th>Описание</th>
+    </tr>
+
+    {% for service in services %}
+        <tr>
+            <td><b>
+                {% if links == '1' %}
+                    <a href="{% url 'service' service.pk %}">{{ service }}</a>
+                {% else %}
+                    {{ service }}
+                {% endif %}
+            </b></td>
+
+            <td>{{ service.servicetype|upper }}</td>
+            <td>
+                {% if service.asn %}
+                    AS{{ service.asn.asn }}
+                {% endif %}
+            </td>
+            <td>
+                {% for vlan in service.vlan.all %}
+                    {{ vlan.vlannum }}<br>
+                {% endfor %}
+            </td>
+            <td>
+                {% for net in service.net.all %}
+                    {{ net }}<br>
+                {% endfor %}
+
+
+            </td>
+            <td>{{ service.description|default:'—'|linebreaksbr }}</td>
+        </tr>
+
+    {% empty %}
+        <tr>
+            <td class="text-center text-muted" colspan=4>Услуг не найдено</td>
+        </tr>
+
+    {% endfor %}
+
+</table>
+</body>

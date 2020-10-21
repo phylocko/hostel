@@ -1,0 +1,36 @@
+{% load hostel_filters %}
+
+<table class="table">
+    <tr>
+        <td><label>Netname</label></td>
+        <td><b>{{ asn.engname|default:"" }}</td>
+    </tr>
+
+    <tr>
+        <td><label>AS-SET</label></td>
+        <td>{{ asn.asset|default:"" }}</td>
+    </tr>
+
+    <tr>
+        <td><label>AS-SET 6</label></td>
+        <td>{{ asn.asset6|default:"" }}</td>
+    </tr>
+
+    <tr>
+        <td><label>AS-LIST</label></td>
+        <td>{{ asn.aslist|default:"" }}</td>
+    </tr>
+
+    <tr>
+        <td><label>Тикет</label></td>
+        <td>{{ asn.ticket|ticket }}</td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+            <label>Комментарий</label>
+            <address>{{ asn.comment|default:"—"|linebreaks }}</address>
+        </td>
+    </tr>
+
+</table>

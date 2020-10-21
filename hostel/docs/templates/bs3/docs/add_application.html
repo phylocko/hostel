@@ -1,0 +1,54 @@
+{% extends 'bs3/base.html' %}
+{% block title %}*Создать приложение к договору {{ agreement }}{% endblock %}
+{% block content %}
+
+{% include 'bs3/docs/docs_tabs.html' %}
+
+<div class="container">
+
+    <br>
+    <ol class="breadcrumb">
+        <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+        <li><a href="{% url 'agreements' %}">Документы</a></li>
+        <li><a href="{% url 'agreement' agreement.pk %}">{{ agreement }}</a></li>
+        <li class="active">Загрузить приложение к договору</li>
+    </ol>
+
+    <div class="alert alert-danger">
+         <strong>Коллеги!</strong>
+        С целью предотвращения распространения коронавирусной инфекции, запрещается добавлять множество приложений общим файлом.
+        Пожалуйста, регистрируйте приложения отдельными документами. В противном случае файлы могут быть помещены в карантин на неопределенный срок.
+    </div>
+
+    <!-- Заголовок, кнопка редактирования -->
+    <div class="row" style="margin-bottom: 16px;">
+        <div class="col-md-8">
+	        <h4>Приложения для {{ agreement.client.clientname}}</h4>
+        </div>
+        <div class="col-md-4 text-right">
+            <button type="submit" form="doc_data" class="btn btn-primary pull-right">Создать</button>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-2">
+        </div>
+
+        <div class="col-md-8">
+
+            <form id="doc_data" METHOD="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="agreement_id" value="{{ agreement.pk }}">
+                {% include 'bs3/docs/application_form.html' %}
+            </form>
+
+        </div>
+
+        <div class="col-md-2">
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Выделенные адреса в этой сети</h3>
+                        </div>
+
+                        <table class="table">
+                        {% for ghostnet in ghostnets %}
+                            <tr>
+                            <td>&nbsp;&nbsp;
+                                <a href="?page=net&action=view&id={{ ghostnet.pk }}">{{ ghostnet.network }}</a>
+                            </td>
+                            <td>
+                                {{ ghostnet.description }}
+                            </td>
+                            </tr>
+                        {% endfor %}
+                            <tr><td colspan="2">
+                                {% include 'bs3/nets/addghost.html' %}
+                            </td></tr>
+                        </table>
+
+
+
+                    </div>

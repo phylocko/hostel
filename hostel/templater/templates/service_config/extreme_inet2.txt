@@ -1,0 +1,3 @@
+configure vlan "fvrs" add ports {{ bundle.name }} tagged
+{% if net %}{% if net.mac %}create fdb {{ net.mac }} vlan "fvrs" ports {{ bundle.name }}{% endif %}{% endif %}
+configure ports {{ bundle.name }} vlan "fvrs" limit-learning 0 action stop-learning

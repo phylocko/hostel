@@ -1,0 +1,34 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Клиенты</h3>
+    </div>
+
+    <table class="table">
+        {% for client in recent_clients %}
+            <tr>
+                <td class="active">
+                    <div class="color-marker color-client"></div>
+                    <b><a href="{% url 'clients' %}{{ client.pk }}"
+                          class="{% if client.enabled %}text-success{% else %}text-danger{% endif %}">{{ client.netname }}</a></b>
+                </td>
+                <td>
+                    <a href="
+                            {% url 'clients' %}{{ client.pk }}">{{ client.clientname|default:'—'|truncatechars:20 }}</a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td class="text-muted text-center">Клиентов нет</td>
+            </tr>
+
+        {% endfor %}
+    </table>
+
+</div>
+
+<script>
+    $('#create_client_form').slideToggle();
+    $('#create_client_trigger').click(function () {
+        $('#create_client_form').slideToggle();
+    })
+</script>

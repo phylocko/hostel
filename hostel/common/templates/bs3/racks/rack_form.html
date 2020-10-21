@@ -1,0 +1,34 @@
+<div class="form-group {% if form.datacenter.errors %}has-error{% endif %}">
+    <label class="control-label">Площадка</label><br>
+    {{ form.datacenter }}
+    {% for error in form.datacenter.errors %}
+        <p class="error">{{ error }}</p>
+    {% endfor %}
+</div>
+
+<div class="form-group {% if form.location.errors %}has-error{% endif %}">
+    <label class="control-label">Расположение/название</label><br>
+    {{ form.location }}
+    {% for error in form.location.errors %}
+        <p class="error">{{ error }}</p>
+    {% endfor %}
+</div>
+
+<div class="form-group {% if form.height.errors %}has-error{% endif %}">
+    <label class="control-label">Высота стойки (в юнитах)</label><br>
+    {{ form.height }}
+    {% for error in form.height.errors %}
+        <p class="error text-danger">{{ error }}</p>
+    {% endfor %}
+</div>
+
+<div class="form-group {% if form.comment.errors %}has-error{% endif %}">
+    <label class="control-label">Комментарий</label><br>
+    {{ form.comment }}
+    {% for error in form.comment.errors %}
+        <p class="error">{{ error }}</p>
+    {% endfor %}
+</div>
+<script>
+    $("#id_datacenter").select2();
+</script>

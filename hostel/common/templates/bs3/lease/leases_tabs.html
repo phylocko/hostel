@@ -1,0 +1,14 @@
+<ul class="nav nav-tabs">
+    <li role="presentation" {% if tab == "filter" %}class="active"{% endif %}>
+        <a href="{% url 'leases' %}">
+            <span class="glyphicon glyphicon-filter"></span>
+        </a></li>
+
+    {% if perms.common.add_lease %}
+        <li role="presentation" {% if tab == "add" %}class="active"{% endif %}>
+            <a href="{% url 'create_lease' %}">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </a>
+        </li>
+    {% endif %}
+</ul>

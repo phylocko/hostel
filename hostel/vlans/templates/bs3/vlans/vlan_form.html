@@ -1,0 +1,32 @@
+<div class="form-group {% if form.ticket.errors %}has-error{% endif %}">
+    <label>Тикет</label>
+    {{ form.ticket.errors }}
+    {{ form.ticket }}
+</div>
+
+<div class="form-group {% if form.vlannum.errors %}has-error{% endif %}">
+    <label>Vlan-id</label>
+    {{ form.vlannum.errors }}
+    {{ form.vlannum }}
+</div>
+
+<div class="form-group {% if form.vname.errors %}has-error{% endif %}">
+    <label>Название</label>
+    {{ form.vname.errors }}
+    {{ form.vname }}
+    <span id="helpBlock" class="help-block">Название влана на железках</span>
+</div>
+
+<div class="checkbox">
+    <label>{{ form.is_management }} <b>p2p-vlan между железками</b></label>
+</div>
+
+<div class="checkbox">
+    <label>{{ form.is_local }} <b>Проходит по нашей сети</b></label>
+</div>
+
+<div class="form-group">
+    <label>Комментарий</label>
+    {{ form.comment.errors }}
+    {{ form.comment }}
+</div>

@@ -1,0 +1,62 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Услуга {{ service }}{% endblock %}
+{% block content %}
+{% load hostel_filters %}
+
+<div class="container">
+
+    {% include 'bs3/common/broadcrumbs_service.html' %}
+
+    <!-- Заголовок, кнопка редактирования -->
+    <div class="row" style="margin-bottom: 16px;">
+        <div class="col-md-8">
+            <h4>
+                <div class="color-marker color-service"></div>
+                {{ service }}
+            </h4>
+        </div>
+        <div class="col-md-4 text-right">
+            {% if return_to == 'client' %}
+            <a class="btn btn-default" href="{% url 'client' service.client.pk %}">Отмена</a>
+            {% else %}
+            <a class="btn btn-default" href="{% url 'service' service.pk %}">Отмена</a>
+            {% endif %}
+            <button type="submit" form="serviceData" class="btn btn-primary">Сохранить</button>
+        </div>
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-md-4">
+        </div>
+
+        <div class="col-md-4">
+
+            {% if mode == "edit" %}
+            <form method="POST" id="serviceData">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ service.pk }}">
+                <input type="hidden" name="name" value="{{ service.name }}">
+                {% include 'bs3/services/service_form.html' %}
+                {% else %}
+                {% include 'bs3/services/service_data.html' %}
+                {% endif %}
+
+                {% with service as object %}
+                {% include 'bs3/common/created_updated.html' %}
+                {% endwith %}
+
+        </div>
+
+        <div class="col-md-4">
+        </div>
+
+    </div>
+
+</div>
+
+
+{% include 'bs3/spy/object_log.html' %}
+
+{% endblock %}

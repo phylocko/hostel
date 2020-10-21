@@ -1,0 +1,11 @@
+<tr>
+    <td style="width: 60px;" class="hidden-xs hidden-sm text-muted">{{ bundle.pk }}</td>
+    <td style="width: 180px;">
+        <div class="color-marker color-bundle"></div>
+        <b><a href="{% url 'bundle' bundle.pk %}">{{ bundle.name }}</a></b></td>
+    <td style="width: 120px;"><b>{{ bundle.device }}</b></td>
+    <td>
+        {{ client.clientname }}
+        <small><div class="text-muted">{{ bundle.description|default:'' }}</div></small>
+    </td>
+</tr>

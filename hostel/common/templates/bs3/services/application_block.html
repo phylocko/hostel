@@ -1,0 +1,66 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Заказ</h3>
+    </div>
+
+    <table class="table">
+
+        {% if service.application %}
+            <tr>
+                <td>
+                    {% with service.application as application %}
+                        {% if application.filename %}
+                            <span class="glyphicon glyphicon-file text-success" aria-hidden="true"></span>
+                        {% else %}
+                            <span class="glyphicon glyphicon-file text-danger" aria-hidden="true"></span>
+                        {% endif %}
+                        <a href="{% url 'application' application.pk %}">{{ application|truncatechars:36 }}</a>
+                    {% endwith %}
+                </td>
+
+                <td class="text-right">
+                    <button class="btn btn-xs btn-warning" data-toggle="modal" data-target=".bs-example-modal-sm">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td class="text-center">
+                    <a href="{% url 'choose_doc_for_service' service.pk %}">Выбрать документ</a>
+                </td>
+            </tr>
+        {% endif %}
+
+
+    </table>
+
+</div>
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Отвязать документ?</h4>
+            </div>
+
+            <div class="modal-body">
+                <p>Вы собираетесь отвязать документ «{{ service.application|truncatechars:20 }}» от услуги</p>
+            </div>
+
+            <div class="modal-footer">
+                <form method="POST">
+                    {% csrf_token %}
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Я еще подумаю...</button>
+                    <button type="submit" name="action" value="release_application" class="btn btn-warning">Отвязать</button>
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+</div>

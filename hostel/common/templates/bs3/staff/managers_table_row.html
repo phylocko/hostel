@@ -1,0 +1,38 @@
+{% load hostel_filters %}
+
+{% load static %}
+
+<thead>
+<tr>
+    <td class="text-right">
+        {% if manager.photo %}
+            <img class="img-circle" style="height: 60px;" src="{{ manager.photo.url }}">
+        {% else %}
+            <img class="img-circle" style="height: 60px;" src="{% static '/i/' %}no-photo.png   ">
+        {% endif %}
+    </td>
+
+    <td class="text-muted">
+
+        <b><a href="{% url 'employee' manager.pk %}">{{ manager.get_full_name|default:'—' }}</a></b><br>
+        {{ manager.username }}
+
+    </td>
+
+    <td class="hidden-sm hidden-xs">{{ manager.position|default:"" }}</td>
+
+    <td class="hidden-md hidden-sm hidden-xs">
+        {% if manager.email %}
+            <a href="mailto:{{ manager.email }}">{{ manager.email }}</a>
+        {% endif %}
+    </td>
+
+    <td>
+        {{ manager.phone|phone }}
+        {{ manager.addphone|default:"" }}
+    </td>
+
+    <td class="text-muted hidden-md hidden-sm hidden-xs">{{ manager.birthday|date:'d.m' }}</td>
+
+</tr>
+</thead>

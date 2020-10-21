@@ -1,0 +1,38 @@
+{% extends 'bs3/base.html' %}
+{% block title %}*Выбрать vlan {{ service }}{% endblock %}
+{% block content %}
+
+
+<div class="container">
+<ol class="breadcrumb">
+    <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+    <li><a href="{% url 'client' service.client.pk %}">{{ service.client }}</a></li>
+    <li><a href="{% url 'services' %}{{ service.pk }}">{{ service }}</a></li>
+    <li class="active">Выбрать существующий vlan для услуги</li>
+</ol>
+
+<button type="submit" form="vlanData" class="btn btn-primary pull-right" id="submit_button" disabled>Выбрать Vlan</button>
+
+    <div class="row">
+
+        <div class="col-md-2">
+        </div>
+
+        <div class="col-md-8">
+
+            <form id="vlanData" METHOD="POST">
+
+                {% csrf_token %}
+                <input type="hidden" name="service_id" value="{{ service.pk }}">
+                {% include 'bs3/vlans/assign_vlan_form.html' %}
+            </form>
+
+        </div>
+
+        <div class="col-md-2">
+        </div>
+
+
+    </div>
+
+    {% endblock %}

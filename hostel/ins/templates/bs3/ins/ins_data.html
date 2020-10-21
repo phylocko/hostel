@@ -1,0 +1,118 @@
+{% load hostel_filters %}
+
+<table class="table">
+    <tr>
+        <td><label>Тип</label></td>
+
+        {% if incident.type == 'failure' %}
+            <td class="danger"><b>{{ incident.type|upper }}</b></td>
+        {% elif incident.type == 'work' %}
+            <td class="info"><b>{{ incident.type|upper }}</b></td>
+        {% else %}
+            <td class="active"><b>{{ incident.type|upper }}</b></td>
+        {% endif %}
+    </tr>
+
+    <tr>
+        <td><label>Дата начала</label></td>
+        <td>{{ incident.time_start|date:"Y-m-d H:i:s" }}</td>
+    </tr>
+
+    <tr>
+        <td><label>Дата окончания</label></td>
+        <td>{{ incident.time_end|date:"Y-m-d H:i:s" }}</td>
+    </tr>
+
+    {% if incident.type == 'failure' %}
+        <tr>
+            <td><label>Период простоя</label></td>
+            <td>
+                {% if incident.outage_period %}
+                    <b>{{ incident.period }}</b> <span class="text-muted">— указан вручную</span>
+                {% else %}
+                    <b>{{ incident.period }}</b> <span class="text-muted">— вычислен</span>
+                {% endif %}
+            </td>
+        </tr>
+    {% endif %}
+
+    <tr>
+        <td><label>Тикет</label></td>
+        <td>
+            {% if incident.ticket %}
+
+                <form method="post">
+                    {% csrf_token %}
+                    {{ incident.ticket|ticket }}
+                    <button type="submit"
+                            name="action" value="rt_fill_ins"
+                            class="btn btn-xs btn-success pull-right"
+                            title="Заполнить поле INS в тикете">
+                        <span class="glyphicon glyphicon-arrow-right"></span>
+                    </button>
+                </form>
+            {% endif %}
+
+        </td>
+    </tr>
+
+    <tr>
+        <td><label>Виновник</label></td>
+        <td>
+            {% if incident.provider %}
+                <div class="color-marker color-client"></div>
+                <b><a href="{% url 'client' incident.provider.pk %}">{{ incident.provider }}</a></b>
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <td><label>Тикет виновника</label></td>
+        <td>{{ incident.provider_tt|default:"" }}</td>
+    </tr>
+
+    <tr>
+        <td><label>Опции</label></td>
+        <td>
+            {% if incident.report_outage %}<label class="label label-danger">Учитывается в простоях</label>{% endif %}
+            {% if incident.closed %}<label class="label label-primary">INS завершен</label>{% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+
+            <label>Затронутые каналы</label>
+            <address>
+                {{ incident.fiber|default:"—"|linebreaks }}
+
+                {% if impact_time %}
+                    <div class="text-danger" title="{{ text_parsed }}">
+                        <label>Найдено: {{ impact_time }}</label>
+
+                        <button class="btn btn-default btn-xs pull-right" id="parsed_comment_trigger">
+                            <span class="glyphicon glyphicon-triangle-bottom pull-right"></span>
+                        </button>
+
+                        <div id="parsed_comment_container">
+                            {{ text_parsed|linebreaksbr }}
+                        </div>
+                    </div>
+                    <hr>
+                    <script>
+                        $('#parsed_comment_container').slideUp();
+                        $('#parsed_comment_trigger').click(function () {
+                            $('#parsed_comment_container').slideToggle();
+                        });
+                    </script>
+                {% endif %}
+
+            </address>
+
+            <label>Влияние/комментарий</label>
+            <address>{{ incident.comment|default:"—"|linebreaks }}</address>
+
+        </td>
+    </tr>
+
+</table>

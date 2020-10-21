@@ -1,0 +1,84 @@
+{% extends 'bs3/base.html' %}
+
+{% block content %}
+
+
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'clients' %}{{ service.client.pk }}">{{ service.client }}</a></li>
+            <li><a href="{% url 'services' %}{{ service.pk }}">{{ service }}</a></li>
+            <li class="active">Выбор документа для услуги</li>
+        </ol>
+    </div>
+
+    <div class="container text-center">
+        <form method="GET" class="form-inline">
+
+            <input type="hidden" value="{{ service.pk }}" name="service">
+
+            <div class="form-group">
+                <input type="text"
+                       name="search"
+                       value="{{ search_string|default:'' }}"
+                       placeholder="Фильтр по документам"
+                       class="form-control"
+                       id="page_search"
+                       autocomplete="off">
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary form-control">
+                    <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
+                </button>
+            </div>
+        </form>
+        <script>
+            $('#page_search').focus();
+        </script>
+        <br>
+
+    </div>
+
+    <div class="container">
+        <table class="table table-hover">
+
+            {% for application in applications %}
+
+                <tr>
+
+                    <td class="active">
+                        <div class="color-marker color-agreement"></div>
+                        <b>{{ application.agreement.agreement_number }}</b>
+                    </td>
+
+                    <td>
+                        {% include 'bs3/docs/application_repr.html' %}
+                    </td>
+
+                    <td class="text-right">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input class="form-control" type="hidden" id="application_id" name="application_id" value="{{ application.pk }}">
+                            <input type="submit" value="Выбрать" class="btn btn-primary btn-xs">
+                        </form>
+
+                    </td>
+
+                </tr>
+
+            {% empty %}
+                <tr>
+                    <td class="text-center text-muted"><b>Ничего не нашлось</b>
+                        <br><br>
+                        <a href="{% url 'service' service.pk %}">Назад</a>
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+{% endblock %}

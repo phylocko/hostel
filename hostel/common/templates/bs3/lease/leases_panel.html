@@ -1,0 +1,121 @@
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h3 class="panel-title">Лизы [{{ leases.count }}]
+            <span id="leases_table_trigger" class="pull-right">
+                <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+            </span>
+        </h3>
+    </div>
+
+    <div id="leases_table_container">
+        <table class="table table-striped">
+
+            {% for lease in leases %}
+                <tr>
+                    <td>
+                        <div class="color-marker color-lease"></div>
+                        <b><a href="{% url 'leases' %}{{ lease.pk }}">{{ lease }}</a></b><br>
+                    </td>
+
+                    <td>
+                        <small class="text-muted">{{ lease.identity|truncatechars:73 }}</small>
+                    </td>
+
+                    <td class="text-right">
+                        {% if perms.common.change_leasegroup %}
+
+                            <span class="glyphicon glyphicon-trash text-danger"
+                                  aria-hidden="true" data-toggle="modal"
+                                  data-target="#release_lease_{{ lease.pk }}">
+                            </span>
+
+                            <div class="modal fade text-left"
+                                 id="release_lease_{{ lease.pk }}"
+                                 tabindex="-1"
+                                 role="dialog"
+                                 aria-labelledby="myModalLabel">
+
+                                <form method="POST">
+                                    {% csrf_token %}
+
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                                        aria-hidden="true">&times;</span>
+                                                </button>
+                                                <h4 class="modal-title" id="myModalLabel">Отвязать усугу подрядчика от этой
+                                                    услуги?</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Убрать лиз <b>{{ lease }} [{{ lease.pk }}]</b> из группы?</p>
+                                                <input type="hidden" name="lease_id" value="{{ lease.pk }}">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                    Я еще подумаю...
+                                                </button>
+                                                <button class="btn btn-primary"
+                                                        type="submit"
+                                                        name="action"
+                                                        value="release_lease">
+                                                    Убрать из группы
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td class="text-muted text-center">Услуги подрядчиков не привязаны</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+    {% if perms.common.change_service %}
+        <div class="panel-footer">
+
+            <div class="text-right">
+                <button id="create_lease_trigger" type="button" class="btn btn-primary btn-xs">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </button>
+            </div>
+
+            <form id="lease_form_container" action="{% url 'create_lease' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="service_id" value="{{ service.pk }}">
+                {% with lease_form as form %}
+                    {% include 'bs3/lease/lease_form.html' %}
+                {% endwith %}
+                <input class="btn btn-success btn-sm" type="submit" value="Создать Lease">
+            </form>
+
+        </div>
+    {% endif %}
+
+</div>
+
+<script>
+    {% if service.lease.all.count > 5 %}
+        $('#leases_table_container').slideToggle();
+    {% endif%}
+
+    $('#lease_form_container').slideToggle();
+
+    $('#create_lease_trigger').click(function () {
+        $('#lease_form_container').slideToggle()
+    })
+
+    $('#leases_table_trigger').click(function () {
+        $('#leases_table_container').slideToggle();
+    })
+
+
+</script>

@@ -1,0 +1,100 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Порты{% endblock %}
+{% load hostel_filters %}
+{% block content %}
+    <style>
+        .service_block {
+            border: solid 1px #cccccc;
+            padding: 4px;
+            padding-left: 10px;
+            border-radius: 3px;
+            margin-bottom: 4px;
+            background-color: #ebebeb;
+        }
+    </style>
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'burst_sets' %}">Burst-наборы</a></li>
+            <li class="active">{{ burst_set.name }}</li>
+        </ol>
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>
+                    <div class="color-marker color-device"></div>
+                    Burst-набор "{{ burst_set.name }}"
+                </h4>
+            </div>
+
+            <div class="col-md-4 text-right">
+                <a class="btn btn-default" href="{% url 'burst_set' burst_set.pk %}">Отмена</a>
+                <button type="submit" form="burst_set_form" class="btn btn-primary">Сохранить</button>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-4"></div>
+
+            <div class="col-md-4">
+
+                <form method="post" id="burst_set_form">
+                    {% csrf_token %}
+                    {% include 'bs3/burst/burst_set_form.html' %}
+                </form>
+
+                <br>
+
+                {% with burst_set as object %}
+                    {% include 'bs3/common/created_updated.html' %}
+                {% endwith %}
+
+            </div>
+
+            <div class="col-md-4"></div>
+
+
+            <div class="col-md-8">
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <div class="modal fade" id="delete_burst_set" tabindex="-1" role="dialog" aria-labelledby="delete_burst_set_label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="delete_burst_set_label">Удалить BurstSet?</h4>
+                </div>
+                <div class="modal-body">
+                    Удалить burst-набор "{{ burst_set }}"?
+                </div>
+                <div class="modal-footer">
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Я еще подумаю...</button>
+                        <button type="submit" class="btn btn-danger" name="action" value="delete_burst_set">Удалить
+                            burst-set!
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        $('#id_client').select2()
+    </script>
+
+{% endblock %}

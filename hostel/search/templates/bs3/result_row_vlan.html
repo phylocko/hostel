@@ -1,0 +1,10 @@
+<tr>
+    <td style="width: 60px;" class="hidden-xs hidden-sm text-muted">{{ vlan.pk }}</td>
+    <td style="width: 190px;">
+        <div class="color-marker color-vlan"></div>
+        <b><a href="{% url 'vlan' vlan.pk %}">{{ vlan.vname }}</a></b></td>
+    <td style="width: 150px;"><b>{{ vlan.vlannum }}</b></td>
+    <td>
+        <small><div class="text-muted">{{ vlan.comment|default:''|linebreaksbr }}</div></small>
+    </td>
+</tr>

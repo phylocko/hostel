@@ -1,0 +1,14 @@
+<tr>
+    <td style="width: 60px;" class="hidden-xs hidden-sm text-muted">{{ autonomous_system.pk }}</td>
+    <td style="width: 180px;">
+        <div class="color-marker color-asn"></div>
+        <b><a href="{% url 'autonomous_system' autonomous_system.pk %}">AS{{ autonomous_system.asn }}</a></b></td>
+    <td style="width: 150px;">
+        <div class="color-marker color-client"></div>
+        <b>{{ autonomous_system.client.netname }}</b>
+    </td>
+    <td>
+                {{ autonomous_system.netname|default:'' }}
+                {{ autonomous_system.asset|default:'' }}
+    </td>
+</tr>

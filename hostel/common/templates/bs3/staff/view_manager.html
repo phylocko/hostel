@@ -1,0 +1,66 @@
+{% extends 'bs3/base.html' %}
+{% block title %}{{ manager }}{% endblock %}
+{% block content %}
+
+{% load hostel_filters %}
+{% load static %}
+
+<div class="container">
+
+    <ol class="breadcrumb">
+        <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+        <li><a href="{% url 'employes' %}">Коллеги</a></li>
+        <li class="active">{{ manager.username }}</li>
+    </ol>
+
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="thumbnail">
+
+                {% if manager.photo %}
+                    <img src="{{ manager.photo.url }}">
+                {% else %}
+                    <img src="{% static '/i/' %}no-photo.png" alt="{{ manager.username }}">
+                {% endif %}
+
+                <div class="caption">
+                    <h4 class="text-center">{{ manager.position|default:'Должность не указана' }}</h4>
+                </div>
+
+                <table class="table">
+                    <tr>
+                        <th>Телефон</th><td>{{ manager.phone|phone }}</td>
+                    </tr>
+                    <tr>
+                        <th>Добавочный</th><td>{{ manager.addphone }}</td>
+                    </tr>
+                    {% if manager.email %}
+                    <tr>
+                        <th>Email</th><td><a href="mailto:{{ manager.email }}">{{ manager.email }}</a></td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <th>ДР</th><td>{{ manager.birthday|date:"d.m" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Последний логин</th><td>{{ manager.last_login|date:"Y-m-d H:i" }}</td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+
+        <div class="col-md-8">
+        </div>
+
+    </div>
+
+    {% if mode == 'view' %}
+    {% include 'bs3/managers/delete_manager_button.html' %}
+    {% endif %}
+
+
+</div>
+
+{% endblock %}

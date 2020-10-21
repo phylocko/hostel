@@ -1,0 +1,79 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Отчёт по берстам{% endblock %}
+{% load hostel_filters %}
+{% block content %}
+
+    <div class="container-fluid">
+
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'burst_sets' %}">Burst-наборы</a></li>
+            <li class="active">Рассчет</li>
+        </ol>
+
+        <h3>Отчет по берстам c {{ start_date }} по {{ end_date }}</h3>
+
+        <table class="table table-condensed">
+            <thead>
+            <tr>
+                <th>Название</th>
+                <th>Организация</th>
+                <th>Трафик</th>
+                <th>Коммит</th>
+                <th>Превышение</th>
+                <th>Mb</th>
+                <th>Абон. плата</th>
+                <th>С НДС</th>
+                <th>Burst</th>
+                <th>Burst с НДС</th>
+                <th>Всего</th>
+                <th>Всего с НДС</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for data in report.values %}
+                <tr>
+                    <td class="active">
+                        <a href="{% url 'burst_set' data.burst_set.pk %}">
+                            {{ data.burst_set.name|title }}
+                        </a>
+                    </td>
+                    <td>{{ data.burst_set.client.clientname }}</td>
+
+                    {% if data.error %}
+                        <td colspan="11" class="danger text-danger">Ошибка считалки:
+                            {{ data.error|truncatechars:100 }}
+                        </td>
+                    {% else %}
+                        <td>{{ data.calculation.traffic }}</td>
+                        <td>{{ data.burst_set.limit|default:0 }}</td>
+                        <td>{{ data.calculation.burst_traffic }}</td>
+                        <td>{{ data.burst_set.price|default:'—' }}</td>
+                        <td>{{ data.burst_set.subscription_fee|default:0 }}</td>
+                        <td>{% if data.burst_set.with_tax %}Да{% else %}Нет{% endif %}</td>
+
+                        <td>{{ data.calculation.burst_cost|default_if_none:'—' }}</td>
+                        <td>{{ data.calculation.burst_cost_taxed|default_if_none:'—' }}</td>
+
+                        <td><b>{{ data.calculation.total_cost|default_if_none:'—' }}</b></td>
+                        <td><b>{{ data.calculation.total_cost_taxed|default_if_none:'—' }}</b></td>
+                    {% endif %}
+
+                </tr>
+            {% empty %}
+                <tr>
+                    <td class="text-muted text-center" colspan="6">Burst-наборов нет</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+
+
+    <script>
+        $('#id_client').select2();
+    </script>
+
+{% endblock %}

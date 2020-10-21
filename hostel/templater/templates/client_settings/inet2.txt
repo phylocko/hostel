@@ -1,0 +1,33 @@
+Настройки для услуги Inet2
+
+Идентификатор услуги: {{ service }}
+Vlan-id: 888
+{% if service.commercial_status == "on_test" %}
+Время окончания теста услуги: {{ service.end_time|date:"Y-m-d H:i" }}
+{%endif%}
+Ваши адреса:
+{% for net in service.net.all %}	{{ net.address }}/23	as{{ service.asn.asn}}
+{%endfor%}
+Наши адреса:
+	85.112.122.1	as25478
+	85.112.123.1	as25478
+
+Ваши адреса IPv6:
+{% for net in service.net.all %}	2a00:1b30:8888::{% if net.penultimate_octet == "123" %}a{% endif %}{{ net.last_octet }}/64	as{{ service.asn.asn }}
+{% endfor %}
+Наши RS IPv6:
+	2a00:1b30:8888::1		as25478
+	2a00:1b30:8888::1:1	as25478
+
+- Установите BGP-сессию с каждым RS
+- Разрешите приём префиксов без 25478 в AS-PATH
+              (в cisco "no bgp enforce first-as").
+
+Для корректной работы Blackhole:
+- Разрешите прием префиксов /32 с community 25478:9999 от наших RS
+- Смаршрутизируйте их в discard/null
+Рекомендуем добавить по одному препенду в ваши существующие апстримы,
+и установить больший localpref в сторону Inet2.
+
+Обновление фильтров может занять до суток.
+При изменении MAC-адресов просьба сообщать на почту.

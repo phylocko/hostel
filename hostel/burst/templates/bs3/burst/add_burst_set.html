@@ -1,0 +1,44 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Порты{% endblock %}
+{% load hostel_filters %}
+{% block content %}
+
+    <div class="container-fluid">
+
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'burst_sets' %}">Burst-наборы</a></li>
+            <li class="active">{{ burst_set.name }}</li>
+        </ol>
+
+        <h3>Создать Burst-набор</h3>
+
+        <div class="row">
+
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4">
+
+                <form method="post">
+                    {% csrf_token %}
+                    {% include 'bs3/burst/burst_set_form.html' %}
+                    <div class="form-group text-right">
+                        <input type="submit" value="Создать Burst-набор" class="btn btn-primary">
+                    </div>
+                </form>
+
+            </div>
+            <div class="col-md-4">
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <script>
+        $('#id_client').select2()
+    </script>
+
+{% endblock %}

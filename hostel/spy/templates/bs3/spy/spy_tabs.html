@@ -1,0 +1,8 @@
+<ul class="nav nav-tabs">
+    <li role="presentation" {% if tab == "all" %}class="active"{% endif %}><a href="{% url 'spy' %}?tab=all">Все</a></li>
+    <li role="presentation" {% if tab == "client" %}class="active"{% endif %}><a href="{% url 'spy' %}?tab=client">Клиенты</a></li>
+    <li role="presentation" {% if tab == "device" %}class="active"{% endif %}><a href="{% url 'spy' %}?tab=device">Девайсы</a></li>
+    <li role="presentation" {% if tab == "vlan" %}class="active"{% endif %}><a href="{% url 'spy' %}?tab=vlan">Вланы</a></li>
+    <li role="presentation" {% if tab == "net" %}class="active"{% endif %}><a href="{% url 'spy' %}?tab=net">Сети</a></li>
+    <li role="presentation" {% if tab == "ins" %}class="active"{% endif %}><a href="{% url 'spy' %}?tab=ins">Mass</a></li>
+</ul>

@@ -1,0 +1,55 @@
+{% if not net.protected %}
+
+    <a class="btn btn-danger" data-toggle="modal" data-target="#delete_net">
+        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+    </a>
+
+    <div class="modal fade text-left" id="delete_net" tabindex="-1" role="dialog">
+        <form method="POST" action="{% url 'delete_net' %}">
+            {% csrf_token %}
+
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Подтвердите удаление сети</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <input type="hidden" name="id" value="{{ net.pk }}">
+                        <b>Удалить сеть {{ net.network }}?</b>
+
+                        {% if children %}
+                            <div class="checkbox">
+                                <label>
+                                    <input name="delete_subnets" type="checkbox"> Удалить посети
+                                </label>
+                                <ul>
+                                    {% for net in children %}
+                                        <li>{{ net.network }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                        {% if net.vlan %}
+                            <div class="checkbox">
+                                <label>
+                                    <input name="delete_vlan" type="checkbox"> Удалить vlan {{ net.vlan }}
+                                </label>
+                            </div>
+                        {% endif %}
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Я еще подумаю...</button>
+                        <input type="submit" class="btn btn-danger" value="Удалить">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endif %}

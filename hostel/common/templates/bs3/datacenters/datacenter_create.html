@@ -1,0 +1,52 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Создать площадку{% endblock %}
+{% block content %}
+
+<div class="container">
+
+    <ol class="breadcrumb">
+        <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+        <li><a href="{% url 'datacenters' %}">Площадки</a></li>
+        <li class="active">Создать</li>
+    </ol>
+
+    <!-- Заголовок, кнопка редактирования -->
+    <div class="row" style="margin-bottom: 16px;">
+        <div class="col-md-8">
+            <h4>
+                <div class="color-marker color-datacenter"></div>
+                Создать площадку
+            </h4>
+        </div>
+        <div class="col-md-4 text-right">
+            <button type="submit" form="datacenter_form" class="btn btn-primary">Сохранить</button>
+        </div>
+    </div>
+
+    <!-- Колонка с общими данными клиента -->
+    <div class="row">
+
+
+        <div class="col-md-2">
+        </div>
+
+
+        <div class="col-md-8">
+
+
+            <!-- Данные клиента -->
+            <form id="datacenter_form" METHOD="POST">
+                {% csrf_token %}
+                {% include 'bs3/datacenters/datacenter_form.html' %}
+            </form>
+
+
+        </div>
+
+        <div class="col-md-2">
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

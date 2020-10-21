@@ -1,0 +1,50 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Ваши клиенты
+
+            {% if perms.client.add_client %}
+                <button id="create_client_trigger" type="button" class="btn btn-default btn-xs pull-right">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </button>
+            {% endif %}
+
+
+        </h3>
+    </div>
+
+    {% if perms.client.add_client %}
+        <div class="panel-body">
+            <form method="POST" action="{% url 'add_client' %}" id="create_client_form">
+                {% csrf_token %}
+                {% with client_form as form %}
+                    {% include 'bs3/clients/client_form.html' %}
+                {% endwith %}
+                <input type="submit" class="btn btn-primary" value="Создать">
+            </form>
+        </div>
+    {% endif %}
+
+    <table class="table">
+        {% for client in my_clients %}
+            <tr>
+                <td class="active">
+                    <div class="color-marker color-client"></div>
+                    <b><a href="{% url 'clients' %}{{ client.pk }}"
+                          class="{% if client.enabled %}text-success{% else %}text-danger{% endif %}">{{ client.netname }}</a></b>
+                </td>
+                <td>
+                    <a href="{% url 'clients' %}{{ client.pk }}">{{ client.clientname|truncatechars:40 }}</a>
+                </td>
+
+            </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+<script>
+    $('#create_client_form').slideToggle()
+    $('#create_client_trigger').click(function () {
+        $('#create_client_form').slideToggle()
+    })
+</script>

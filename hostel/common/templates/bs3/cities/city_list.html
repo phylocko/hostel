@@ -1,0 +1,89 @@
+{% extends 'bs3/base.html' %}
+
+{% block title %}Города{% endblock %}
+
+{% block content %}
+
+    {% include 'bs3/cities/cities_tabs.html' %}
+
+    <div class="container">
+        <br>
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li class="active">Города</li>
+        </ol>
+    </div>
+
+    <div class="container text-center">
+        <form method="GET" class="form-inline">
+            <div class="form-group">
+                <input type="text" name="search"
+                       value="{{ search_string|default:'' }}"
+                       class="form-control"
+                       autocomplete="off"
+                       id="page_search"
+                       placeholder="Поиск по городам">
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary form-control">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                </button>
+            </div>
+
+        </form>
+
+        <script>
+            $('#page_search').focus();
+        </script>
+    </div>
+    <br>
+
+
+    <div class="container">
+        {% if cities %}
+            <table class="table table-hover teble-striped">
+                <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>English name</th>
+                    <th class="success">Услуги</th>
+                    <th class="info">Девайсы</th>
+                    <th class="warning">Площадки</th>
+                    <th class="text-right">BGP Community</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for city in cities %}
+                    <tr>
+                        <td class="active">
+                            {% if city.name == "Москва" %}
+                                <span class="glyphicon glyphicon-star text-danger" aria-hidden="true"></span>
+                            {% endif %}
+                            <b><a href="{% url 'cities' %}{{ city.pk }}">{{ city.name }}</a></b>
+                        </td>
+                        <td>{{ city.engname|default:'' }}</td>
+                        <th class="success">{{ city.services__count|default:'' }}</th>
+                        <th class="info">{{ city.datacenter__device__count|default:'' }}</th>
+                        <th class="warning">{{ city.datacenter__count|default:'' }}</th>
+                        <td class="text-right"><label class="label label-default">{{ city.community|default:'' }}</label></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+
+        {% else %}
+
+            <div class="container text-center">
+                <h3 class="text-center">Пусто</h3>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+{% endblock %}
+

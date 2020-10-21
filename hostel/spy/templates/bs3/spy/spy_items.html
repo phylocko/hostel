@@ -1,0 +1,98 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Spy{% endblock %}
+{% block content %}
+
+    <div class="container-fluid">
+
+        <div class="well well-sm">
+
+            <form class="form-inline">
+
+                <div class="form-group {% if filter_form.user.errors %}has-error{% endif %}">
+                    <label class="control-label">Кто</label>
+                    {% for error in filter_form.user.errors %}
+                        <span class="error">{{ error }}</span>
+                    {% endfor %}<br>
+                    {{ filter_form.user }}
+                </div>
+
+                <div class="form-group {% if filter_form.action.errors %}has-error{% endif %}">
+                    <label class="control-label">Действие</label>
+                    {% for error in filter_form.action.errors %}
+                        <span class="error">{{ error }}</span>
+                    {% endfor %}<br>
+                    {{ filter_form.action }}
+                </div>
+
+
+                <div class="form-group {% if filter_form.client.errors %}has-error{% endif %}">
+                    <label class="control-label">Клиент</label>
+                    {% for error in filter_form.client.errors %}
+                        <span class="error">{{ error }}</span>
+                    {% endfor %}<br>
+                    {{ filter_form.client }}
+                </div>
+
+                <div class="form-group {% if filter_form.object_name.errors %}has-error{% endif %}">
+                    <label class="control-label">Объект</label>
+                    {% for error in filter_form.object_name.errors %}
+                        <span class="error">{{ error }}</span>
+                    {% endfor %}<br>
+                    {{ filter_form.object_name }}
+                </div>
+
+                <div class="form-group {% if filter_form.time_from.errors %}has-error{% endif %}">
+                    <label class="control-label">Дата с</label>
+                    {% for error in filter_form.time_from.errors %}
+                        <span class="error">{{ error }}</span>
+                    {% endfor %}<br>
+                    {{ filter_form.time_from }}
+                </div>
+
+                <div class="form-group {% if filter_form.time_to.errors %}has-error{% endif %}">
+                    <label class="control-label">Дата по</label>
+                    {% for error in filter_form.time_to.errors %}
+                        <span class="error">{{ error }}</span>
+                    {% endfor %}<br>
+                    {{ filter_form.time_to }}
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">&nbsp;</label><br>
+                    <button class="btn btn-primary" type="submit">Показать</button>
+                </div>
+
+            </form>
+            <script>
+                $('#id_client').select2();
+                $('#id_user').select2();
+            </script>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-right">{% include 'bs3/paginator.html' %}</div>
+        </div>
+
+    </div>
+
+    <table class="table table-hover">
+        {% include 'bs3/spy/spy_itemsTableHeader.html' %}
+        <tbody>
+        {% for spy in listing %}
+            {% include 'bs3/spy/spy_itemsTableRow.html' %}
+        {% empty %}
+            <tr>
+                <td colspan="6" class="text-muted text-center">Ненаход</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 text-right">{% include 'bs3/paginator.html' %}</div>
+        </div>
+    </div>
+{% endblock %}
+

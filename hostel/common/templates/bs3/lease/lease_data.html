@@ -1,0 +1,152 @@
+{% load hostel_filters %}
+
+<table class="table">
+
+    <tr>
+        <td><label>Тип</label></td>
+        <td><label class="label label-primary">{{ lease.type|upper }}</label></td>
+    </tr>
+
+    <tr>
+        <td><label>Подрядчик</label></td>
+        <td>
+            <a href="{% url 'clients' %}{{ lease.organization.pk }}?tab=leases">
+                <div class="color-marker color-client"></div>
+                {{ lease.organization }}
+            </a>
+        </td>
+    </tr>
+
+    <tr>
+        <td><label>RT#</label></td>
+        <td>{{ lease.rt|ticket }}</td>
+    </tr>
+
+    <tr>
+        <td><label>Города</label></td>
+        <td>
+            {% for city in lease.cities.all %}
+                <label class="label label-default">{{ city }}</label>
+            {% endfor %}
+        </td>
+    </tr>
+
+
+    <tr>
+        <td><label>Для нас</label></td>
+        <td class="info">
+            {% if lease.is_ours %}
+                <span class="glyphicon glyphicon-ok"></span>
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <td><label>Волокно выкуплено</label></td>
+        <td class="success">
+            {% if lease.is_bought %}
+                <span class="glyphicon glyphicon-ok text-success"></span>
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <td><label>Google Maps</label></td>
+        <td>
+            {% if lease.google_map_url %}
+                <a target="_blank" href="{{ lease.google_map_url }}">Открыть карту</a>
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+
+            <label>Договор, заказ</label>
+            <address>{{ lease.agreement|default:'' }}</address>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+
+            <label>Идентификация или Service ID</label>
+            <address>{{ lease.identity|default:'' }}</address>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+
+            <label>Адреса включения</label>
+            <address>{{ lease.addresses|default:'' }}</address>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+
+            <label>Группа</label>
+            <address>
+                {% if lease.group %}
+                    <a href="{% url 'lease_group' lease.group.pk %}">
+                        <b>{{ lease.group|default:'' }}</b>
+                    </a>
+                {% endif %}
+            </address>
+
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+            <label>Support Email</label>
+            <address>
+                {% if lease.support_email %}
+                    {{ lease.support_email }}
+                {% elif lease.organization.support_email %}
+                    <span class="text-danger">{{ lease.organization.support_email }}</span>
+                    <div class="help-block">— Показаны имейлы {{ lease.organization.netname }}</div>
+                {% endif %}
+            </address>
+
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+            <label>Support-контакты</label>
+            <address>
+                {% if lease.contacts %}
+                    {{ lease.contacts|linebreaks }}
+                {% elif lease.organization.support_contacts %}
+                    <span class="text-danger">{{ lease.organization.support_contacts|linebreaksbr }}</span>
+                    <div class="help-block">— Показаны Support-контакты {{ lease.organization.netname|title }}</div>
+                {% else %}
+                    —
+                {% endif %}
+            </address>
+
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+            <label>Комментарий</label>
+            <address>{{ lease.comment|linebreaks }}</address>
+
+        </td>
+    </tr>
+
+    <tr>
+        <td><label>Описание</label><br>
+            <label class="label label-danger">Deprecated</label></td>
+        <td>
+            {{ lease.description|default:"" }}
+
+
+        </td>
+    </tr>
+
+</table>
+

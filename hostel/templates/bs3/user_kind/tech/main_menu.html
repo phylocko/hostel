@@ -1,0 +1,47 @@
+<ul class="nav navbar-nav">
+    <li {% if app == "clients" %} class="active" {% endif %}><a href="{% url 'clients' %}">
+        <div class="color-marker color-client"></div>
+        client</a></li>
+
+
+    <li class="dropdown {% if app == 'devices' %}active{% endif %}">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+           aria-expanded="false">
+            <div class="color-marker color-device"></div>
+            dev <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <li><a href="{% url 'devices' %}"><b>Список устройств</b></a></li>
+            <li><a href="{% url 'add_device' %}">Создать устройство</a></li>
+        </ul>
+    </li>
+
+    <li {% if app == "bundles" %} class="active" {% endif %}><a href="{% url 'bundles' %}">
+        <div class="color-marker color-bundle"></div>
+        bdl</a></li>
+
+    <li {% if app == "nets" %} class="active" {% endif %}><a href="{% url 'nets' %}">
+        <div class="color-marker color-net"></div>
+        ip</a></li>
+
+    <li {% if app == "vlans" %} class="active" {% endif %}><a href="{% url 'vlans' %}">
+        <div class="color-marker color-vlan"></div>
+        vlan</a></li>
+
+    <li class="dropdown {% if app == 'ins' %}active{% endif %}">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+           aria-expanded="false">
+            <div class="color-marker color-ins"></div>
+            ins <span class="caret"></span>
+        </a>
+
+        <ul class="dropdown-menu">
+            <li><a href="{% url 'ins' %}"><b>Список INS</b></a></li>
+            <li><a href="{% url 'add_incident' %}">Создать...</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="{% url 'last_changed_ins' %}">Последний измененный</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="{% url 'outages' %}"><b>Простои</b></a></li>
+        </ul>
+    </li>
+</ul>

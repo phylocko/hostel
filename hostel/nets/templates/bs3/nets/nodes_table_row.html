@@ -1,0 +1,113 @@
+<tr class="net_tr_margin_{{ node.data.margin }}">
+    {% load net_filters %}
+
+    <td class="text-danger small">
+        {% if net.protected %}
+            <span class="glyphicon glyphicon-lock pull-right" aria-hidden="true"></span>
+        {% endif %}
+    </td>
+
+    <!-- network -->
+    <td class="net net_margin_{{ node.data.margin }} {{ node.parent.prefix|parent_id }}">
+        {% if node.data.is_free %}
+            <div class="net-container text-muted">
+                <a class="text-muted" href="{% url 'add_net' %}?address={{ node.network }}&mask={{ node.prefixlen }}"
+                   class="net-free">{{ node.prefix }}</a>
+            </div>
+        {% else %}
+            <div class="net-container"><a name="{{ net.pk }}"
+                                          class="{% if net.status == '+' %}text-success{% else %}text-danger{% endif %}"
+                                          href="{% url 'nets' %}{{ net.pk }}">
+                <b>{{ net }}</b>
+            </a></div>
+        {% endif %}
+
+    </td>
+
+    <!-- mac -->
+    <td><samp class="text-muted">{{ net.mac|default:''|lower }}</samp></td>
+
+    <!-- vlan -->
+    <td>
+        {% if net.vlan %}
+            <a href="{% url 'vlan' net.vlan.pk %}">
+                <b>{{ net.vlan|default:"—" }}</b>
+            </a>
+        {% endif %}
+    </td>
+
+    <!-- device -->
+    <td>
+        {% if net.device %}
+            <a href="{% url 'device' net.device.pk %}">
+                <b>{{ net.device|default:"—" }}</b>
+            </a>
+        {% endif %}
+    </td>
+
+    <td>
+        {% if net.service %}
+            <a href="{% url 'service' net.service.pk %}">
+                <b>{{ net.service }}</b>
+            </a>
+            для
+            <a href="{% url 'client' net.service.client.pk %}">{{ net.service.client.netname }}</a>
+        {% endif %}
+    </td>
+
+    <!-- Description -->
+    <td class="text-muted">{{ net.description }}</td>
+
+    <!-- ptr -->
+    <td>
+        {{ net.ptr|default:"" }}
+    </td>
+
+    <!-- buttons -->
+    <td>
+        {% if perms.nets.change_net and not node.data.is_free %}
+            <a href="{% url 'update_net' net.pk %}?return_to=nets"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;
+        {% endif %}
+
+        {% if perms.nets.delete_net %}
+            {% if not node.data.is_free %}
+            <span class="glyphicon glyphicon-trash pull-right text-danger" aria-hidden="true" data-toggle="modal"
+                  data-target="#delete_net_{{ net.pk }}"></span>
+
+            <div class="modal fade" tabindex="-1" role="dialog" id="delete_net_{{ net.pk }}">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Удалить сеть {{ net }}?</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="panel panel-danger">
+                                {% with net as net %}
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Сеть</h3>
+                                    </div>
+                                    {% include 'bs3/nets/net_data.html' %}
+                                {% endwith %}
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <form method="post" action="{% url 'delete_net' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" value="{{ net.pk }}">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Я еще подумаю...
+                                </button>
+                                <button type="submit" class="btn btn-danger">Удалить</button>
+                            </form>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+                {% endif %}
+        {% endif %}
+    </td>
+
+</tr>

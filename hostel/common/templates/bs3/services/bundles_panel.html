@@ -1,0 +1,35 @@
+<!-- Порты -->
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Бандлы [{{ service.bundle_vlans.count }}]
+            <span id="bundles_table_trigger" class="pull-right">
+                <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+            </span>
+        </h3>
+    </div>
+    <div id="bundles_table_container">
+        <table class="table">
+            {% for bundle_vlan in bundle_vlans %}
+                <tr>
+                    <td>
+                        <div class="color-marker color-bundle"></div>
+                        <b><a href="{% url 'device' bundle_vlan.bundle.device.pk %}">{{ bundle_vlan.bundle.device }}</a>
+                        </b>
+                    </td>
+                    <td><b><a href="{% url 'bundle' bundle_vlan.bundle.pk %}">{{ bundle_vlan.bundle.name }}</a></b></td>
+                    <td class="text-muted">{{ bundle_vlan.bundle.description }}</td>
+                    <td><a href="{% url 'vlan' bundle_vlan.vlan.pk %}">{{ bundle_vlan.vlan }}</a></td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td class="text-muted text-center" colspan="6">Бандлы не привязаны</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+<script>
+    $('#bundles_table_trigger').click(function () {
+        $('#bundles_table_container').slideToggle();
+    })
+</script>

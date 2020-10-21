@@ -1,0 +1,5 @@
+<ul class="nav nav-tabs">
+    <li role="presentation" {% if tab == "add" %}class="active"{% endif %}><a href="{% url 'create_user' %}">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></li>
+    <li role="presentation" {% if tab == "all" %}class="active"{% endif %}><a href="{% url 'users' %}">Сотрудники</a></li>
+</ul>

@@ -1,0 +1,25 @@
+<tr>
+    <td style="width: 60px;" class="hidden-xs hidden-sm text-muted">{{ net.pk }}</td>
+    <td style="width: 180px;">
+        <div class="color-marker color-net"></div>
+        <b><a href="{% url 'view_net' net.pk %}">{{ net }}</a></b></td>
+    <td style="width: 150px;">
+        {% if net.service %}
+            <a href="{% url 'service' net.service.pk %}">{{ net.service }}</a>
+
+            {% if net.service.client %}
+                <b>
+                    <a href="{% url 'client' net.service.client.pk %}">
+                        {{ net.service.client.netname }}
+                    </a>
+                </b>
+            {% endif %}
+        {% endif %}
+    </td>
+    <td>
+        {{ net.description|default:'' }}
+        <small>
+            <div class="text-muted">{{ net.comment|default:''|linebreaksbr }}</div>
+        </small>
+    </td>
+</tr>

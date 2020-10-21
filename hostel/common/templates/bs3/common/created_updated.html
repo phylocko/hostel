@@ -1,0 +1,14 @@
+<div class="well well-sm text-muted">
+    <small>
+
+        <b>Создан:</b> {{ object.created|date:"Y-m-d в H:i" }}<br>
+        <b>Обновлен:</b> {{ object.updated|date:"Y-m-d в H:i" }}<br>
+
+        {% if object.creator %}
+        <b>Создатель:</b> {{ object.creator }}<br>
+        {% endif %}
+
+        <b>ID:</b> {{ object.pk }}<br>
+
+    </small>
+</div>

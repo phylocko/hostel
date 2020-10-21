@@ -1,0 +1,21 @@
+<div class="panel panel-danger">
+
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            Тест закончился
+        </h3>
+    </div>
+
+    {% if expired_services %}
+        <table class="table">
+            {% for service in expired_services %}
+            {% include 'bs3/dashboard/panels/expired_service_row.html' %}
+            {% endfor %}
+        </table>
+    {% else %}
+        <div class="panel-body text-center">
+        <span class="text-muted">Просроченных услуг нет</span>
+        </div>
+    {% endif %}
+
+</div>

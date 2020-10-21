@@ -1,0 +1,71 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Конфигурация <span id="provizor_panel_trigger" class="pull-right">
+            <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+        </h3>
+    </div>
+
+    <div class="panel-body" id="provizor_panel_container">
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group {% if provision_form.device.errors %}has-error{% endif %}">
+                <label>Девайс</label>
+                {{ provision_form.device }}
+                {% for error in provision_form.device.errors %}
+                    <span class="text-danger">{{ error }}</span><br>
+                {% endfor %}
+            </div>
+
+            <div class="form-group {% if provision_form.bundle.errors %}has-error{% endif %}">
+                <label>Бандл</label>
+                {{ provision_form.bundle }}
+                {% for error in provision_form.bundle.errors %}
+                    <span class="text-danger">{{ error }}</span><br>
+                {% endfor %}
+            </div>
+
+            <button type="submit" name="action" value="generate_config" class="btn btn-primary">Generate config</button>
+
+        </form>
+
+        {% if config %}
+
+            <form id="config_form" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="deploying_device" value="{{ provision_form.cleaned_data.device.netname }}">
+                <br><textarea id="config_container" name="commands" rows="6" class="form-control">{{ config }}</textarea><br>
+                <button type="submit" name="action" value="deploy_config" class="btn btn-danger">Применить на девайсе</button>
+
+                <div class="help-block">Эта штука еще сырая, прошу использовать с осторожностью.</div>
+
+            </form>
+        {% endif %}
+
+        {% if deploying_results %}
+            <h4>Результат</h4>
+            <pre class="text-danger">
+{% for result in deploying_results.results %}
+<b>{{ result.command }}</b>
+{{ result.result }}
+{% endfor %}
+            </pre>
+        {% endif %}
+
+    </div>
+
+</div>
+
+<script>
+    var clipboard = new ClipboardJS('.btn');
+
+    {% if service.bundle_vlans.all and not config and not deploying_results %}
+        $('#provizor_panel_container').slideToggle();
+    {% endif %}
+    $('#provizor_panel_trigger').click(function () {
+        $('#provizor_panel_container').slideToggle();
+    })
+
+
+</script>

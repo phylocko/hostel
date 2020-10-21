@@ -1,0 +1,82 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Отчет по простоям{% endblock %}
+{% block content %}
+
+    {% include 'bs3/ins/ins_tabs.html' %}
+
+    <div class="container-fluid">
+        <div style="border: solid 1px #cccccc;
+                padding: 12px;
+                -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;
+                background-color: #ebebeb;
+                margin-top: 10px;
+                margin-bottom: 10px;">
+            <form method="GET" class="form-inline">
+                <div class="form-group {% if form.keywords.errors %}has-error{% endif %}">
+                    <label>Ключевые слова</label><br>
+                    {{ form.keywords.errors }}
+                    {{ form.keywords }}
+                </div>
+                <div class="form-group">
+                    <label>Год</label><br>
+                    {{ form.year }}
+                </div>
+                <div class="form-group">
+                    <label>Месяц</label><br>
+                    {{ form.month }}
+                </div>
+                <div class="form-group">
+                    <label>Виновник</label><br>
+                    {{ form.provider }}
+                </div>
+                <div class="form-group">
+                    <label>Клиент</label><br>
+                    {{ form.client }}
+                </div>
+                <div class="form-group">
+                    <label>&nbsp;</label><br>
+                    <input type="submit" class="btn btn-primary" value="Показать">
+                </div>
+            </form>
+            <script>
+                $('#id_provider').select2();
+                $('#id_client').select2();
+            </script>
+        </div>
+    </div>
+
+    {% if open_incidents_count %}
+        <div class="container-fluid">
+            <div class="alert alert-warning text-center" role="alert">
+                Внимание! Есть незакрытые аварии ({{ open_incidents_count }}) в этом месяце.
+            </div>
+        </div>
+
+    {% endif %}
+
+    {% if incidents %}
+
+        <style>
+            .vis-item {
+                border-color: #ffc1b7;
+                background-color: #ffc1b7;
+                color: #666666;
+            }
+        </style>
+
+        <table class="table table-condensed">
+            {% include 'bs3/ins/outages_table_header.html' %}
+            <tbody>
+            {% for incident in incidents %}
+                {% include 'bs3/ins/outages_table_row.html' %}
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="container text-center">
+            <h3 class="text-center">Все чисто</h3>
+        </div>
+    {% endif %}
+
+{% endblock %}
+

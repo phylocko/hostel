@@ -1,0 +1,50 @@
+<script src="/static/hostel/apps/choose/controller.js"></script>
+<link href="/static/css/choose.css" rel="stylesheet">
+
+
+<div ng-app="Choose">
+
+    <div ng-controller="APIController">
+
+        <div class="form-group">
+
+            <input type="hidden" name="provider" id="object_id" value="{{ incident.provider.pk }}">
+
+            <div class="well well-sm fit" id="selected_object">{{ incident.provider.clientname }}</div>
+
+            <input class="form-control filter"
+                   ng-change="get('/api/?page=clients&action=exact_search&filter=' + filter)"
+                   placeholder="Начните вводить название организации"
+                   ng-model-options='{ debounce: 400 }'
+                   class="form-control"
+                   autocomplete="off"
+                   ng-model="filter"
+                   id="filter"
+                   type='text'>
+
+        </div>
+
+        {% verbatim %}
+
+        <ul class="list-group">
+
+            <li class="list-group-item heighted" ng-repeat="client in objects">
+
+                <div class="netname">{{ client.fields.netname }}</div>
+
+                <a href="#" ng-click="choose_object(client, client.fields.clientname)" title="Прицепить"><b>{{ client.fields.clientname }}</b></a>
+
+                <a target="blank"
+                   title="Просмотреть страницу клиента (откроется в новом окне)"
+                   href="/clients/{% templatetag openvariable %} client.pk {% templatetag closevariable %}">
+                    <span class="glyphicon glyphicon-new-window pull-right" aria-hidden="true"></span>
+                </a>
+
+            </li>
+
+        </ul>
+
+        {% endverbatim %}
+
+    </div>
+</div>

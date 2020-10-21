@@ -1,0 +1,31 @@
+<table class="table">
+
+    <tr>
+        <td><label>Клиент</label></td>
+        <td>
+            <div class="color-marker color-client"></div>
+            <b><a href="{% url 'client' burst_set.client_id %}">{{ burst_set.client }}</a></b>
+        </td>
+    </tr>
+
+    <tr>
+        <td><label>Коммит</label></td>
+        <td>{{ burst_set.limit|default:0 }} мегабит</td>
+    </tr>
+
+    <tr>
+        <td><label>Ежемесячно</label></td>
+        <td>{{ burst_set.subscription_fee|default:'—' }} {% if burst_set.with_tax %}с НДС{% else %}без НДС{% endif %}   </td>
+    </tr>
+
+    <tr>
+        <td><label>Цена за мегабит</label></td>
+        <td>{{ burst_set.price|default:'—' }} {% if burst_set.with_tax %}с НДС{% else %}без НДС{% endif %}</td>
+    </tr>
+
+    <tr>
+        <td><label>Направление</label></td>
+        <td>{{ burst_set.direction|upper }}</td>
+    </tr>
+
+</table>

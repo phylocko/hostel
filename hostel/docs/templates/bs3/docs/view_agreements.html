@@ -1,0 +1,62 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Документы{% endblock %}
+{% block content %}
+
+    <style>
+        table tr td {
+            padding-top: 2px !important;
+            padding-bottom: 2px !important;
+        }
+
+        pre {
+            padding-top: 2px !important;
+            padding-bottom: 2px !important;
+            border-radius: 0px;
+            margin: 0px;
+            background-color: #222222;
+            color: #cccccc;
+            border: none;
+        }
+    </style>
+
+
+    {% include 'bs3/docs/docs_tabs.html' %}
+
+    <br>
+    {% include 'bs3/search_and_paginator.html' %}
+
+    {% if listing %}
+
+        <table class="table table-striped">
+
+            {% include 'bs3/docs/docs_table_header.html' %}
+
+            <tbody>
+
+            {% for agreement in listing %}
+                {% include 'bs3/docs/docs_table_row.html' %}
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    {% else %}
+
+        <div class="container text-center">
+            <h3 class="text-center">Документы [почему-то] не найдены</h3>
+
+            {% if search_text %}
+                <a href="../docs/">Показать все договоры</a>
+            {% endif %}
+
+        </div>
+
+    {% endif %}
+
+    <div class="container-fluid">
+        {% include 'bs3/paginator.html' %}
+    </div>
+
+{% endblock %}
+

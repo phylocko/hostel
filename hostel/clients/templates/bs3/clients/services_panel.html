@@ -1,0 +1,46 @@
+{% include 'bs3/tab_search_form.html' %}
+
+<div class="panel panel-default">
+    <div class="panel-heading" style="padding-right: 8px;">
+        <h4 class="panel-title">Общие услуги
+
+            {% if perms.common.add_service %}
+                <div class="dropdown pull-right">
+                    <button class="btn btn-primary btn-xs dropdown-toggle"
+                            type="button" id="dropdownMenu1" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="true">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        {% for our_service in our_services_all %}
+                            <li>
+                                <a href="{% url 'create_service' %}?service_name={{ our_service.name }}&client_id={{ client.pk }}">
+                                    {{ our_service.name|upper }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+        </h4>
+
+    </div>
+
+    <table class="table table-striped">
+        {% for service in services %}
+            {% include 'bs3/clients/table_rows/service_simple_row.html' %}
+
+            {% if service.subservices.count %}
+                {% for subservice in service.subservices.all %}
+                    {% include 'bs3/clients/table_rows/subservice_simple_row.html' %}
+                {% endfor %}
+            {% endif %}
+
+        {% empty %}
+            <tr>
+                <td colspan="6" class="text-center text-muted">Услуг нет</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>

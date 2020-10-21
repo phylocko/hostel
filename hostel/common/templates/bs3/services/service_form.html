@@ -1,0 +1,106 @@
+<div class="form-group {% if form.servicetype.errors %}has-error{% endif %}">
+    <label>Тип услуги</label>
+    {{ form.servicetype.errors }}
+    {{ form.servicetype }}
+</div>
+
+{% if form.instance.params.require_as %}
+    <div class="form-group {% if form.asn.errors %}has-error{% endif %}">
+        <label class="control-label">Автономная система</label>
+        {% for error in form.asn.errors %}
+            <span class="error">{{ error }}</span>
+        {% endfor %}<br>
+        {{ form.asn }}
+        <div class="help-block">Только для услуг Inet2, W-IX и BGP</div>
+    </div>
+{% endif %}
+
+<div class="form-group {% if form.status.errors %}has-error{% endif %}">
+    <label>Статус</label>
+    {{ form.status.errors }}
+    {{ form.status }}
+    <div class="help-block">Для Inet2 и W-IX влияет на конфиг RS</div>
+</div>
+
+<div class="form-group {% if form.start_time.errors %}has-error{% endif %}">
+    <label class="control-label">Старт услуги</label>
+    <div class="input-group date" id="start_time">
+        {{ form.start_time }}
+        <span class="input-group-addon">
+        <span class="glyphicon glyphicon-calendar"></span>
+    </span>
+    </div>
+    {{ form.start_time.errors }}
+    <div class="help-block">Ine2 или W-IX включатся не ранее этого времени</div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('#start_time').datetimepicker({format: 'YYYY-MM-DD HH:mm', locale: 'ru'});
+    });
+</script>
+
+<div class="form-group {% if form.end_time.errors %}has-error{% endif %}">
+    <label class="control-label">Конец теста</label>
+    <div class="input-group date" id="end_time">
+        {{ form.end_time }}
+        <span class="input-group-addon">
+        <span class="glyphicon glyphicon-calendar"></span>
+    </span>
+    </div>
+    {{ form.end_time.errors }}
+    <div class="help-block">Inet2 и W-IX выключатся, если статус «Тест»</div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('#end_time').datetimepicker({format: 'YYYY-MM-DD HH:mm', locale: 'ru'});
+    });
+</script>
+
+<div class="form-group {% if form.cities.errors %}has-error{% endif %}">
+    <label class="control-label pull-left">Города</label>
+    <a class="pull-right" href="{% url 'create_city' %}" target="_blank">Создать город</a>
+
+    {{ form.cities.errors }}
+    {{ form.cities }}
+    <div class="help-block">Города предоставления услуги</div>
+</div>
+
+<div class="form-group {% if form.commited_bandwidth.errors %}has-error{% endif %}">
+    <label>Пропускная способность (Мбит/c)</label>
+    {{ form.commited_bandwidth.errors }}
+    {{ form.commited_bandwidth }}
+    <div class="help-block">Какую полосу заказывает клиент</div>
+</div>
+
+<div class="form-group {% if form.maximum_bandwidth.errors %}has-error{% endif %}">
+    <label>Открытая полоса (Мбит/c)</label>
+    {{ form.maximum_bandwidth.errors }}
+    {{ form.maximum_bandwidth }}
+    <div class="help-block">Какая полоса доступна в принципе</div>
+</div>
+
+<div class="form-group {% if form.rt.errors %}has-error{% endif %}">
+    <label class="control-label">#RT</label>
+    {{ form.rt.errors }}
+    {{ form.rt }}
+</div>
+
+
+<div class="form-group {% if form.description.errors %}has-error{% endif %}">
+    <label class="control-label text-danger">Описание (клиент видит это поле!)</label>
+    {{ form.description.errors }}
+    {{ form.description }}
+    <div class="help-block">Для услуг l2 укажите адреса включения</div>
+</div>
+
+<div class="form-group {% if form.comment.errors %}has-error{% endif %}">
+    <label class="control-label">Комментарий</label>
+    {{ form.comment.errors }}
+    {{ form.comment }}
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#id_cities").select2();
+    })
+</script>

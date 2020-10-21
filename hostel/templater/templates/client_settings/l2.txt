@@ -1,0 +1,6 @@
+Service ID:	{{ service }}
+Услуга:         L2-канал
+Описание:       {{ service.description }}
+{% for vlan in service.vlan.all %}VLAN ID:	{{ vlan.vlannum }}
+{% endfor %}
+{% if service.commited_bandwidth %}Скорость:       {{ service.commited_bandwidth }} Мбит/c{% endif %}

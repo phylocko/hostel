@@ -1,0 +1,61 @@
+{% extends 'bs3/base.html' %}
+{% block title %}IP-адреса{% endblock %}
+{% block content %}
+
+{% include 'bs3/nets/tabs.html' %}
+
+        <div class="container text-center">
+
+            <div class="well-sm">
+                <form action="{% url 'nets' %}search" method="GET" class="form-inline">
+                <input type="text" name="search" value="{{ search_string }}" class="form-control">
+                <input type="submit" class="btn btn-primary" value="Найти">
+                </form>
+            </div>
+
+        </div>
+
+	{% if nets %}
+
+        <table class="table table-hover">
+
+            {% include 'bs3/nets/netsTableHeader.html' %}
+
+            <tbody>
+
+            {% for net in nets %}
+
+                {% if net.free %}
+                    {% include 'bs3/nets/netsfreeTableRow.html' %}
+                {% else %}
+                    {% include 'bs3/nets/netsTableRow.html' %}
+                {% endif %}
+
+            {% endfor %}
+
+    {% if search_text %}
+    <script>
+    $("td:icontains('{{ search_text}}')" ).css( "background-color", "yellow");
+    </script>
+    {% endif %}
+
+
+            </tbody>
+
+	</table>
+
+	{% else %}
+
+        <div class="container text-center">
+
+        {% if search_text %}
+            <h3 class="text-center">Сетей не найдено</h3>
+        {% else %}
+            <h3 class="text-center">Поиск сетей</h3>
+        {% endif %}
+        </div>
+
+    {% endif %}
+
+{% endblock %}
+

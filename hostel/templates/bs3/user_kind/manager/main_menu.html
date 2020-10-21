@@ -1,0 +1,23 @@
+<ul class="nav navbar-nav">
+    <li {% if app == "clients" %} class="active" {% endif %}><a href="{% url 'clients' %}"><div class="color-marker color-client"></div>client</a></li>
+
+    <li {% if app == "devices" %} class="active" {% endif %}><a href="{% url 'devices' %}"><div class="color-marker color-device"></div>dev</a></li>
+
+    <li {% if app == "bundles" %} class="active" {% endif %}><a href="{% url 'bundles' %}"><div class="color-marker color-bundle"></div>bdl</a></li>
+
+    <li class="dropdown {% if app == 'ins' %}active{% endif %}">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+           aria-expanded="false">
+            <div class="color-marker color-ins"></div> ins <span class="caret"></span>
+        </a>
+
+        <ul class="dropdown-menu">
+            <li><a href="{% url 'ins' %}">Обзор</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="{% url 'outages' %}"><b>Простои</b></a></li>
+        </ul>
+    </li>
+
+    <li {% if app == "docs" %} class="active" {% endif %}><a href="{% url 'agreements' %}"><div class="color-marker color-agreement"></div>doc</a></li>
+
+</ul>

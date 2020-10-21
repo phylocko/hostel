@@ -1,0 +1,60 @@
+{% load hostel_filters %}
+<thead>
+
+{% autoescape off %}
+
+    <tr>
+
+        <td>
+
+            {% if spy.action == "create" %}
+                <span class="label label-success">{{ spy.action|upper }}</span>
+            {% elif spy.action == "change" %}
+                <span class="label label-primary">{{ spy.action|upper }}</span>
+            {% elif spy.action == "delete" %}
+                <span class="label label-danger">{{ spy.action|upper }}</span>
+            {% else %}
+                <span class="label label-default">{{ spy.action|upper }}</span>
+            {% endif %}
+
+            {% if spy.client %}
+                <hr>
+                <div class="color-marker color-client"></div>
+                <b>{{ spy.client }}</b>
+            {% endif %}
+
+            <br><b>{{ spy.object_name|upper }}</b>
+
+
+        </td>
+
+        <td class="active" width="260">
+
+            <ul class="list-unstyled">
+
+                <li class="text-muted">{{ spy.time|date:"Y-m-d H:i:s" }}</li>
+
+                <li>
+                    <b title="{{ spy.object_str|default:'' }}">{{ spy.object_str|truncatechars:60|default:'' }}</b>
+                </li>
+
+                {% if spy.user %}
+                    <li class="text-muted"><span class="glyphicon glyphicon-user"></span> {{ spy.user }}</li>
+                {% endif %}
+
+            </ul>
+
+
+        </td>
+
+
+        <td>
+            <small>{{ spy.changes|spy_changes}}</small>
+        </td>
+
+
+    </tr>
+
+{% endautoescape %}
+
+</thead>

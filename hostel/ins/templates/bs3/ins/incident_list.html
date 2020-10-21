@@ -1,0 +1,21 @@
+{% extends 'bs3/base.html' %}
+{% block title %}INS{% endblock %}
+{% block content %}
+
+    {% include 'bs3/ins/ins_tabs.html' %}
+
+    <br>
+    {% include 'bs3/search_and_paginator.html' %}
+    <br>
+
+    <table class="table table-hover">
+
+        {% for incident in listing %}
+            {% include 'bs3/ins/insTableRow.html' %}
+        {% endfor %}
+
+    </table>
+
+
+{% endblock %}
+

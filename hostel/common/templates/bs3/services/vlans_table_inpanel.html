@@ -1,0 +1,29 @@
+{% load hostel_filters %}
+<table class="table" id="vlan_table">
+    {% for vlan in vlans %}
+        <tr>
+            <td>
+                <div class="color-marker color-vlan"></div>
+                <b><a href="{% url 'vlans' %}{{ vlan.pk }}">{{ vlan.vlannum }}</a></b>
+            </td>
+            <td><a href="{% url 'vlans' %}{{ vlan.pk }}"><b>{{ vlan.vname }}</b></a></td>
+            <td class="text-muted">{{ vlan.comment|default:""|truncatechars:55 }}</td>
+            <td>{{ vlan.rt|ticket }}</td>
+            <td class="text-right">
+                {% if perms.common.change_service %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="vlan_id" value="{{ vlan.pk }}">
+                        <button class="btn btn-xs btn-default" name="action" value="release_vlan">
+                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                        </button>
+                    </form>
+                {% endif %}
+            </td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td class="text-muted text-center">Пусто</td>
+        </tr>
+    {% endfor %}
+</table>

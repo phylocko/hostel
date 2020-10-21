@@ -1,0 +1,47 @@
+
+<div class="form-group {% if form.engname.errors %}has-error{% endif %}">
+    <label>Netname *</label>
+    {{ form.engname.errors }}
+    {{ form.engname }}
+    <div class="help-block">Перекрывает netname в выводе на Looking Glass<br>
+    Удобно, если юр.лицо подключает через себя разных клиентов</div>
+</div>
+
+
+<div class="form-group {% if form.asn.errors %}has-error{% endif %}">
+    <label>ASN *</label>
+    {{ form.asn.errors }}
+    {{ form.asn }}
+</div>
+
+<div class="form-group {% if form.asset.errors %}has-error{% endif %}">
+    <label>AS-SET</label>
+    {{ form.asset.errors }}
+    {{ form.asset }}
+</div>
+
+<div class="form-group {% if form.asset6.errors %}has-error{% endif %}">
+    <label>AS-SET 6</label>
+    {{ form.asset6.errors }}
+    {{ form.asset6 }}
+</div>
+
+<div class="form-group {% if form.aslist.errors %}has-error{% endif %}">
+    <label>AS-LIST</label>
+    {{ form.aslist.errors }}
+    {{ form.aslist }}
+    <div class="help-block">Номера AS через пробел (не используется)</div>
+</div>
+
+<div class="form-group {% if form.ticket.errors %}has-error{% endif %}">
+    <label>Тикет</label>
+    {{ form.ticket.errors }}
+    {{ form.ticket }}
+    <div class="help-block">Если AS добавляется в рамках отдельного тикета</div>
+</div>
+
+<div class="form-group {% if form.comment.errors %}has-error{% endif %}">
+    <label>Комментарий</label>
+    {{ form.comment.errors }}
+    {{ form.comment }}
+</div>

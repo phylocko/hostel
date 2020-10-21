@@ -1,0 +1,22 @@
+<div class="container text-center">
+    <form method="GET" action="{% url 'search_lease' %}" class="form-inline">
+        <br>
+        <div class="form-group">
+            <input type="text" name="search"
+                   value="{{ search_string|default:'' }}"
+                   class="form-control"
+                   autocomplete="off"
+                   id="page_search"
+                   placeholder="Поиск по услугам">
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary form-control">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            </button>
+        </div>
+    </form>
+    <script>
+        $('#page_search').focus();
+    </script>
+
+</div>

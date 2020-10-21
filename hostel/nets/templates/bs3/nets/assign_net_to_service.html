@@ -1,0 +1,125 @@
+{% extends 'bs3/base.html' %}
+{% block title %}*Выбрать ip-адрес для {{ service }}{% endblock %}
+{% block content %}
+
+
+<div class="container">
+
+                    <h2>Выбор сети для услуги {{ service.name }} для
+
+                        {{service.client.netname }}
+
+                    <button type="submit" form="netData" class="btn btn-primary pull-right" id="submit_button" disabled>Выбрать</button>
+                </h2>
+                <h4><a href="{% url 'client' service.client.pk %}">{{ service.client }}</a></h4>
+
+
+    <div class="row">
+
+        <div class="col-md-2">
+        </div>
+
+        <div class="col-md-8">
+
+            <form id="netData" METHOD="POST">
+
+                {% csrf_token %}
+                <input type="hidden" name="service_id" value="{{ service.pk }}">
+
+<script>
+var AnalyzerApp = angular.module('AnalyzerApp', []);
+
+AnalyzerApp.controller('APIController', function APIController($scope, $http, $filter) {
+
+	$scope.isLoading = false;
+
+	$scope.get = function ($url)
+	{
+	    $("#submit_button").prop('disabled', true);
+
+		if($url == "")
+		{
+			$url = "{% url 'api' %}?page=nets&action=search";
+		}
+
+		$scope.isLoading = true;
+
+		$http.get($url).then(function(value) {
+			$scope.objects = value.data.nets;
+			$scope.isLoading = false;
+		});
+
+    $scope.select_object = function (object)
+    {
+        $("#object_id").val(object.id);
+        $("#selected_net").html(object.network);
+        $scope.objects = "";
+        $("#submit_button").prop('disabled', false);
+
+    }
+
+
+
+	}
+
+});
+</script>
+
+<div ng-app="AnalyzerApp">
+
+    <div ng-controller="APIController">
+
+                <div class="row">
+                        <div class="col-md-4">
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+
+                                <div class="well well-sm">
+                                    <span class="label label-default" id="selected_net"></span>
+                                </div>
+
+                                <input type="hidden" name="object_id" id="object_id">
+
+                                <input class="form-control"
+                                       ng-change="get('{% url 'api' %}?page=nets&action=search&search_string=' + filter)"
+                                       ng-model-options='{ debounce: 400 }'
+                                       data-toggle="tooltip" data-placement="bottom"
+                                       type='text' class="form-control" ng-model="filter" placeholder="Filter">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                        </div>
+                </div>
+
+                <table class="table table-stripped">
+
+                <tr ng-repeat="object in objects">
+                    <td><b>{% templatetag openvariable %} object.network {% templatetag closevariable %}</b></td>
+                    <td>{% templatetag openvariable %} object.description {% templatetag closevariable %}</td>
+                    <td>{% templatetag openvariable %} object.comment {% templatetag closevariable %}</td>
+                    <td>
+                        <a href="#" ng-click="select_object(object)" title="Прицепить">
+                            <span class="glyphicon glyphicon-plus text-primary" aria-hidden="true"></span>
+                        </a>
+                    </td>
+                </tr>
+
+            </table>
+    </div>
+</div>
+
+
+
+
+            </form>
+
+        </div>
+
+        <div class="col-md-2">
+        </div>
+
+
+    </div>
+
+    {% endblock %}

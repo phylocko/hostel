@@ -1,0 +1,56 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Управление группами{% endblock %}
+{% block content %}
+
+    <div class="container">
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li class="active">Группы</li>
+        </ol>
+    </div>
+
+    <div class="container text-right">
+        {% if perms.common.add_group %}
+            <a class="btn btn-primary" href="{% url 'create_group' %}">Создать группу</a>
+        {% endif %}
+    </div>
+
+    <div class="container">
+        {% if groups %}
+            <table class="table table-hover">
+                <thead>
+                <th>#</th>
+                <th>Название</th>
+                <th>Разрешения</th>
+                <th>Участники</th>
+                </thead>
+                <tbody>
+                {% for group in groups %}
+                    <tr>
+                        <td>{{ group.pk }}</td>
+                        <td><a href="{% url 'group' group.pk %}">{{ group.name|title }}</a></td>
+                        <td>
+                            {% for permission in group.permissions.all %}
+                                {{ permission.name|title }}<br>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for user in group.user_set.all %}
+                                {{ user.username }}<br>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        {% else %}
+
+            <div class="container text-center">
+                <h3 class="text-center">Пусто</h3>
+            </div>
+
+        {% endif %}
+    </div>
+{% endblock %}
+

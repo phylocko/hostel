@@ -1,0 +1,13 @@
+<tr>
+    <td style="width: 60px;" class="hidden-xs hidden-sm text-muted">{{ entry.pk }}</td>
+    <td style="width: 180px;">
+        <div class="color-marker color-entry"></div>
+        <b><a href="{% url 'entry' entry.pk %}">{{ entry.vendor|title }}</a></b></td>
+    <td style="width: 150px;"><b>{{ entry.type }}</b></td>
+    <td>
+        <b>{{ entry.model }}</b> {{ entry.serial }}<br>
+        {% if entry.device %}
+        <small><div class="text-muted">Используется как {{ entry.device.netname }}</div></small>
+        {% endif %}
+    </td>
+</tr>

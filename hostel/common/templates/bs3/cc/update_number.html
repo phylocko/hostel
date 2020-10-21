@@ -1,0 +1,48 @@
+{% extends 'bs3/base.html' %}
+{% block title %}{{ datacenter }}{% endblock %}
+{% block content %}
+
+    {% include 'bs3/cc/tabs.html' %}
+
+
+    <div class="container">
+        <br>
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>
+                    <div class="color-marker color-phone"></div>
+                    {{ phone.number }}
+                </h4>
+            </div>
+            <div class="col-md-4 text-right">
+                <a class="btn btn-default" href="{% url 'number' phone.pk %}">Отмена</a>
+                <button type="submit" form="datacenter_form" class="btn btn-primary">Сохранить</button>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+
+                <form method="POST" id="datacenter_form">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ datacenter.pk }}">
+                    {% include 'bs3/cc/phone_form.html' %}
+                </form>
+
+            </div>
+
+            <div class="col-md-4"></div>
+
+        </div>
+
+    </div>
+
+    <script>
+        $('#id_client').select2();
+    </script>
+
+{% endblock %}
+

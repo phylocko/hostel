@@ -1,0 +1,46 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Сеть {{ net }}{% endblock %}
+{% block content %}
+
+    <div class="container">
+
+    {% include 'bs3/nets/broadcrumbs_net.html' %}
+
+
+    <!-- Заголовок, кнопка редактирования -->
+    <div class="row" style="margin-bottom: 16px;">
+        <div class="col-md-8">
+            <h4>{{ net.address }}/{{ net.netmask }}</h4>
+        </div>
+        <div class="col-md-4 text-right">
+            <a class="btn btn-default" href="{% url 'nets' %}{{ net.pk }}">Отмена</a>
+            <button type="submit" form="netData" class="btn btn-primary">Сохранить</button>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-4"></div>
+
+        <div class="col-md-4">
+            <form id="netData" METHOD="POST">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ net.pk }}">
+                {% include 'bs3/nets/net_form.html' %}
+            </form>
+        </div>
+
+        <div class="col-md-4">
+        </div>
+
+    </div>
+
+    {% if mode == "view" %}
+        <div class="well">
+        {% if perms.nets.delete_net %}
+            {% include 'bs3/nets/delete_button.html' %}
+        {% endif %}
+        </div>
+    {% endif %}
+
+{% endblock %}

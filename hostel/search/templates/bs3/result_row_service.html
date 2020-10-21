@@ -1,0 +1,22 @@
+{% load hostel_filters %}
+<tr>
+    <td style="width: 60px;" class="hidden-xs hidden-sm text-muted">{{ service.pk }}</td>
+    <td style="width: 180px;">
+        <div class="color-marker color-service"></div>
+        <b><a href="{% url 'service' service.pk %}" class="{{ service|service_text_class }}">{{ service }}</a></b></td>
+    <td style="width: 150px;">
+        <div class="color-marker color-client"> </div>
+        <b>{{ service.client.netname|default:'' }}</b>
+    </td>
+    <td>
+        {% if service.cities.all.count == 2 %}
+            {{ service.cities.first }} — {{ service.cities.last }}
+        {% else %}
+            {{ service.cities.all|join:', ' }}
+        {% endif %}
+        <br>
+        <small>
+            <div class="text-muted">{{ service.description|default:''|linebreaksbr }}</div>
+        </small>
+    </td>
+</tr>

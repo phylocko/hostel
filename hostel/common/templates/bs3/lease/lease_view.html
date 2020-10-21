@@ -1,0 +1,178 @@
+{% extends 'bs3/base.html' %}
+{% load hostel_filters %}
+
+{% block title %}Lease {{ lease }}{% endblock %}
+{% block content %}
+
+    {% include 'bs3/lease/leases_tabs.html' %}
+    <br>
+    <br>
+
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'leases' %}">Услуги подрядчиков</a></li>
+            <li class="active">{{ lease }}</li>
+        </ol>
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>
+                    <div class="color-marker color-lease"></div>
+                    Аренда {{ lease }}
+                </h4>
+            </div>
+            <div class="col-md-4 text-right">
+                {% if mode == 'edit' %}
+                    <a class="btn btn-default" href="{% url 'leases' %}{{ lease.pk }}">Отмена</a>
+                    <button type="submit" form="leaseData" class="btn btn-primary">Сохранить</button>
+                {% else %}
+                    {% if perms.common.change_lease %}
+                        <a class="btn btn-primary" href="{% url 'leases' %}{{ lease.pk }}/update/">
+                            <span class="glyphicon glyphicon-edit"></span> Редактировать
+                        </a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+
+        <div class="row">
+
+
+            <div class="col-md-4">
+
+
+                {% if mode == "edit" %}
+                    <form id="leaseData" METHOD="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" placeholder="lease_id" value="{{ lease.pk }}">
+                        {% include 'bs3/lease/lease_form.html' %}
+                    </form>
+                {% else %}
+                    {% include 'bs3/lease/lease_data.html' %}
+                {% endif %}
+
+                {% include 'bs3/lease/application_block.html' %}
+
+
+                {% with lease as object %}
+                    {% include 'bs3/common/created_updated.html' %}
+                {% endwith %}
+
+
+            </div>
+
+            <div class="col-md-8">
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs">
+                    <li {% if tab == 'services' %}class="active"{% endif %}>
+                        <a href="{% url 'lease' lease.pk %}?tab=services">
+                            <div class="color-marker color-service"></div>
+                            Услуги <label class="badge badge-primary">{{ lease.services.count }}</label>
+                        </a>
+                    </li>
+
+                    <li {% if tab == 'subservices' %}class="active"{% endif %}>
+                        <a href="{% url 'lease' lease.pk %}?tab=subservices">
+                            <div class="color-marker color-service"></div>
+                            Подуслуги <label class="badge badge-primary">{{ lease.subservices.count }}</label>
+                        </a>
+                    </li>
+
+                    <li {% if tab == 'ins' %}class="active"{% endif %}>
+                        <a href="{% url 'lease' lease.pk %}?tab=ins">
+                            <div class="color-marker color-ins"></div>
+                            INS <label class="badge badge-primary">{{ lease.incident_set.count }}</label>
+                        </a>
+                    </li>
+
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+
+                    <br>
+
+                    {% if tab == 'services' %}
+                        <div class="tab-pane active" id="services">
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Услуги через этот Lease</h3>
+                                </div>
+
+                                <table class="table">
+                                    {% for service in services %}
+                                        {% include 'bs3/services/table_rows/service_row.html' %}
+
+                                    {% empty %}
+                                        <tr>
+                                            <td class="text-center text-muted">Услуг нет</td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+
+                        </div>
+                    {% endif %}
+
+                    {% if tab == 'subservices' %}
+                        <div class="tab-pane active" id="services">
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Подуслуги через этот Lease</h3>
+                                </div>
+
+                                <table class="table">
+                                    {% for subservice in subservices %}
+                                        {% with subservice.service as service %}
+                                            {% include 'bs3/services/table_rows/subservice_row.html' %}
+                                        {% endwith %}
+
+                                    {% empty %}
+                                        <tr>
+                                            <td class="text-center text-muted">Подуслуг нет</td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+
+                        </div>
+                    {% endif %}
+
+                    {% if tab == 'ins' %}
+                        <div class="tab-pane active" id="ins">
+                            {% include 'bs3/common/panel_tables/ins_panel.html' %}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+        {% if mode == 'view' %}
+
+            <div class="well text-right">
+
+                {% include 'bs3/lease/disturb_provider.html' %}
+
+                {% if perms.common.delete_lease %}
+                    {% include 'bs3/lease/delete_lease_button.html' %}
+                {% endif %}
+
+            </div>
+        {% endif %}
+
+    </div>
+
+    {% include 'bs3/spy/object_log.html' %}
+
+{% endblock %}

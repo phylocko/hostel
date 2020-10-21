@@ -1,0 +1,23 @@
+<a class="btn btn-danger" data-toggle="modal" data-target="#delete_manager">Удалить сотрудника</a>
+
+<div class="modal fade text-left" id="delete_manager" tabindex="-1" role="dialog">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Удалить {{ shown_user }}?</h4>
+                </div>
+                <div class="modal-body">
+                    Это действие нельзя отменить
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Я еще подумаю...</button>
+                    <button type="submit" name="action" value="delete_user" class="btn btn-danger">Удалить</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

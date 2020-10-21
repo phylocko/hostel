@@ -1,0 +1,10 @@
+<ul class="nav nav-tabs">
+
+    <li role="presentation" {% if tab == "all" %}class="active"{% endif %}><a href="{% url 'companies' %}?tab=all">Все</a></li>
+
+    {% if perms.companies.add_company %}
+    <li role="presentation" {% if tab == "add" %}class="active"{% endif %}>
+        <a href="{% url 'add_company' %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+    </li>
+    {% endif %}
+</ul>

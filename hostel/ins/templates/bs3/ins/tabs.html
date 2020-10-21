@@ -1,0 +1,37 @@
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" {% if tab == 'clients' %}class="active"{% endif %}>
+        <a href="{% url 'incident' incident.pk %}?tab=clients">
+            <div class="color-marker color-client"></div>
+            Клиенты
+            <span class="badge">{{ incident.clients.count }}</span>
+        </a>
+    </li>
+    <li role="presentation" {% if tab == 'services' %}class="active"{% endif %}>
+        <a href="{% url 'incident' incident.pk %}?tab=services">
+            <div class="color-marker color-service"></div>
+            Услуги
+            <span class="badge">{{ incident.services.count }}</span>
+        </a>
+    </li>
+    <li role="presentation" {% if tab == 'subservices' %}class="active"{% endif %}>
+        <a href="{% url 'incident' incident.pk %}?tab=subservices">
+            <div class="color-marker color-subservice"></div>
+            Подуслуги
+            <span class="badge">{{ incident.subservices.count }}</span>
+        </a>
+    </li>
+    <li role="presentation" {% if tab == 'leases' %}class="active"{% endif %}>
+        <a href="{% url 'incident' incident.pk %}?tab=leases">
+            <div class="color-marker color-lease"></div>
+            Лизы
+            <span class="badge">{{ incident.leases.count }}</span>
+        </a>
+    </li>
+    <li role="presentation" {% if tab == 'messages' %}class="active"{% endif %}>
+        <a href="{% url 'incident' incident.pk %}?tab=messages">
+            <span class="glyphicon glyphicon-envelope"></span>
+            Письма
+            <span class="badge">{{ incident.notifications.count }}</span>
+        </a>
+    </li>
+</ul>

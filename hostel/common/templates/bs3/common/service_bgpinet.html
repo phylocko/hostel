@@ -1,0 +1,83 @@
+{% extends 'bs3/base.html' %}
+
+{% block content %}
+
+<ul class="nav nav-tabs">
+    <li role="presentation"><a href="index.php?page=services#service_{{ service.pk }}">Клиенты</a></li>
+</ul>
+
+<div class="container">
+
+
+    <!-- Заголовок странички, кнопка редактирования -->
+    <h2>Услуга
+        <small>{{ service.name }}</small>
+
+        {% if mode == 'edit' %}
+        <a class="btn btn-default"
+           href="index.php?page=service&action=view&id={{ service.pk }}&client_id={{ client.pk }}">Отмена</a>
+        <button type="submit" form="serviceData" class="btn btn-danger">Сохранить</button>
+        {% else %}
+        <a class="btn btn-default"
+           href="?page=service&action=view&mode=edit&id={{ service.pk }}&client_id={{ client.pk }}">Редактировать</a>
+        {% endif %}
+
+    </h2>
+
+    <!-- Колонка с общими данными клиента -->
+    <div class="row">
+        <div class="col-md-4">
+        </div>
+
+        <div class="col-md-4">
+
+
+            <!-- Данные услуги -->
+            <label>#RT</label>
+                {% if form.rt.errors %}
+                {{ form.rt.errors }}
+                {% endif %}
+            <div>{{ form.rt }}</div>
+
+            <label>Тип</label>
+                {% if form.servicetype.errors %}
+                {{ form.servicetype.errors }}
+                {% endif %}
+            <div>{{ form.servicetype }}</div>
+
+            <label>AS</label>
+                {% if form.autonomoussystem.errors %}
+                {{ form.autonomoussystem.errors }}
+                {% endif %}
+            <div>{{ form.autonomoussystem }}</div>
+
+            <label>Vlan</label>
+                {% if form.vlan.errors %}
+                {{ form.vlan.errors }}
+                {% endif %}
+            <div>{{ form.vlan }}</div>
+
+            <label></label>
+                {% if form..errors %}
+                {{ form..errors }}
+                {% endif %}
+            <div>{{ form. }}</div>
+
+            <label>Статус</label>
+                {% if form.status.errors %}
+                {{ form.status.errors }}
+                {% endif %}
+            <div>{{ form.status }}</div>
+
+
+        </div>
+
+        <!-- Колонка с услугами -->
+        <div class="col-md-4">
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}

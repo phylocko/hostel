@@ -1,0 +1,131 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Добавление лиз в INS {{ incident.pk }}{% endblock %}
+{% block content %}
+
+    {% include 'bs3/ins/ins_tabs.html' %}
+
+    <div class="container">
+
+        <div class="page-header">
+            <h3>Услуги подрядчиков для INS-{{ incident.pk }}</h3>
+        </div>
+
+        <a href="{% url 'incident' incident.pk %}">Назад</a>
+        <br>
+        <br>
+
+        <div class="row">
+
+            <div class="col-md-3">
+
+                <form id="choose_clients_form" METHOD="POST">
+                    {% csrf_token %}
+
+                    <div class="form-group {% if filter_form.city.errors %}has-error{% endif %}">
+                        <label>Города</label>
+                        {{ filter_form.city.errors }}
+                        {{ filter_form.city }}
+                    </div>
+
+                    <div class="form-group {% if filter_form.keywords.errors %}has-error{% endif %}">
+                        <label>Ключевые слова</label>
+                        {{ filter_form.keywords.errors }}
+                        {{ filter_form.keywords }}
+                    </div>
+
+
+                    <div class="form-group {% if filter_form.limit_by_services.errors %}has-error{% endif %}">
+                        {{ filter_form.limit_by_services.errors }}
+                        {{ filter_form.limit_by_services }}
+                        <label for="id_limit_by_services">Взять из услуг</label>
+                    </div>
+
+                    <div class="form-group">
+                        <button class="btn btn-primary form-control" type="submit"
+                                name="action" value="filter">
+                            <span class="glyphicon glyphicon-filter"></span> Отфильтровать
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="col-md-9">
+
+                <div class="alert alert-info" role="alert">
+                    Отображаются только услуги, предоставляемые виновником инцидента.
+                </div>
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <table class="table table-hover">
+                        <tr>
+                            <th><input type="checkbox" id="select_all" checked></th>
+                            <th>Тип</th>
+                            <th>Услуга</th>
+                            <th></th>
+                        </tr>
+
+                    {% for lease in leases %}
+
+                        <tr>
+
+                            <td class="text-muted">
+                                <input type="checkbox" name="lease" value="{{ lease.pk }}" checked>
+                            <td>
+                                <div class="color-marker color-lease"></div>
+                                <b><a href="{% url 'lease' lease.pk %}">{{ lease.type|upper }}</a></b><br>
+                            </td>
+
+                            <td>
+
+                                {% if lease.identity %}
+                                    <div><b>{{ lease.identity|truncatechars:72 }}</b></div>
+                                {% endif %}
+
+                                {% if lease.addresses %}
+                                    <div title="{{ lease.addresses }}">
+                                        {{ lease.addresses|truncatechars:72 }}
+                                    </div>
+                                {% endif %}
+
+                                {% if lease.cities %}
+                                    <div class="text-muted">{{ lease.cities.all|join:' — ' }}</div>
+                                {% endif %}
+
+                            </td>
+
+                            <td class="text-right">
+                                <label class="label label-primary">{{ lease.services.count|default:'' }}</label><br>
+                                <label class="label label-info">{{ lease.subservices.count|default:'' }}</label>
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+                    </table>
+
+                    <div class="well well-sm text-right">
+                        <button class="btn btn-primary" {% if not leases %}disabled{% endif %} type="submit"
+                                name="action"
+                                value="choose_leases">Выбрать услуги
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        $('#id_city').select2();
+
+        $('#select_all').change(function () {
+            var checkboxes = $(this).closest('form').find(':checkbox');
+            checkboxes.prop('checked', $(this).is(':checked'));
+        });
+    </script>
+
+{% endblock %}

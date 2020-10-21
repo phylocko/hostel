@@ -1,0 +1,68 @@
+<div class="form-group {% if form.agreement_number.errors %}has-error{% endif %}">
+    <label>Номер договора</label>
+    {{ form.agreement_number.errors }}
+    {{ form.agreement_number }}
+</div>
+<div class="form-group {% if form.company.errors %}has-error{% endif %}">
+    <label>Компания</label>
+    {{ form.company.errors }}
+    {{ form.company }}
+    <div class="help-block">Если компании нет в списке, вы можете ее <a href="{% url 'add_company' %}">создать</a></div>
+</div>
+<div class="form-group {% if form.name.errors %}has-error{% endif %}">
+    <label>Название договора</label>
+    {{ form.name.errors }}
+    {{ form.name }}
+    <div class="help-block">Если оставить это поле пустым, названием будет имя загруженного скана</div>
+</div>
+<div class="form-group {% if form.partner_type.errors %}has-error{% endif %}">
+    <label>Кем является эта организация</label>
+    {{ form.partner_type.errors }}
+    {{ form.partner_type }}
+</div>
+
+
+<div class="form-group {% if form.file.errors %}has-error{% endif %}">
+    <label>Скан договора</label> {{ form.file.errors }}
+    {% if agreement.filename %}
+        <span class="text-warning"><span class="glyphicon glyphicon-warning-sign"></span>
+            Загрузка заменит имеющийся документ
+        </span>
+    {% endif %}
+
+    <input {% if mode == "view" %}disabled{% endif %} type="file" name="file" class="form-control">
+
+
+</div>
+
+<div class="form-group {% if form.agreement_date.errors %}has-error{% endif %}">
+    <label>Договор от</label>
+    <div class="form-group date" id="agreement_date">
+        {{ form.agreement_date }}
+        </span>
+    </div>
+    {{ form.agreement_date.errors }}
+    <div class="help-block">Формат: 20.01.2019</div>
+</div>
+
+<div class="form-group {% if form.is_terminated.errors %}has-error{% endif %}">
+
+    <label for="id_is_terminated">
+        {{ form.is_terminated }}
+        Договор расторгнут
+    </label>
+    {% for error in form.is_terminated.errors %}
+        <span class="error">{{ error }}</span>
+    {% endfor %}<br>
+</div>
+
+<div class="form-group {% if form.comment.errors %}has-error{% endif %}">
+    <label>Комментарий</label> {{ form.comment.errors }} {{ form.comment }}
+</div>
+<script>
+    $("#id_company").select2();
+
+    // Vika hates calendar widget!
+    // $('#agreement_date').datetimepicker({format: 'DD.MM.YYYY', locale: 'ru'});
+
+</script>

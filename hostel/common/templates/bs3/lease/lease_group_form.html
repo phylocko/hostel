@@ -1,0 +1,17 @@
+<div class="form-group {% if form.rt.errors %}has-error{% endif %}">
+    <label class="control-label">#RT</label>
+    {{ form.rt.errors }}
+    {{ form.rt }}
+</div>
+
+<div class="form-group {% if form.description.errors %}has-error{% endif %}">
+    <label class="control-label">Краткое описание</label>
+    {{ form.description.errors }}
+    {{ form.description }}
+</div>
+
+<div class="form-group {% if form.comment.errors %}has-error{% endif %}">
+    <label class="control-label">Комментарии</label>
+    {{ form.comment.errors }}
+    {{ form.comment }}
+</div>

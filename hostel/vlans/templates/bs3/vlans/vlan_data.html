@@ -1,0 +1,43 @@
+{% load hostel_filters %}
+
+
+<table class="table">
+
+    <tr>
+        <td><label>Название</label></td>
+        <td>{{ vlan.vname }}</td>
+    </tr>
+
+    <tr>
+        <td><label>Тикет</label></td>
+        <td>{{ vlan.ticket|ticket }}</td>
+    </tr>
+
+    <tr>
+        <td><label>p2p</label></td>
+        <td>
+        {% if vlan.is_management %}
+            <span class="glyphicon glyphicon-ok"></span>
+        {% endif %}
+        </td>
+    </tr>
+
+<tr>
+    <td><label>Проходит по нашей сети</label></td>
+    <td>
+        {% if vlan.is_local %}
+            <span class="glyphicon glyphicon-ok"></span>
+        {% endif %}
+    </td>
+</tr>
+
+    <tr>
+        <td colspan="2">
+            <label>Комментарий</label>
+            <address>{{ vlan.comment|keep_lines }}</address>
+        </td>
+    </tr>
+
+
+</table>
+

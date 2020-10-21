@@ -1,0 +1,291 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Vlan {{ vlan }}{% endblock %}
+{% block content %}
+
+    {% include 'bs3/vlans/vlans_tabs.html' %}
+
+
+    <div class="container">
+        <br>
+        {% include 'bs3/vlans/broadcrumbs_vlan.html' %}
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>
+                    <div class="color-marker color-vlan"></div>
+                    {{ vlan }}
+                </h4>
+            </div>
+            <div class="col-md-4 text-right">
+                {% if perms.vlans.change_vlan %}
+                    <a class="btn btn-primary" href="{% url 'vlans' %}{{ vlan.pk }}/update/">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Редактировать
+                    </a>
+                {% endif %}
+            </div>
+
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-4">
+
+                {% include 'bs3/vlans/vlan_data.html' %}
+
+                {% with vlan as object %}
+                    {% include 'bs3/common/created_updated.html' %}
+                {% endwith %}
+
+
+            </div>
+
+
+            <div class="col-md-8">
+
+                <!-- Nav tabs -->
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+
+                    <li role="presentation" {% if tab == 'services' %}class="active"{% endif %}>
+                        <a href="{% url 'vlan' vlan.pk %}?tab=services">
+                            <div class="color-marker color-service"></div>
+                            Услуги
+                        </a>
+                    </li>
+
+                    <li role="presentation" {% if tab == 'nets' %}class="active"{% endif %}>
+                        <a href="{% url 'vlan' vlan.pk %}?tab=nets">
+                            <div class="color-marker color-net"></div>
+                            Сети
+                        </a>
+                    </li>
+
+                    <li role="presentation" {% if tab == 'bundles' %}class="active"{% endif %}>
+                        <a href="{% url 'vlan' vlan.pk %}?tab=bundles">
+                            <div class="color-marker color-bundle"></div>
+                            Бандлы
+                        </a>
+                    </li>
+
+                    <li role="presentation" {% if tab == 'map' %}class="active"{% endif %}>
+                        <a href="{% url 'vlan' vlan.pk %}?tab=map">Схема</a>
+                    </li>
+
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <br>
+
+                    {% if tab == 'services' %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Услуги</h3>
+                            </div>
+
+                            <table class="table">
+                                {% if vlan.service %}
+                                    <tr>
+                                        <th>
+                                            <div class="color-marker color-service"></div>
+                                            <a href="{% url 'service' vlan.service.pk %}">{{ vlan.service }}</a>
+                                        </th>
+                                        <td>
+                                            <div class="color-marker color-client"></div>
+                                            <a href="{% url 'client' vlan.service.client.pk %}">
+                                                {{ vlan.service.client }}
+                                            </a>
+                                        </td>
+                                        <td class="text-muted">
+                                            {{ vlan.service.description|truncatechars:50 }}
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td class="text-muted text-center">Влан не привязан к услуге</td>
+                                    </tr>
+                                {% endif %}
+
+                                {% for subservice in vlan.subservices.all %}
+                                    <tr>
+                                        <th>
+                                            <div class="color-marker color-subservice"></div>
+                                            <a href="{% url 'subservice' subservice.service.pk subservice.pk %}">
+                                                {{ subservice }}
+                                            </a>
+                                        </th>
+                                        <td>
+                                            <div class="color-marker color-client"></div>
+                                            <a href="{% url 'client' subservice.service.client.pk %}">
+                                                {{ subservice.service.client }}
+                                            </a>
+                                        </td>
+                                        <td class="text-muted">
+                                            {{ subservice.description|truncatechars:50 }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                            </table>
+                        </div>
+
+
+                    {% endif %}
+
+                    {% if tab == 'nets' %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    Сети
+                                </h3>
+                            </div>
+
+                            <table class="table">
+                                {% for net in vlan.nets.all %}
+                                    <tr>
+                                        <th>
+                                            <div class="color-marker color-net"></div>
+                                            <b><a href="{% url 'view_net' net.pk %}">{{ net }}</a></b>
+                                        </th>
+
+                                        <td>
+                                            <div class="color-marker color-device"></div>
+                                            <b><a href="{% url 'device' net.device.pk %}">{{ net.device }}</a></b>
+                                        </td>
+                                        <td class="text-muted">
+                                            {{ net.description|truncatechars:30 }}
+                                        </td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td class="text-muted text-center">Влан не содержит сетей</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+
+                        </div>
+                    {% endif %}
+
+                    {% if tab == 'bundles' %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    Бандлы
+                                </h3>
+                            </div>
+
+                            <table class="table">
+                                <tr>
+                                    <th>Device</th>
+                                    <th>Bundle</th>
+                                    <th>Description</th>
+                                    <th>Mode</th>
+                                </tr>
+                                {% for bundle_vlan in bundle_vlans %}
+                                    <tr>
+                                        <td>
+                                            <div class="color-marker color-device"></div>
+                                            <b><a href="{% url 'device' bundle_vlan.bundle.device.pk %}">{{ bundle_vlan.bundle.device }}</a></b>
+                                        </td>
+                                        <td>
+                                            <div class="color-marker color-bundle"></div>
+                                            <b>
+                                                <a href="{% url 'bundle' bundle_vlan.bundle.pk %}">{{ bundle_vlan.bundle.name }}</a>
+                                            </b>
+                                        </td>
+                                        <td class="text-muted">{{ bundle_vlan.bundle.description|default:"—" }}</td>
+                                        <td class="text-muted"><span
+                                                class="label label-info">{{ bundle_vlan.mode }}</span></b>
+                                        </td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td class="text-muted text-center" colspan="5">Бандлов не найдено</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+
+                        </div>
+                    {% endif %}
+
+                    {% if tab == 'map' %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Схема влана {{ vlan }}</h3>
+                            </div>
+                            <div class="panel-body" id="graph_container"></div>
+                        </div>
+                        <script type="text/javascript">
+
+                            var url = '/api/?page=vlans&action=vis_graph&vlan_id={{ vlan.vlannum }}'
+
+                            $.ajax({
+                                url: url,
+                                success: function (data) {
+
+                                    devices = data['nodes'];
+                                    edges = data['edges'];
+
+                                    var nodes = new vis.DataSet(devices);
+                                    var edges = new vis.DataSet(edges);
+
+                                    // create a network
+                                    var container = document.getElementById('graph_container');
+
+                                    // provide the data in the vis format
+                                    var data = {
+                                        nodes: nodes,
+                                        edges: edges
+                                    };
+
+                                    var options = {
+                                        layout: {
+                                            improvedLayout: true,
+                                        },
+                                        physics: {
+                                            stabilization: true
+                                        },
+                                        edges: {
+                                            scaling: {
+                                                label: true,
+                                            },
+                                            smooth: true,
+                                            width: 1,
+                                            color: {
+                                                color: '#666666',
+                                                highlight: '#6b89e3',
+                                                hover: '#848484',
+                                                inherit: 'from',
+                                                opacity: 1.0
+                                            },
+                                        },
+                                    }
+
+                                    var network = new vis.Network(container, data, options);
+                                }
+                            });
+
+                        </script>
+                    {% endif %}
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+        {% if perms.vlans.change_vlan %}
+            {% include 'bs3/vlans/delete_vlan_button.html' %}
+        {% endif %}
+
+    </div>
+
+    {% include 'bs3/spy/object_log.html' %}
+
+{% endblock %}

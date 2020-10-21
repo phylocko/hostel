@@ -1,0 +1,130 @@
+{% load hostel_filters %}
+
+<table class="table">
+
+    <tr class="active">
+        <td colspan="2">
+            <label>Наименование</label><br>
+            {{ client.clientname|default:'' }}
+            <div class="help-block">Для отображения в списке участников на сайте</div>
+        </td>
+    </tr>
+
+    <tr>
+        <td><label>Нетнейм</label></td>
+        <td><b>{{ client.netname }}</b></td>
+    </tr>
+
+    <tr>
+        <td><label>English name</label></td>
+        <td>{{ client.engname|default:"" }}</td>
+    </tr>
+
+    <tr>
+        <td><label>Статус</label></td>
+        <td>
+            {% if client.enabled %}
+                <label class="label label-success">Работает</label>
+            {% else %}
+                <label class="label label-danger">Выключен</label>
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <td><label>Тикет</label></td>
+        <td>{{ client.ticket|ticket }}</td>
+    </tr>
+
+    <tr>
+        <th>Потребитель</th>
+        <td>
+            {% if client.is_consumer %}
+                <span class="glyphicon glyphicon-ok text-success"></span>
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <th>Поставщик</th>
+        <td>
+            {% if client.is_provider %}
+                <span class="glyphicon glyphicon-ok text-success"></span>
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <td><label>Менеджер</label></td>
+        <td>
+            {% if client.manager %}
+                <a href="{% url 'employee' client.manager.pk %}">{{ client.manager }}</a>
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <td><label>Город</label></td>
+        <td>
+            {% if client.city %}
+                <a href="{% url 'city' client.city.pk %}">{{ client.city }}</a>
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <td><label>Сайт</label></td>
+        <td>
+            {{ client.url|default:""|urlize }}
+            {% if client.is_published %}
+                <span class="glyphicon glyphicon-eye-open text-success pull-right"></span>
+            {% else %}
+                <span class="glyphicon glyphicon-eye-close text-muted pull-right"></span>
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+
+            {% if client.comment %}
+                <label>Комментарий</label>
+                <address>
+                    {{ client.comment|linebreaksbr }}
+                </address>
+            {% endif %}
+
+
+            <label>Email</label>
+            <address>
+                {{ client.email }}
+            </address>
+
+            {% if client.contacts %}
+                <label>Контакты</label>
+                <address>
+                    {{ client.contacts|linebreaksbr }}
+                </address>
+            {% endif %}
+
+            <label class="text-success">Support Email</label>
+            <address class="text-success">
+                {{ client.support_email|default:'—' }}
+            </address>
+
+            <label class="text-success">Support-контакты</label>
+            <address class="text-success">
+                {{ client.support_contacts|default:'—'|linebreaksbr }}
+            </address>
+
+            <label>Адрес</label>
+            <address>
+                {{ client.address|default:'—'|linebreaksbr }}
+            </address>
+
+        </td>
+    </tr>
+
+
+</table>
+

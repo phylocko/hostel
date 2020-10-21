@@ -1,0 +1,23 @@
+{% load hostel_filters %}
+
+<table class="table">
+
+    <tr>
+        <td><label>RT#</label></td>
+        <td>{{ lease_group.rt|ticket }}</td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+
+            <label>Описание</label>
+            <address>{{ lease_group.description|default:'—' }}</address>
+
+            <label>Комментарий</label>
+            <address>{{ lease_group.comment|default:'—'|linebreaks }}</address>
+
+        </td>
+    </tr>
+
+</table>
+

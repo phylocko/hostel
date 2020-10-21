@@ -1,0 +1,13 @@
+<div class="form-group {% if form.name.errors %}has-error{% endif %}">
+    <label>Название города</label>
+    {{ form.name }}
+    {{ form.name.errors }}
+</div>
+
+<div class="form-group {% if form.map_url.errors %}has-error{% endif %}">
+<label>Ссылка на карту</label>
+    {% if form.map_url.errors %}
+    {{ form.map_url.errors }}
+    {% endif %}
+    {{ form.map_url }}
+</div>

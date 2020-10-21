@@ -1,0 +1,95 @@
+{% load hostel_filters %}
+
+<table class="table">
+
+    <tr>
+        <th>Тип</th>
+        <td class="active">{{ device.type|default:''|upper }}</td>
+    </tr>
+
+    <tr>
+        <th>Управление и мониторинг</th>
+        <td>
+            {% if device.is_managed %}<span class="glyphicon glyphicon-ok text-success"></span>{% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <th>Статус</th>
+        <td>{{ device.status|status }}</td>
+    </tr>
+
+    <tr>
+        <th>IP-адрес управления</th>
+        <td>
+            <div class="color-marker color-net"></div>
+            {% if device.management_net %}
+                <a href="{% url 'nets' %}{{ device.management_net.pk }}">{{ device.management_net }}</a>
+            {% else %}
+                <div class="text-muted">Не задан</div>
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <td><label>Площадка</label></td>
+        <td>
+            <div class="color-marker color-datacenter"></div>
+            {% if device.datacenter %}
+                <a href="{% url 'datacenter' device.datacenter.pk %}">{{ device.datacenter.name|title|default:"—" }}</a>
+            {% else %}
+                <div class="text-muted">Не указана</div>
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <th>Стойка</th>
+        <td>
+            {% if device.rack %}
+                <a href="{% url 'rack' device.rack.pk %}">{{ device.rack|truncatechars:20 }}</a>
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <th>Начальный юнит</th>
+        <td>{{ device.start_unit|default:'—' }}</td>
+    </tr>
+
+    <tr>
+        <th>Железо</th>
+        <td>
+            {% if device.store_entry %}
+                <div class="color-marker color-entry"></div>
+                <a href="{% url 'store' %}{{ device.store_entry.pk }}">{{ device.store_entry.model|default:"—" }}</a>
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <td><label>SNMP Community</label></td>
+        <td>{{ device.community|default:'' }}</td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+
+            <label>Адрес площадки</label>
+            <address class="text-muted">
+                {% if device.datacenter.address %}
+                    {% if device.datacenter.city %}{{ device.datacenter.city }}, {% endif %}
+                    {{ device.datacenter.address }}
+                {% endif %}
+
+            </address>
+
+            <label>Информация о прошивке и версии</label>
+            <address>{{ device.version|default:"—"|linebreaks }}</address>
+
+            <label>Комментарий</label>
+            <address>{{ device.comment|default:"—"|linebreaks }}</address>
+        </td>
+    </tr>
+
+</table>

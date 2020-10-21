@@ -1,0 +1,25 @@
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            Потерянные вланы [0:20]
+            <span class="pull-right"><a href="{% url 'vlans' %}?tab=gone">Все</a></span>
+        </h3>
+    </div>
+
+    <div class="panel-body text-muted">Вланы, которые не поданы ни в один порт, но идут по нашей сети</div>
+
+    <table class="table">
+        {% for vlan in dead_vlans %}
+            <tr>
+                <td class="active">
+                    <div class="color-marker color-vlan"></div>
+                    <a href="{% url 'vlan' vlan.pk %}"><b>{{ vlan.vlannum }}</b></a>
+                </td>
+                <td><a href="{% url 'vlan' vlan.pk %}"><b>{{ vlan.vname }}</b></a></td>
+                <td>{{ vlan.comment|default:''|truncatechars:50 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+</div>

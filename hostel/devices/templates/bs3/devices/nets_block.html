@@ -1,0 +1,69 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th></th>
+        <th>Сеть</th>
+        <th>Vlan</th>
+        <th>Услуга</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if device.management_net %}
+        <tr>
+            <td class="warning"><span class="glyphicon glyphicon-console" aria-hidden="true"></span></td>
+            <td class="warning">
+                <div class="color-marker color-net"></div>
+                <b>
+                    <a href="{% url 'nets' %}{{ device.management_net.pk }}" class="text-success">
+                        {{ device.management_net.address }}
+
+                    </a></b>
+            </td>
+            <td class="warning">
+                <b>
+                    <a href="{% url 'vlans' %}{{ device.management_net.vlan.pk }}">
+                        {{ device.management_net.vlan|default:"—" }}</a>
+                </b>
+            </td>
+            <td class="warning text-muted">Адрес управления</td>
+        </tr>
+    {% endif %}
+
+    {% for net in device.net.all %}
+        {% if net.managed_device != device %}
+            <tr>
+                <td></td>
+                <td>
+                    <div class="color-marker color-net"></div>
+                    <a href="{% url 'nets' %}{{ net.pk }}">{{ net }}</a></td>
+                <td>
+                    {% if net.vlan %}
+                        <div class="color-marker color-vlan"></div>
+                        <b><a href="{% url 'vlan' net.vlan.pk %}">{{ net.vlan|default:"—" }}</a></b>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if net.service %}
+                        <div class="color-marker color-service"></div>
+                        <b><a href="{% url 'service' net.service.pk %}">{{ net.service }}</a></b> для
+                        <b><a href="
+                                    {% url 'client' net.service.client.pk %}">
+                            {{ net.service.client.netname }}</a>
+                        </b>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+    </tbody>
+</table>
+
+<div class="well well-sm text-right">
+    <b>
+        <a href="{% url 'add_net' %}?device={{ device.pk }}">
+            Создать сеть на {{ device.netname }}
+        </a>
+    </b>
+</div>
+

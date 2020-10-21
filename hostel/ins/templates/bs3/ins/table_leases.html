@@ -1,0 +1,39 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Lease</th>
+        <th>Описание</th>
+        <th></th>
+    </tr>
+    </thead>
+    {% for lease in incident.leases.all %}
+        <tr>
+            <td style="width: 200px;">
+                <div class="color-marker color-lease hidden-xs"></div>
+                <b>
+                    <a href="{% url 'lease' lease.pk %}">{{ lease }}</a>
+                </b>
+            </td>
+            <td>
+                <small>{{ lease.identity|truncatechars:56 }}</small>
+            </td>
+            <td class="text-right text-danger">
+                {% if perms.ins.change_incident %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{ lease.pk }}" name="lease_id">
+                        <button type="submit" name="action" value="delete_lease"
+                                class="btn btn-default btn-xs">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </form>
+                {% endif %}
+
+            </td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td colspan="3" class="text-muted text-center">Пусто</td>
+        </tr>
+    {% endfor %}
+</table>

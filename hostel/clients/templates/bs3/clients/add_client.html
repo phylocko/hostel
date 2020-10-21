@@ -1,0 +1,51 @@
+{% extends 'bs3/base.html' %}
+{% block title %}*Создать клиента{% endblock %}
+{% block content %}
+
+{% include 'bs3/clients/tabs.html' %}
+
+<div class="container">
+
+    <br>
+    <!-- Заголовок, кнопка редактирования -->
+    <div class="row" style="margin-bottom: 16px;">
+        <div class="col-md-8">
+        	<h4>
+                <div class="color-marker color-ins"></div>
+                Создание нового клиента
+            </h4>
+        </div>
+        <div class="col-md-4 text-right">
+            <button type="submit" form="client_form" class="btn btn-primary">Сохранить</button>
+        </div>
+    </div>
+
+
+    <!-- Колонка с общими данными клиента -->
+    <div class="row">
+
+
+        <div class="col-md-2">
+        </div>
+
+
+        <div class="col-md-8">
+
+
+            <!-- Данные клиента -->
+            <form id="client_form" METHOD="POST">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ client.clientid }}">
+                {% include 'bs3/clients/client_form.html' %}
+            </form>
+
+
+        </div>
+
+        <div class="col-md-2">
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

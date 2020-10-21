@@ -1,0 +1,73 @@
+{% load hostel_filters %}
+
+{% if vlan.pk %}
+    <tr>
+
+        <td class="hidden-xs hidden-sm">
+            {{ vlan.rt|ticket }}
+        </td>
+        <td class="active">
+            <div class="color-marker color-vlan"></div>
+            <b><a href="{% url 'vlan' vlan.pk %}">
+                {{ vlan.vlannum }}
+            </a></b>
+        </td>
+
+        <td>
+            <a href="{% url 'vlans' %}{{ vlan.pk }}">{{ vlan.vname }}</a>
+        </td>
+
+        <td class="hidden-xs hidden-sm info text-center">
+            {% if vlan.is_management %}
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+            {% endif %}
+        </td>
+
+        <td class="hidden-xs hidden-sm warning text-center">
+            {% if vlan.is_local %}
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+            {% endif %}
+        </td>
+
+        <th class="hidden-xs hidden-sm text-center">
+            {{ vlan.nets__count|default:'' }}
+        </th>
+
+        <td class="text-muted">
+
+            {% if vlan.service_id %}
+                <div class="color-marker color-service"></div>
+                <a href="{% url 'service' vlan.service_id %}">
+                    <b>{{ vlan.service }}</b>
+                </a>
+            {% endif %}
+
+        </td>
+        <td class="hidden-xs hidden-sm">
+            {% if vlan.comment %}
+                <pre style="overflow: hidden; width: 100%;">{{ vlan.comment|truncatechars:80 }}</pre>
+            {% endif %}
+        </td>
+    </tr>
+
+{% else %}
+    <tr>
+        <td class="warning hidden-xs hidden-sm"></td>
+        <td class="warning">
+            {% if vlan.0 == vlan.1 %}
+                <b>{{ vlan.0 }}</b>
+            {% else %}
+                <b>{{ vlan.0 }} — {{ vlan.1 }}</b>
+            {% endif %}
+        </td>
+        <td class="warning">
+            <a class="btn btn-xs btn-default" href="{% url 'add_vlan' %}?vlanid={{ vlan.0 }}">Создать влан {{ vlan.0 }}</a>
+        </td>
+        <td class="warning hidden-xs hidden-sm"></td>
+        <td class="warning hidden-xs hidden-sm"></td>
+        <td class="warning"></td>
+        <td class="warning hidden-xs hidden-sm"></td>
+        <td class="warning hidden-xs hidden-sm"></td>
+    </tr>
+
+{% endif %}

@@ -1,0 +1,126 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Порты{% endblock %}
+{% load hostel_filters %}
+{% block content %}
+
+<style>
+    .label_wrapper {
+        padding: 10px;
+        background-color: #ebebeb;
+        margin-bottom: 10px;
+        margin-left: 20px;
+        border-radius: 5px;
+        padding-bottom: 1px;
+    }
+    .service_list {
+        padding-left: 40px;
+    }
+</style>
+
+<div class="container-fluid">
+
+    <ol class="breadcrumb">
+        <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+        <li><a href="{% url 'burst_sets' %}">Burst</a></li>
+        <li class="active">Посчитать вручную</li>
+    </ol>
+
+    <div class="well well-sm text-right">
+        <a href="{% url 'burst_sets' %}">Burst-наборы</a>
+    </div>
+
+    <h3>Подсчет Burst вручную</h3>
+
+    <form method="get">
+
+        <div class="row">
+            <div class="col-md-6">
+
+                {% with burst_period_form as form %}
+                    {% include 'bs3/burst/burst_period_form.html' %}
+                {% endwith %}
+
+
+                <div class="well" style="magrin: 0px;">
+                    <div class="form-group">
+                        <label>Клиент </label><br>
+                        {{ form.client }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    {% for bundle in client.bundles %}
+
+
+                    <table class="table">
+                        <tr class="active">
+                            <th>
+                                <input id="bundle_{{ bundle.pk }}" type="checkbox" name="devs" value="{{ bundle.pk }}" {% if bundle in selected_bundles %}checked{% endif %}>
+                                <label class="service_label" for="bundle_{{ bundle.pk }}">
+                                    {{ bundle.device.netname }} port {{ bundle }} [{{ bundle.traffic_ports.count }}]
+                                </label>
+                            </th>
+                            <th colspan="2">
+                                <span class="text-muted pull-right">{{ bundle.device.datacenter.address }}</span>
+                            </th>
+                        </tr>
+
+                        {% for service in bundle.services.all %}
+                        <tr>
+                            <td></td>
+                            <td>{{ service.status|status }}</td>
+                            <td><a href="{% url 'service' service.pk %}">{{ service }} — {{ service.name }} {{ service.servicetype }}</a></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+
+
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {% if client %}
+                    <a class="btn btn-lg btn-default" href="{% url 'manual_burst' %}">Заново</a>
+                    {% endif %}
+                    <button type="submit" class="btn btn-primary btn-lg pull-right">{% if client %}Посчитать Burst{% else %}Продолжить{% endif %}
+                    </button>
+                </div>
+
+
+            </div>
+            <div class="col-md-6">
+
+                {% if burst %}
+                <div class="jumbotron">
+                    <p>Входящий бёрст</p>
+
+                    <h1>{{ burst_in }} Mbps</h1>
+
+                    <p>Исходящий бёрст</p>
+                    <h1>{{ burst_out }} Mbps</h1>
+
+                    <p>Период: {{ start }} — {{ end }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+    </form>
+
+    <div class="row">
+        <div class="col-md-12 text-right text-muted">
+            <small>{{ burst }}</small>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $('#id_client').select2()
+
+
+
+
+</script>
+
+{% endblock %}

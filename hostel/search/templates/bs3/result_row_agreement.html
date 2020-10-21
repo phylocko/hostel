@@ -1,0 +1,20 @@
+<tr>
+    <td style="width: 60px;" class="hidden-xs hidden-sm text-muted">{{ agreement.pk }}</td>
+    <td style="width: 180px;">
+        <div class="color-marker color-agreement"></div>
+        <b><a href="{% url 'agreement' agreement.pk %}">{{ agreement.agreement_number|truncatechars:16 }}</a></b></td>
+    <td style="width: 150px;">
+        {% if agreement.partner_type == 'client' %}
+            <label class="label label-danger">Клиент</label>
+        {% else %}
+            <label class="label label-default">Поставщик</label>
+        {% endif %}
+
+    </td>
+    <td>
+        {{ agreement }}
+        <small>
+            <div class="text-muted">{{ agreement.comment|default:'' }}</div>
+        </small>
+    </td>
+</tr>

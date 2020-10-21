@@ -1,0 +1,133 @@
+<div class="form-group {% if form.netname.errors %}has-error{% endif %}">
+    <label>Netname *</label>
+    {{ form.netname.errors }}
+    {{ form.netname }}
+</div>
+
+<div class="form-group {% if form.clientname.errors %}has-error{% endif %}">
+    <label>Наименование организации</label>
+    {{ form.clientname.errors }}
+    {{ form.clientname }}
+    <div class="help-block">Для отображения в списке участников на сайте</div>
+</div>
+
+<div class="form-group {% if form.engname.errors %}has-error{% endif %}">
+    <label>English name</label>
+    {{ form.engname.errors }}
+    {{ form.engname }}
+    <div class="help-block">Для английской версии сайта</div>
+</div>
+
+<div class="form-group">
+    <label>Номер тикета</label>
+    {{ form.ticket }}
+</div>
+
+<div class="checkbox">
+    <label> {{ form.is_consumer }} <b>Потребитель услуг</b></label>
+    <div class="help-block">Мы предоставляем клиенту услуги</div>
+</div>
+
+<div class="checkbox">
+    <label>{{ form.is_provider }} <b>Поставщик услуг</b></label>
+    <div class="help-block">Клиент предоставляет нам услуги</div>
+</div>
+
+
+<div class="form-group {% if form.manager.errors %}has-error{% endif %}">
+    <label>Менеджер</label>
+    {{ form.manager.errors }}
+    {{ form.manager }}
+</div>
+
+<div class="form-group {% if form.city.errors %}has-error{% endif %}">
+    <label>Город</label>
+    {{ form.city.errors }}
+    {{ form.city }}
+    <div class="help-block">Город включения. Влияет на BGP community на RS-ах</div>
+</div>
+
+
+<div class="form-group {% if form.address.errors %}has-error{% endif %}">
+    <label>Адрес</label>
+    {{ form.address.errors }}
+    {{ form.address }}
+    <div class="help-block">Юридический или физический — не важно</div>
+</div>
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">Контакты клиента</h3>
+    </div>
+    <div class="panel-body">
+
+        <div class="help-block">Для связи с клиентом, как потребителем услуг</div>
+
+        <div class="form-group {% if form.email.errors %}has-error{% endif %}">
+            <label>Email</label>
+            {{ form.email.errors }}
+            {{ form.email }}
+            <div class="help-block">Для уведомлений и связи с персоналом</div>
+        </div>
+
+        <div class="form-group {% if form.contacts.errors %}has-error{% endif %}">
+            <label>Прочие контакты</label>
+            {{ form.contacts.errors }}
+            {{ form.contacts }}
+            <div class="help-block">Для эскалаций и оперативной связи</div>
+        </div>
+
+    </div>
+</div>
+
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h3 class="panel-title">Контакты подрядчика</h3>
+    </div>
+    <div class="panel-body">
+
+        <div class="help-block">Для связи с клиентом, как поставщиком</div>
+
+        <div class="form-group {% if form.support_email.errors %}has-error{% endif %}">
+            <label>Support Email</label>
+            {{ form.support_email.errors }}
+            {{ form.support_email }}
+            <div class="help-block">Для автоматизированных обращений</div>
+        </div>
+
+        <div class="form-group {% if form.support_contacts.errors %}has-error{% endif %}">
+            <label>Support контакты</label>
+            {{ form.support_contacts.errors }}
+            {{ form.support_contacts }}
+            <div class="help-block">Для эскалаций и оперативной связи</div>
+        </div>
+
+    </div>
+</div>
+
+<div class="form-group {% if form.enabled.errors %}has-error{% endif %}">
+    <div class="checkbox">
+        <label> {{ form.enabled }} <b>Включен</b></label>
+        {{ form.enabled.errors }}
+    </div>
+</div>
+
+<div class="form-group {% if form.comment.errors %}has-error{% endif %}">
+    <label for="login">Комментарий</label>
+    {{ form.comment.errors }}
+    {{ form.comment }}
+
+</div>
+
+<div class="form-group {% if form.url.errors %}has-error{% endif %}">
+    <label>Сайт</label>
+    {{ form.url.errors }}
+    {{ form.url }}
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#id_manager").select2();
+        $("#id_city").select2();
+    })
+</script>

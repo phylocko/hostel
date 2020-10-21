@@ -1,0 +1,33 @@
+{% if incident.progress == "now" %}
+    <tr class="warning">
+        {% else %}
+    <tr>
+{% endif %}
+
+<td>
+    <div class="color-marker color-ins"></div>
+    <a href="{% url 'incident' incident.pk %}">
+        <b>{{ incident }}</b>
+    </a>
+</td>
+
+<td>
+    <div class="color-marker color-client"></div>
+    <b>{{ incident.provider.netname|default:'' }}</b>
+</td>
+
+<td>
+<span class="glyphicon glyphicon-user"></span> <b>{{ incident.services.count|default:incident.clients.count }}</b>
+</td>
+
+<td class="text-right">
+
+    {% if incident.progress == "now" %}
+        <progress max="100" value="{{ incident.percent_progress }}"></progress>
+    {% else %}
+        <small>
+            {{ incident.time_start|date:'Y-m-d H:i' }} — {{ incident.time_end|date:'H:i' }}
+        </small>
+    {% endif %}
+
+</td>

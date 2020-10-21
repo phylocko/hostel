@@ -1,0 +1,134 @@
+<h3>Запрос на BGP-услуги</h3>
+
+{% if form.non_field_errors %}
+    <div class="text-danger">
+        {% for error in form.non_field_errors %}
+            <p class="form-error">{{ error }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<div class="form-group {% if form.parent_rt.errors %}has-error{% endif %}">
+    <label class="control-label">Родительская заявка RT</label>
+    {{ form.parent_rt.errors }}
+    {{ form.parent_rt }}
+    <div class="help-block">Созданный тикет станет потомком</div>
+</div>
+
+<div class="form-group">
+
+    <label class="control-label" for="id_inet2_requested">{{ form.inet2_requested }} Inet2</label><br>
+
+    <div id="inet2_group">
+        {{ form.inet2_type }}
+    </div>
+    <div class="help-block">BGP Full View по пиринговой схеме</div>
+
+</div>
+
+<div class="form-group">
+    <label class="control-label" for="id_wix_requested">{{ form.wix_requested }} W-IX</label><br>
+
+    <div id="wix_group">
+        {{ form.wix_type }}
+    </div>
+    <div class="help-block">Международный пиринг</div>
+
+</div>
+
+<div class="form-group">
+    <label class="control-label" for="id_bgpinet_requested">{{ form.bgpinet_requested }} BGP Inet</label>
+    <div id="bgpinet_group">
+        {{ form.bgpinet_type }}
+    </div>
+    <div class="help-block">Классический интернет по BGP</div>
+
+</div>
+
+
+<div class="form-group {% if form.ports.errors %}has-error{% endif %}">
+    <label class="control-label">Порт/Порты включения</label>
+    {{ form.ports.errors }}
+    {{ form.ports }}
+    <div class="help-block">Например: mrxst-sw0 port 2</div>
+</div>
+
+<div class="form-group {% if form.contacts.errors %}has-error{% endif %}">
+    <label class="control-label">Контактные данные</label>
+    {{ form.contacts.errors }}
+    {{ form.contacts }}
+    <div class="help-block">С кем взаимодействовать по согласованию и включению</div>
+</div>
+
+<div class="form-group {% if form.mode.errors %}has-error{% endif %}">
+    <label class="control-label">Коммерция/тест?</label>
+    {{ form.mode.errors }}
+    {{ form.mode }}
+
+    <div id="period_group">
+        <label class="control-label">Период теста (дней)</label>
+        {{ form.test_period.errors }}
+        {{ form.test_period }}
+    </div>
+
+</div>
+
+<div class="form-group {% if form.comment.errors %}has-error{% endif %}">
+    <label class="control-label">Что бы вы хотели добавить от себя?</label>
+    {{ form.comment.errors }}
+    {{ form.comment }}
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        show_groups();
+    });
+
+    $mode_select = $('#id_mode');
+
+    function show_groups() {
+
+        $inet2_requested = $("#id_inet2_requested");
+        $wix_requested = $("#id_wix_requested");
+        $bgpinet_requested = $("#id_bgpinet_requested");
+
+        if ($inet2_requested.prop('checked')) {
+            $('#inet2_group').slideDown();
+        } else {
+            $('#inet2_group').slideUp();
+
+        }
+
+        if ($wix_requested.prop('checked')) {
+            $('#wix_group').slideDown();
+        } else {
+            $('#wix_group').slideUp();
+
+        }
+
+        if ($bgpinet_requested.prop('checked')) {
+            $('#bgpinet_group').slideDown();
+        } else {
+            $('#bgpinet_group').slideUp();
+
+        }
+
+        if ($mode_select.val() == 'test') {
+            $('#period_group').slideDown();
+        } else {
+            $('#period_group').slideUp();
+        }
+
+
+    }
+
+    $('input[type=checkbox]').change(function () {
+        show_groups();
+    });
+
+    $mode_select.change(function () {
+        show_groups();
+    })
+
+</script>

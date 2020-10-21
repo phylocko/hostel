@@ -1,0 +1,115 @@
+<div class="form-group {% if form.type.errors %}has-error{% endif %}">
+    <label class="control-label">Тип</label>
+    {{ form.type }}
+    {% for error in form.type.errors %}
+        <span class="text-danger">{{ error }}</span>
+    {% endfor %}
+</div>
+
+<div class="form-group {% if form.organization.errors %}has-error{% endif %}">
+    <label class="control-label">Подрядчик</label><br>
+    {{ form.organization }}
+    {% for error in form.organization.errors %}
+        <span class="text-danger">{{ error }}</span>
+    {% endfor %}
+</div>
+
+<div class="form-group {% if form.ticket.errors %}has-error{% endif %}">
+    <label class="control-label">Тикет</label>
+    {{ form.ticket }}
+    {% for error in form.ticket.errors %}
+        <span class="text-danger">{{ error }}</span>
+    {% endfor %}
+</div>
+
+<div class="form-group {% if form.cities.errors %}has-error{% endif %}">
+    <label class="control-label">Города</label>
+    {{ form.cities }}
+    {% for error in form.cities.errors %}
+        <span class="text-danger">{{ error }}</span>
+    {% endfor %}
+</div>
+
+<div class="checkbox">
+    <label>{{ form.is_ours }} <b>Для нас</b></label>
+    <span class="help-block">Услуга для нас: магистрали, оптика, каналы</span>
+</div>
+
+<div class="checkbox">
+    <label>{{ form.is_bought }} <b>Волокно выкуплено</b></label>
+</div>
+
+
+<div class="form-group {% if form.google_map_url.errors %}has-error{% endif %}">
+<label>Google Map URL</label>
+    {% if form.google_map_url.errors %}
+    {{ form.google_map_url.errors }}
+    {% endif %}
+    {{ form.google_map_url }}
+    <span class="help-block">Схема карты в Google Maps</span>
+
+</div>
+
+<div class="form-group {% if form.agreement.errors %}has-error{% endif %}">
+    <label class="control-label">Договор, заказ</label>
+    {{ form.agreement }}
+    {% for error in form.agreement.errors %}
+        <span class="text-danger">{{ error }}</span>
+    {% endfor %}
+</div>
+
+<div class="form-group {% if form.identity.errors %}has-error{% endif %}">
+    <label class="control-label">Идентификация или Service ID</label>
+    {{ form.identity }}
+    {% for error in form.identity.errors %}
+        <span class="text-danger">{{ error }}</span>
+    {% endfor %}
+    <span class="help-block">Идентификация, понятная подрядчику</span>
+
+</div>
+
+<div class="form-group {% if form.addresses.errors %}has-error{% endif %}">
+    <label class="control-label">Адреса включения</label>
+    {{ form.addresses }}
+    {% for error in form.addresses.errors %}
+        <span class="text-danger">{{ error }}</span>
+    {% endfor %}
+    <span class="help-block">Если применимо</span>
+
+</div>
+
+<div class="form-group {% if form.group.errors %}has-error{% endif %}">
+    <label class="control-label">Группа</label><br>
+    {{ form.group }}
+    {% for error in form.group.errors %}
+        <span class="text-danger">{{ error }}</span>
+    {% endfor %}
+</div>
+
+<div class="form-group {% if form.support_email.errors %}has-error{% endif %}">
+    <label>Support Email</label>
+    <span class="text-danger">{{ form.support_email.errors }}</span>
+    {{ form.support_email }}
+    <div class="help-block">Если отличается от Support Email подрядчика</div>
+</div>
+
+<div class="form-group {% if form.contacts.errors %}has-error{% endif %}">
+    <label>Support контакты</label>
+    {{ form.contacts.errors }}
+    {{ form.contacts }}
+    <div class="help-block">Если отличается от Support-контактов подрядчика</div>
+</div>
+
+<div class="form-group {% if form.comment.errors %}has-error{% endif %}">
+    <label>Комментарии</label>
+    {{ form.comment.errors }}
+    {{ form.comment }}
+</div>
+
+<script>
+$(document).ready(function() {
+    $("#id_organization").select2();
+    $("#id_cities").select2();
+    $("#id_group").select2();
+})
+</script>

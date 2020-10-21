@@ -1,0 +1,49 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Склад{% endblock %}
+{% block content %}
+
+    <style>
+        pre {
+            padding-top: 2px !important;
+            padding-bottom: 2px !important;
+            border-radius: 0px;
+            margin: 0px;
+            background-color: #222222;
+            color: #cccccc;
+            border: none;
+        }
+    </style>
+
+    {% include 'bs3/store/store_tabs.html' %}
+
+    <div class="container text-center">
+        <br>
+        {% include 'bs3/page_search.html' %}
+    </div>
+
+    {% if entries %}
+
+        <table class="table table-hover">
+
+            {% include 'bs3/store/entriesTableHeader.html' %}
+
+            <tbody>
+
+            {% for entry in entries %}
+                {% include 'bs3/store/entriesTableRow.html' %}
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    {% else %}
+
+        <div class="container text-center">
+            <h3 class="text-center">На складе [почему-то] ничего нет</h3>
+        </div>
+
+    {% endif %}
+
+{% endblock %}
+

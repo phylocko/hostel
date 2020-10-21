@@ -1,0 +1,36 @@
+<table class="table">
+    <tr>
+        <td><label>Город</label></td>
+        <td><a href="{% url 'city' datacenter.city.pk %}">{{ datacenter.city }}</a></td>
+    </tr>
+    <tr>
+        <td><label>Организация</label></td>
+        <td>
+            {% if datacenter.organization %}
+                <div class="color-marker color-client"></div>
+                <a href="{% url 'client' datacenter.organization.pk %}">{{ datacenter.organization }}</a>
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <label>Адрес</label>
+            <address>
+                {{ datacenter.address|default:"—" }}
+            </address>
+            <label>Контактные данные</label>
+            <address class="text-muted">
+                {% if datacenter.contacts %}
+                    {{ datacenter.contacts|linebreaksbr }}
+                {% elif datacenter.organization.contacts %}
+                    <span class="text-danger">{{ datacenter.organization.contacts|linebreaksbr }}</span>
+                    <br><span class="text-muted">Показаны контакты {{ datacenter.organization.netname }}</span>
+                {% else %}
+                    <span class="text-muted">Контакты не найдены</span>
+                {% endif %}
+            </address>
+            <label>Комментарий</label>
+            <address class="text-muted">{{ datacenter.comment|default:"—"|linebreaks }}</address>
+        </td>
+    </tr>
+</table>

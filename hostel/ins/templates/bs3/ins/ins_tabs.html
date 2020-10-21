@@ -1,0 +1,20 @@
+<ul class="nav nav-tabs">
+
+    <li role="presentation" class="{% if tab == "review" %}active{% endif %}"><a href="{% url 'ins' %}">Обзор</a></li>
+
+    <li role="presentation" class="hidden-xs {% if tab == "closed" %}active{% endif %}"><a href="{% url 'closed_ins' %}">Закрытые</a></li>
+
+    <li role="presentation" class="hidden-xs {% if tab == "calc" %}active{% endif %}"><a href="{% url 'calc' %}">Калькулятор</a></li>
+
+    <li role="presentation" class="hidden-xs {% if tab == "outages" %}active{% endif %} pull-right"><a href="{% url 'outages' %}">
+        <b>Простои</b></a>
+    </li>
+
+    {% if perms.ins.add_incident %}
+    <li role="presentation" {% if tab == "add" %}class="active"{% endif %}>
+        <a href="{% url 'ins' %}add">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </a>
+    </li>
+    {% endif %}
+</ul>

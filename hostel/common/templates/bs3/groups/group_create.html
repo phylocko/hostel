@@ -1,0 +1,43 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Группа «{{ group|title }}»{% endblock %}
+{% block content %}
+
+    <div class="container">
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'groups' %}">Группы</a></li>
+            <li class="active">Создание новой группы</li>
+        </ol>
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>Создать новую группу</h4>
+            </div>
+            <div class="col-md-4 text-right">
+                <button type="submit" form="group_form" class="btn btn-primary">Сохранить</button>
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-4">
+            </div>
+
+            <div class="col-md-4">
+                <form id="group_form" method="post">
+                    {% csrf_token %}
+                    {% include 'bs3/groups/group_form.html' %}
+                </form>
+            </div>
+
+            <div class="col-md-4">
+            </div>
+
+
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Сеть {{ net }}{% endblock %}
+{% block content %}
+
+{% include 'bs3/nets/tabs.html' %}
+
+<div class="container">
+
+    <br>
+
+
+    <ol class="breadcrumb">
+        <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+
+        <li><a href="{% url 'nets' %}">Сети</a></li>
+        <li class="active">Табы</li>
+    </ol>
+
+    <!-- Заголовок, кнопка редактирования -->
+    <div class="row" style="margin-bottom: 16px;">
+        <div class="col-md-8">
+        	<h4>Табы сетей</h4>
+        </div>
+        <div class="col-md-4 text-right">
+		{% if mode == 'edit' %}
+            <a class="btn btn-default" href="{% url 'root-nets' %}">Отмена</a>
+            <button type="submit" form="netData" class="btn btn-primary">Сохранить</button>
+		{% else %}
+			<a class="btn btn-default" href="{% url 'root-nets' %}?mode=edit">Редактировать</a>
+		{% endif %}
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="help-block">
+                Только в формате ipaddress/masklen<br>
+                Если указанной сети нет в таблице, она не отобразится во вкладках.
+            </div>
+        </div>
+        <div class="col-md-4">
+            <form id="netData" METHOD="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <textarea {% if mode == 'view' %}disabled{% endif %} name="root_nets" class="form-control" rows="12">{{ root_nets_txt }}</textarea>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-4">
+        </div>
+
+    </div>
+
+    {% endblock %}

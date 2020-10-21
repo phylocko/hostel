@@ -1,0 +1,31 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Клиенты{% endblock %}
+{% block content %}
+
+    {% include 'bs3/clients/tabs.html' %}
+
+
+    <div class="container-fluid">
+        <br>
+        <div class="well well-sm">
+        <form method="GET" class="form-inline">
+            {% include 'bs3/clients/filter_form.html' %}
+        </form>
+        </div>
+    </div>
+
+    {% if clients %}
+        <table class="table table-hover">
+            {% include 'bs3/clients/clientsTableHeader.html' %}
+            <tbody>
+            {% for client in clients %}
+                {% include 'bs3/clients/clientsTableRow.html' %}
+            {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center"><b>Пусто</b></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

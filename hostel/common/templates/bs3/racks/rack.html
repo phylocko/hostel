@@ -1,0 +1,63 @@
+{% extends 'bs3/base.html' %}
+{% block title %}{{ rack }}{% endblock %}
+{% block content %}
+
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'racks' %}">Стойки</a></li>
+            <li class="active">{{ rack }}</li>
+        </ol>
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>{{ rack }}</h4>
+            </div>
+            <div class="col-md-4 text-right">
+                {% if perms.common.change_rack %}
+                    <a class="btn btn-primary" href="{% url 'rack_update' rack.pk %}">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Редактировать
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-4">
+                <h3>Параметры стойки</h3>
+                {% include 'bs3/racks/rack_data.html' %}
+            </div>
+
+            <div class="col-md-4">
+                <h3>Вид стойки спереди</h3>
+                {% with schema=front_schema %}
+                    {% include 'bs3/racks/rack_facade.html' %}
+                {% endwith %}
+
+            </div>
+
+            <div class="col-md-4">
+                <h3>Вид стойки сзади</h3>
+                {% with schema=back_schema %}
+                    {% include 'bs3/racks/rack_facade.html' %}
+                {% endwith %}
+
+            </div>
+
+        </div>
+
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="well well-sm text-right">
+                    {% include 'bs3/racks/delete_button.html' %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

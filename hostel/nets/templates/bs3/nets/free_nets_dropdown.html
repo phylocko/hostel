@@ -1,0 +1,30 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Свободные сети</h3>
+    </div>
+
+    <table class="table table-hover">
+        {% for item in suggested_nets %}
+            <tr>
+                <td>{{ item.address }}/{{ item.netmask }}</td>
+                <td class="text-right">
+                    <a href="#" class="btn btn-default btn-xs" onclick="fill('{{ item.address }}', '{{ item.netmask }}')">
+                        <span class="glyphicon glyphicon-ok"></span>
+                    </a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td class="text-muted text-center">Пусто</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+<script>
+    function fill(address, netmask) {
+        $('#id_address').val(address);
+        $('#id_netmask').val(netmask);
+    }
+</script>

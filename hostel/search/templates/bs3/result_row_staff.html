@@ -1,0 +1,32 @@
+{% load static %}
+{% load hostel_filters %}
+<tr>
+    <td style="width: 60px;" class="hidden-xs hidden-sm text-muted">{{ manager.pk }}</td>
+    <td style="width: 180px;">
+
+
+        <div class="color-marker color-client"></div>
+        <b><a href="{% url 'employee' manager.pk %}">{{ manager.username }}</a></b></td>
+    <td style="width: 150px;"><b>{{ entry.type }}</b></td>
+    <td>
+
+        <div class="pull-left" style="margin-right: 20px;">
+        {% if manager.photo %}
+            <img class="img-circle" style="height: 60px;" src="{{ manager.photo.url }}">
+        {% else %}
+            <img class="img-circle" style="height: 60px;" src="{% static '/i/' %}no-photo.jpg">
+        {% endif %}
+
+        </div>
+
+        <div>
+        {{ manager.get_full_name }}<br>
+        <small>
+            <div class="text-muted">{{ manager.position|default:'' }}</div>
+        </small>
+
+        <b>{{ manager.phone|phone }}</b> {% if manager.ext_phone %}[{{ manager.ext_phone }}]{% endif %}
+
+        </div>
+    </td>
+</tr>

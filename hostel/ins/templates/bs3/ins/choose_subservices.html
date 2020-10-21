@@ -1,0 +1,144 @@
+{% extends 'bs3/base.html' %}
+{% load hostel_filters %}
+{% block title %}Добавление подуслуг в INS {{ incident.pk }}{% endblock %}
+{% block content %}
+
+    {% include 'bs3/ins/ins_tabs.html' %}
+
+    <div class="container">
+
+        <div class="page-header">
+            <h4>
+                Выбор подуслуг для {{ incident }}
+                <a class="btn btn-default pull-right" href="{% url 'incident' incident.pk %}?tab=subservices">Отмена</a>
+            </h4>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-12">
+
+                <div class="well well-sm">
+
+                    <form id="choose_clients_form" method="POST" class="form-inline">
+                        {% csrf_token %}
+
+                        <div class="form-group {% if filter_form.client.errors %}has-error{% endif %}">
+                            <label class="control-label">Клиент</label>
+                            {% for error in filter_form.client.errors %}
+                                <span class="error">{{ error }}</span>
+                            {% endfor %}<br>
+                            {{ filter_form.client }}
+                        </div>
+
+                        <div class="form-group {% if filter_form.service_name.errors %}has-error{% endif %}">
+                            <label class="control-label">Услуга</label>
+                            {% for error in filter_form.service_name.errors %}
+                                <span class="error">{{ error }}</span>
+                            {% endfor %}<br>
+                            {{ filter_form.service_name }}
+                        </div>
+
+                        <div class="form-group {% if filter_form.city.errors %}has-error{% endif %}">
+                            <label class="control-label">Города</label>
+                            {% for error in filter_form.city.errors %}
+                                <span class="error">{{ error }}</span>
+                            {% endfor %}<br>
+                            {{ filter_form.city }}
+                        </div>
+
+                        <div class="form-group {% if filter_form.keywords.errors %}has-error{% endif %}">
+                            <label class="control-label">Ключевые слова</label>
+                            {% for error in filter_form.keywords.errors %}
+                                <span class="error">{{ error }}</span>
+                            {% endfor %}<br>
+                            {{ filter_form.keywords }}
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">&nbsp;</label><br>
+                            <button class="btn btn-default form-control" type="submit"
+                                    name="action" value="filter_services">
+                                <span class="glyphicon glyphicon-filter"></span>Отфильтровать
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th style="min-width: 120px;"><input type="checkbox" id="select_all" checked> Подуслуга</th>
+                            <th style="min-width: 120px;">Клиент</th>
+                            <th style="min-width: 160px;">Влан</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        {% for subservice in subservices %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" id="subservice_{{ subservice.pk }}"
+                                           name="subservice"
+                                           value="{{ subservice.pk }}" checked>
+                                    <label for="subservice_{{ subservice.pk }}">{{ subservice }}</label>
+                                </td>
+                                <td>
+                                    <div class="color-marker color-client"></div>
+                                    <b>{{ subservice.service.client.netname }}</b>
+                                </td>
+                                <td>
+                                    {% for vlan in subservice.vlans.all %}
+                                        <a href="{% url 'vlan' vlan.pk %}" target="_blank">{{ vlan }}<br></a>
+                                    {% endfor %}
+
+                                </td>
+                                <td>
+                                    {{ subservice.description|default:""|truncatechars:80|linebreaksbr }}<br>
+                                    <small>
+                                        <span class="text-muted pull-right">{{ service.cities.all|join:', ' }}</span>
+                                    </small>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+
+                    <div class="well well-sm text-right">
+                        <button class="btn btn-primary"
+                                name="action"
+                                value="add_subservices"
+                                {% if not subservices %}disabled{% endif %}>Выбрать</button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        $('#id_city').select2();
+        $('#id_service_name').select2();
+        $('#id_device').select2();
+        $('#id_device_negative').select2();
+        $('#id_client').select2();
+
+        $('#select_all').change(function () {
+            var checkboxes = $(this).closest('form').find(':checkbox');
+            checkboxes.prop('checked', $(this).is(':checked'));
+        });
+    </script>
+
+{% endblock %}

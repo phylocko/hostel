@@ -1,0 +1,55 @@
+{% if application.filename %}
+
+
+    <table class="table">
+        <tr>
+            <td>
+                <h4>
+                    <span class="glyphicon glyphicon-file text-muted" aria-hidden="true"></span>
+                    {% load static %}
+                    <a href="{% static '/docs/' %}{{ application.FILE_FOLDER }}/{{ application.filename }}">{{ application.filename }}</a>
+                </h4>
+            </td>
+            <td class="text-right">
+                <a class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete_agreement_file">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    Удалить скан документа
+                </a>
+            </td>
+        </tr>
+    </table>
+
+        <div class="modal fade" id="delete_agreement_file" tabindex="-1" role="dialog">
+        <form method="POST" action="{% url 'agreements' %}delete_application_file/">
+
+            {% csrf_token %}
+            <input type="text" name="id" value="{{ application.pk }}">
+
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Удалить скан документа?</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <h4>Действие необратимо</h4>
+                        Вы собираетесь удалить файл <br><b>{{ application.filename }}</b>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Я еще подумаю...</button>
+                        <input type="submit" class="btn btn-danger" value="Удалить">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% else %}
+
+   <div class="alert alert-danger" role="alert">Загрузите скан документа</div>
+
+{% endif %}

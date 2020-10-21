@@ -1,0 +1,65 @@
+{% include 'bs3/tab_search_form.html' %}
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Бандл</th>
+        <th>Description</th>
+        <th>Подключен к</th>
+        <th class="text-right">Вланы</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for bundle in bundles %}
+
+        <tr class="{% if bundle.is_lag %}info{% endif %}">
+
+            <td>
+                <div class="color-marker color-bundle"></div>
+                <a href="{% url 'bundle' bundle.pk %}"><b>{{ bundle.name }}</b></a>
+                {% if bundle.ports_count > 1 %}
+                    <small class="pull-right">
+                        <a class="show_bundles" href="#">
+                            {{ bundle.ports.count }} ports
+                        </a>
+                    </small>
+                {% endif %}
+            </td>
+
+            <td class="text-muted">
+                {{ bundle.description|default:'—' }}
+            </td>
+
+            <td>
+                {% if bundle.remote_device_id %}
+                    <div class="color-marker color-device"></div>
+                    <b><a href="{% url 'device' bundle.remote_device.pk %}">{{ bundle.remote_device }}</a></b>
+                {% endif %}
+            </td>
+
+            <td class="text-right">
+                <span class="label label-success">{{ bundle.vlans_count|default:'' }}</span>
+            </td>
+
+
+        </tr>
+
+        {% if bundle.is_lag %}
+            {% for port in bundle.ports.all %}
+                <tr class="active bundle_port">
+
+                    <td style="padding-left: 30px;"><b>{{ port.name }}</b></td>
+
+                    <td class="text-muted">{{ port.description }}</td>
+
+                    <td colspan="2">
+                        <small><span class="text-muted pull-right">In sharing {{ bundle.name }}</span></small>
+                    </td>
+
+                </tr>
+            {% endfor %}
+        {% endif %}
+
+    {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,27 @@
+<tr>
+    <td class="text-muted">#{{ issue.pk }}</td>
+    <td><b><a href="{% url 'issues' %}{{ issue.pk }}">{{ issue.title }}</a></b></td>
+    <td>{{ issue.description|truncatewords:6|default:"—" }}</td>
+    <td class="hidden-md hidden-sm hidden-xs text-muted"><b>{{ issue.status }}</b></td>
+    <td class="hidden-md hidden-sm hidden-xs text-muted text-right"><small>{{ issue.created|date:"Y-m-d H:i" }}</small></td>
+    <td class="hidden-md hidden-sm hidden-xs text-muted text-right"><small>{{ issue.creator }}</small></td>
+</tr>
+
+<!-- latest comment -->
+{% if issue.comments.last %}
+<!--tr>
+    <td></td>
+    <td colspan="3" class="text-muted">{{ issue.comments.last }}</td>
+    <td class="text-muted"><small>{{ issue.comments.last.created|date:"Y-m-d H:i" }}</small></td>
+    <td></td>
+</tr-->
+
+<tr>
+    <td colspan="2"></td>
+    <td class="text-muted"><i>{{ issue.comments.last|truncatewords:6|default:"—" }}</i></td>
+    <td class="hidden-md hidden-sm hidden-xs text-muted"></td>
+    <td class="hidden-md hidden-sm hidden-xs text-muted text-right"><small>{{ issue.comments.last.created|date:"Y-m-d H:i" }}</small></td>
+    <td class="hidden-md hidden-sm hidden-xs text-muted text-right"><small>{{ issue.comments.last.creator }}</small></td>
+</tr>
+
+{% endif %}

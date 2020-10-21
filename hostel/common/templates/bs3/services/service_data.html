@@ -1,0 +1,77 @@
+{% load hostel_filters %}
+
+<table class="table">
+    <tr>
+        <td style="min-width: 120px;"><label>Тип услуги</label></td>
+        <td><b>{{ service.servicetype|upper }}</b></td>
+    </tr>
+
+    {% if service.params.require_as %}
+    <tr>
+        <td><label>ASN</label></td>
+        <td><b>{{ service.asn|default:'' }}</b></td>
+    </tr>
+    {% endif %}
+
+    <tr>
+        <td><label>RT#</label></td>
+        <td><b>{{ service.rt|ticket }}</b></td>
+    </tr>
+
+    <tr>
+        <td><label>Статус</label></td>
+        <th class="{{ service|service_field_class }} text-center">
+            {{ service.status|upper }}
+            <br>
+            <small>{{ service|commercial_status }}</small>
+        </th>
+    </tr>
+
+    <tr>
+        <td><label>Старт услуги</label></td>
+        <td>{{ service.start_time|date:"Y-m-d H:i" }}</td>
+    </tr>
+
+    <tr>
+        <td><label>Конец теста</label></td>
+        <td>{{ service.end_time|date:"Y-m-d H:i" }}</td>
+    </tr>
+
+    <tr>
+        <td><label>Города</label></td>
+        <td>
+            {% for city in service.cities.all %}
+                <label class="label label-default">{{ city }}</label>
+            {% endfor %}
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+            <label>Пропускная способность (Мбит/с)</label>
+            <address>{{ service.commited_bandwidth|default:'—' }}</address>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+            <label>Открытая полоса (Мбит/с)</label>
+            <address>{{ service.maximum_bandwidth|default:'—' }}</address>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2" class="text-danger">
+            <label>Описание</label>
+            <address>{{ service.description|default:"—"|linebreaks }}</address>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+            <label>Комментарий</label>
+            <address>{{ service.comment|default:"—"|linebreaks }}</address>
+        </td>
+    </tr>
+
+</table>

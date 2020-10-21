@@ -1,0 +1,93 @@
+<a class="btn btn-success" data-toggle="modal" data-target="#extend_test_period">
+    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> Продлить тест / В коммерцию
+</a>
+
+<div class="modal fade in text-left" id="extend_test_period" role="dialog">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Изменение статуса услуги {{ service }}</h4>
+                </div>
+
+                <div class="modal-body">
+
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#prolongate" data-toggle="tab">Продление теста</a></li>
+                        <li><a href="#set_commerce" data-toggle="tab">Перевод в коммерцию</a></li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+
+                        <div class="tab-pane active" id="prolongate">
+
+                            <br>
+
+                            <div class="help-block">
+                                <ul>
+                                    <li>Дата окончания теста будет изменена</li>
+                                    <li>BGP-сессия будет переконфигурена автоматически</li>
+                                    <li>В тикете появится комментарий о продлении теста</li>
+                                </ul>
+                            </div>
+
+                            <br>
+                            <div class="form-group {% if service_test_end_form.new_expiration_time.errors %}has-error{% endif %}">
+                                <label class="control-label">Дата окончания теста</label><br>
+                                <div class="input-group date" id="expiration_time">
+                                    {{ service_test_end_form.new_expiration_time }}
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                </div>
+
+                                {% for error in service_test_end_form.new_expiration_time.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+
+                            <div class="form-group">
+                                <button name="action" value="change_test_end_date" type="submit" class="form-control btn btn-warning">Продлить тест</button>
+                            </div>
+
+                        </div>
+                        <div class="tab-pane" id="set_commerce">
+                            <br>
+
+                            <div class="help-block">
+                                <ul>
+                                    <li>Услуга будет переведена в коммерцию</li>
+                                    <li>Если тест уже окончился, BGP-сессия будет включена автоматически</li>
+                                    <li>В тикете появится комментарий об изменнении статуса услуги</li>
+                                </ul>
+                            </div>
+
+                            <br>
+                            <div class="form-group">
+                                <button name="action" value="set_commerce" type="submit" class="form-control btn btn-success">Перевести в коммерцию</button>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <script type="text/javascript">
+                        $(function () {
+                            $('#id_new_expiration_time').datetimepicker({format: 'YYYY-MM-DD HH:mm', locale: 'ru'});
+                        });
+
+                        {% if service_test_end_form.has_errors %}
+                            $('#extend_test_period').modal('show');
+                        {% endif %}
+                    </script>
+
+                </div>
+
+
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,200 @@
+{% extends 'bs3/base.html' %}
+{% load hostel_filters %}
+{% block title %}Port {{ port }}{% endblock %}
+{% block content %}
+
+{% include 'bs3/bundles/bundles_tabs.html' %}
+
+<br>
+
+<div class="container">
+
+    <ol class="breadcrumb">
+        <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+
+        <li><a href="{% url 'devices' %}">Девайсы</a></li>
+        <li><a href="{% url 'device' bundle.device.pk  %}">{{ bundle.device }}</a></li>
+        <li class="active">{{ bundle }}</li>
+    </ol>
+
+    <!-- Заголовок, кнопка редактирования -->
+    <div class="row" style="margin-bottom: 16px;">
+        <div class="col-md-8">
+            <h4>{{ bundle.device.netname }} порт <div class="color-marker color-bundle"></div>{{ bundle }}</h4>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-4">
+
+            <table class="table">
+                <tr>
+                    <td><label>Интерфейс</label></td>
+                    <td class="bg-info"><b>{{ bundle.name }}</b></td>
+                </tr>
+
+                <tr>
+                    <td><label>Дескрипшн</label></td>
+                    <td>{{ bundle.description|default:"" }}</td>
+                </tr>
+
+                {% if bundle.remote_device %}
+                <tr>
+                    <td><label>Подключен к</label></td>
+                    <td>
+                        <a href="{% url 'device' bundle.remote_device.pk %}">{{ bundle.remote_device }}</a></td>
+                    </td>
+                </tr>
+                {% endif %}
+
+                <tr>
+                    <td colspan="2">
+
+                        {% if bundle.is_lag %}
+                        <label class="label label-info">Является мастером в LAG</label>
+                        {% endif %}
+
+                    </td>
+                </tr>
+
+            </table>
+
+            <h5 class="text-muted">Трафик за сутки</h5>
+            <p><img class="img-thumbnail" src="{{ MRTG_URL }}{{ bundle.device.netname }}/{{ bundle.mrtg_name }}-day.png" alt="График"></p>
+
+            <h5 class="text-muted">За неделю</h5>
+            <p><img class="img-thumbnail" src="{{ MRTG_URL }}{{ bundle.device.netname }}/{{ bundle.mrtg_name }}-week.png" alt="График"></p>
+
+            <h5 class="text-muted">За месяц</h5>
+            <p><img class="img-thumbnail" src="{{ MRTG_URL }}{{ bundle.device.netname }}/{{ bundle.mrtg_name }}-month.png" alt="График"></p>
+
+            <h5 class="text-muted">За год</h5>
+            <p><img class="img-thumbnail" src="{{ MRTG_URL }}{{ bundle.device.netname }}/{{ bundle.mrtg_name }}-year.png" alt="График"></p>
+
+            {% with bundle as object %}
+            {% include 'bs3/common/created_updated.html' %}
+            {% endwith %}
+
+        </div>
+
+        <div class="col-md-8">
+
+            <div class="panel panel-info">
+                <div class="panel-heading"><h3 class="panel-title">Интерфейсы в бандле {{ bundle.name }}</h3></div>
+                <table class="table">
+
+                    {% for port in bundle.ports.all %}
+                    <tr>
+                        <td><b>{{ port.name }}</b></td>
+                        <td>{{ port.description }}</td>
+                        <td class="text-muted text-right">
+                            <a href="{{ MRTG_URL }}{{ port.bundle.device.netname }}/{{ port.mrtg_name }}.html"
+                               target="_blank">MRTG</a>
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading"><h3 class="panel-title">Вланы</h3></div>
+
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Tagged</h4>
+
+                            <ul class="list-unstyled">
+                            {% for bundle_vlan in tagged_bundle_vlans %}
+                                {% if bundle_vlan.mode == 'tagged' %}
+                                <li><a href="{% url 'vlan' bundle_vlan.vlan.pk %}">{{ bundle_vlan.vlan }}</a></li>
+                                {% endif %}
+                            {% empty %}
+                                <li class="text-muted">Тегированных вланов нет</li>
+                            {% endfor %}
+                            </ul>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h4>Untagged</h4>
+
+                            <ul class="list-unstyled">
+                            {% for bundle_vlan in untagged_bundle_vlans %}
+                                {% if bundle_vlan.mode == 'untagged' %}
+                                <li><a href="{% url 'vlan' bundle_vlan.vlan.pk %}">{{ bundle_vlan.vlan }}</a></li>
+                                {% endif %}
+                            {% empty %}
+                                <li class="text-muted">Нетегированных вланов нет</li>
+                            {% endfor %}
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading"><h3 class="panel-title">Услуги в бандле</h3></div>
+                <div class="panel-body">
+
+                    <div class="row">
+                        <div class="col-md-6">
+
+                            <h4>Услуги</h4>
+
+
+                            <ul class="list-inline">
+                                {% for service in bundle_services %}
+                                    <li>
+                                        <b>
+                                            <a href="{% url 'service' service.pk %}"
+                                               class="{{ service|service_text_class }}">
+                                                {{ service }}
+                                            </a>
+                                        </b> для {{ service.client.netname }}
+                                    </li>
+                                {% empty %}
+                                    <li class="text-muted">Услуг нет</li>
+                                {% endfor %}
+                            </ul>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <h4>Подуслуги</h4>
+
+                            <ul class="list-inline">
+                                {% for subservice in bundle_subservices %}
+                                    <li>
+                                        <b>
+                                            <a href="{% url 'subservice' subservice.service.pk subservice.pk %}"">
+                                                {{ subservice }}
+                                            </a>
+                                        </b> для {{ subservice.service.client.netname }}
+                                    </li>
+                                {% empty %}
+                                    <li class="text-muted">Подуслуг нет</li>
+                                {% endfor %}
+                            </ul>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+{% endblock %}

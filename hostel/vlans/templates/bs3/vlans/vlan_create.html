@@ -1,0 +1,59 @@
+{% extends 'bs3/base.html' %}
+{% block title %}*Создать vlan{% endblock %}
+{% block content %}
+
+{% include 'bs3/vlans/vlans_tabs.html' %}
+
+<div class="container">
+
+    <!-- Заголовок, кнопка редактирования -->
+    <br>
+    <div class="row" style="margin-bottom: 16px;">
+        <div class="col-md-8">
+            <h4>
+                <div class="color-marker color-vlan"></div>
+                Создание влана
+            </h4>
+        </div>
+        <div class="col-md-4 text-right">
+            <button type="submit" form="vlanData" class="btn btn-primary">Создать</button>
+        </div>
+
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-4">
+            {% if free_vlans %}
+            <h4>Свободные диапазоны</h4>
+            <ul class="list-group">
+                {% for vlan in free_vlans %}
+                <li class="list-group-item">
+                    <a href="#" class="text-warning" onclick="$('#id_vlannum').val('{{ vlan.vlannum }}')">
+                        {{ vlan.vlannum }} — {{ vlan.freeUpTo }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+
+        <div class="col-md-4">
+
+            <form id="vlanData" METHOD="POST">
+                {% csrf_token %}
+                <input type="hidden" name="service_id" value="{{ service.pk }}">
+                {% include 'bs3/vlans/vlan_form.html' %}
+            </form>
+
+        </div>
+
+        <div class="col-md-4">
+        </div>
+
+
+    </div>
+</div>
+
+{% endblock %}

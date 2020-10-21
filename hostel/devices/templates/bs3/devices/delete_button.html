@@ -1,0 +1,40 @@
+<div class="panel panel-default">
+    <div class="panel-body text-right">
+        <a class="btn btn-danger" data-toggle="modal" data-target="#delete_device">Удалить девайс</a>
+    </div>
+</div>
+<div class="modal fade" id="delete_device" tabindex="-1" role="dialog">
+    <form method="POST" action="{% url 'delete_device' %}">
+        {% csrf_token %}
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Удалить девайс {{ device.netname }}?</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" placeholder="device id" value="{{ device.pk }}">
+                    <h5>Действие необратимо</h5>
+
+                    {% if bursts %}
+                        <div class="alert alert-danger">
+                            <b>Внимание!</b><br>
+                            Остались Burst-наборы, привязанные к этому девайсу.<br>
+                            Порты c {{ device.netname }} будут удалены из этих burst-наборов:<br>
+                            <ul class="list-unstyled">
+                                {% for burst in bursts %}
+                                    <li>— {{ burst }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Я еще подумаю...</button>
+                    <input type="submit" class="btn btn-danger" value="Удалить">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

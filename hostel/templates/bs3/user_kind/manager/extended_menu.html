@@ -1,0 +1,38 @@
+<ul class="nav navbar-nav">
+    <li class="dropdown">
+        <a href="#"
+           class="dropdown-toggle"
+           data-toggle="dropdown"
+           role="button"
+           aria-haspopup="true"
+           aria-expanded="false">
+            <span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span></a>
+
+        <ul class="dropdown-menu">
+            <li><a href="{% url 'employes' %}"><b><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Коллеги</b></a></li>
+
+            <li role="separator" class="divider"></li>
+
+            <li><a href="{% url 'companies' %}">Компании</a></li>
+            <li><a href="{% url 'agreements' %}">Документы</a></li>
+
+            <li role="separator" class="divider"></li>
+
+            <li role="separator" class="divider"></li>
+
+            <li><a href="{% url 'numbers' %}">Номера</a></li>
+            <li><a href="{% url 'calls' %}">Звонки</a></li>
+
+            <li><a href="{% url 'leases' %}">Лизы</a></li>
+            <li><a href="{% url 'lease_groups' %}">Группы лиз</a></li>
+
+            <li role="separator" class="divider"></li>
+
+            <li><a href="{% url 'services' %}">Услуги</a></li>
+            <li><a href="{% url 'datacenters' %}">Площадки</a></li>
+            <li><a href="{% url 'cities' %}">Города</a></li>
+            <li><a href="{% url 'store' %}">Склад</a></li>
+            <li><a href="{% url 'spy' %}">Spy</a></li>
+        </ul>
+    </li>
+</ul>

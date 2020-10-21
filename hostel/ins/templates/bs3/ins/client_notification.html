@@ -1,0 +1,106 @@
+{% extends 'bs3/base.html' %}
+{% block title %}{{ incident.name }}{% endblock %}
+
+{% block content %}
+
+    {% include 'bs3/ins/ins_tabs.html' %}
+
+    <div class="container">
+
+        <br>
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>
+                    <div class="color-marker color-ins"></div>
+                    {{ incident }} — {{ incident.name }}
+                </h4>
+            </div>
+            <div class="col-md-4 text-right">
+                {% if mode == "edit" %}
+                    <a class="btn btn-default" href="{% url 'ins' %}{{ incident.pk }}">Отмена</a>
+                    <button type="submit" form="incident_data" class="btn btn-primary">Сохранить</button>
+                {% else %}
+                    {% if perms.ins.change_incident %}
+                        <a class="btn btn-primary" href="{% url 'ins' %}{{ incident.pk }}/update/">
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Редактировать
+                        </a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-4">
+
+                {% include 'bs3/ins/ins_data.html' %}
+
+                {% with incident as object %}
+                    {% include 'bs3/common/created_updated.html' %}
+                {% endwith %}
+
+            </div>
+
+
+            <div class="col-md-8">
+
+                {% include 'bs3/ins/tabs.html' %}
+                <br>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <form method="post">
+                            <h3 class="panel-title">
+                                {{ notification.subject }}
+
+                                {% csrf_token %}
+                                <button class="btn btn-xs btn-warning pull-right" title="Переотправить" type="submit" name="action" value="resend">
+                                    <span class="glyphicon glyphicon-refresh"></span>
+                                </button>
+
+                            </h3>
+                        </form>
+                    </div>
+                    <div class="panel-body">
+                        {{ text|linebreaks }}
+                    </div>
+                    <div class="panel-footer text-muted">
+                        <small>
+                            {% if notification_message.ok %}
+                                <span class="glyphicon glyphicon-ok-circle text-success"></span>
+                                <b><a href="{% url 'client' notification_message.client.pk %}">{{ notification_message.client }}</a></b>
+                                {{ notification_message.to|default:'no email' }}
+
+                            {% else %}
+
+                                {% if notification_message.error %}
+                                    <span class="glyphicon glyphicon-remove-circle text-danger"></span>
+                                    <b><a href="{% url 'client' notification_message.client.pk %}">{{ notification_message.client }}</a></b>
+                                    {{ notification_message.to|default:'no email' }}    :
+                                    <i>{{ notification_message.error|linebreaksbr }}</i>
+                                {% else %}
+                                    <span class="glyphicon glyphicon-time text-muted"></span>
+                                    <b><a href="{% url 'client' notification_message.client.pk %}">{{ notification_message.client }}</a></b>
+                                    {{ notification_message.to|default:'no email' }}    :
+                                    <i>В ожидании оптравки или потеряно</i>
+
+                                {% endif %}
+
+                            {% endif %}
+
+                            <span class="pull-right">{{ notification_message.time|date:'Y-m-d H:i' }}</span>
+
+                        </small>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+{% endblock %}

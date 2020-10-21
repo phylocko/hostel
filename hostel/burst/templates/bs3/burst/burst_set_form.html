@@ -1,0 +1,49 @@
+<div class="form-group {% if form.name.errors %}has-error{% endif %}">
+    <label>Название</label>
+    {{ form.name.errors }}
+    {{ form.name }}
+</div>
+
+<div class="form-group {% if form.client.errors %}has-error{% endif %}">
+    <label>Клиент</label>
+    {{ form.client.errors }}
+    {{ form.client }}
+</div>
+
+<div class="form-group {% if form.limit.errors %}has-error{% endif %}">
+    <label>Коммит</label> <span class="text-muted">в мегабитах</span>
+    {{ form.limit.errors }}
+    {{ form.limit }}
+</div>
+
+<div class="form-group {% if form.subscription_fee.errors %}has-error{% endif %}">
+    <label>Ежемесячно</label> <span class="text-muted">абонентская плата</span>
+    {{ form.subscription_fee.errors }}
+    {{ form.subscription_fee }}
+</div>
+
+
+<div class="form-group {% if form.price.errors %}has-error{% endif %}">
+    <label>Цена за мегабит</label>
+    {{ form.price.errors }}
+    {{ form.price }}
+</div>
+
+<div class="form-group {% if form.with_tax.errors %}has-error{% endif %}">
+    <label class="control-label">{{ form.with_tax }} Цены указаны с НДС </label>
+    {% for error in form.with_tax.errors %}
+        <span class="error">{{ error }}</span>
+    {% endfor %}<br>
+
+</div>
+
+<div class="form-group {% if form.direction.errors %}has-error{% endif %}">
+    <label class="control-label">Направление</label>
+    {% for error in form.direction.errors %}
+        <span class="error">{{ error }}</span>
+    {% endfor %}<br>
+    {{ form.direction }}
+    <div class="help-block">
+        «Входящий» — трафик от клиента к нам
+    </div>
+</div>

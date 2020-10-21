@@ -1,0 +1,31 @@
+{% load hostel_filters %}
+<table class="table table-striped">
+
+    {% for lease in leases %}
+        <tr>
+            <td class="text-muted">{{ lease.pk }}</td>
+            <td>
+                <div class="color-marker color-lease"></div>
+                <b><a href="{% url 'leases' %}{{ lease.pk }}">{{ lease }}</a></b><br>
+            </td>
+
+            <td>
+                <small class="text-muted">{{ lease.identity|truncatechars:73 }}</small>
+            </td>
+
+            <td class="text-right">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="lease_id" value="{{ lease.pk }}">
+                    <button type="submit" name="action" value="release_lease" class="btn btn-xs btn-default">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                </form>
+            </td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td class="text-muted text-center">Услуги подрядчиков не привязаны</td>
+        </tr>
+    {% endfor %}
+</table>

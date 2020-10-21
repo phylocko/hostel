@@ -1,0 +1,86 @@
+{% extends 'bs3/base.html' %}
+{% load hostel_filters %}
+
+{% block title %}Lease {{ lease }}{% endblock %}
+{% block content %}
+
+    {% include 'bs3/lease/leases_tabs.html' %}
+    <br>
+    <br>
+
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'leases' %}">Услуги подрядчиков</a></li>
+            <li class="active">{{ lease }}</li>
+        </ol>
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>
+                    <div class="color-marker color-lease"></div>
+                    Аренда {{ lease }}
+                </h4>
+            </div>
+            <div class="col-md-4 text-right">
+                {% if mode == 'edit' %}
+                    <a class="btn btn-default" href="{% url 'leases' %}{{ lease.pk }}">Отмена</a>
+                    <button type="submit" form="leaseData" class="btn btn-primary">Сохранить</button>
+                {% else %}
+                    {% if perms.common.change_lease %}
+                        <a class="btn btn-primary" href="{% url 'leases' %}{{ lease.pk }}/update/">
+                            <span class="glyphicon glyphicon-edit"></span> Редактировать
+                        </a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-3"></div>
+
+            <div class="col-md-6">
+
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Редактирование Lease</h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <form id="leaseData" METHOD="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" placeholder="lease_id" value="{{ lease.pk }}">
+                            {% include 'bs3/lease/lease_form.html' %}
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-3"></div>
+
+
+        </div>
+
+        {% if mode == 'view' %}
+
+            <div class="well text-right">
+
+                {% include 'bs3/lease/disturb_provider.html' %}
+
+                {% if perms.common.delete_lease %}
+                    {% include 'bs3/lease/delete_lease_button.html' %}
+                {% endif %}
+
+            </div>
+        {% endif %}
+
+    </div>
+
+    {% include 'bs3/spy/object_log.html' %}
+
+{% endblock %}

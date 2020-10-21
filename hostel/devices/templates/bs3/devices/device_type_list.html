@@ -1,0 +1,59 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Девайсы{% endblock %}
+{% block content %}
+
+    {% include 'bs3/devices/devices_tabs.html' %}
+
+    <br>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4"></div>
+
+
+            <ul class="list-group">
+
+                <div class="col-md-4">
+
+                    <div class="list-group">
+
+                        <div class="list-group-item list-group-item-info">
+                            <h4 class="list-group-item-heading">Типы девайсов
+                                <a href="{% url 'device_type_create' %}" class="btn btn-xs btn-primary pull-right">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </a>
+                            </h4>
+                        </div>
+
+                        {% for device_type in listing %}
+
+                            <a href="{% url 'device_vendor_update' device_type.pk %}" class="list-group-item">
+                                <h4 class="list-group-item-heading">
+                                    {{ device_type|upper }}
+                                    <label class="badge pull-right">{{ device_type.vendors.count }}</label>
+                                </h4>
+                                <p class="list-group-item-text">
+                                    {{ device_type.vendors.all|join:', '|truncatechars:80 }}
+                                </p>
+                            </a>
+
+                        {% empty %}
+
+                            <div class="list-group-item text-center text-muted">
+                                Пусто
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-4"></div>
+        </div>
+
+
+    </div>
+
+{% endblock %}
+

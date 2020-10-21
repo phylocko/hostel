@@ -1,0 +1,35 @@
+password: _iHome_233
+aut-num:        AS25478
+as-name:        IHOME-AS
+descr:          iHome LLC
+{clients}
+remarks:
+remarks:        Cities:
+{cities}
+remarks:
+remarks:        RS accepts:
+remarks:        25478:9999 blackhole
+remarks:        0:as - do not advertise to as
+remarks:
+remarks:        city = 61000 + 40xx = 650xx
+remarks:        where 40xx - city community
+remarks:
+remarks:        in order of specifity:
+remarks:        0:peeras - no ann to peer
+remarks:        myas:peeras - ann to peer
+remarks:        0:city - no ann to city
+remarks:        myas:city - ann to city
+remarks:        0:myas - no ann to any
+remarks:
+remarks:        65501:peeras - 1 prep to peer or city (additive)
+remarks:        65502:peeras - 2 prep to peer or city (additive)
+remarks:        i.e. up to 6 prepends to peer at city
+remarks:
+remarks:
+org:            ORG-IJ5-RIPE
+admin-c:        IHOM-RIPE
+tech-c:         IHOM-RIPE
+mnt-by:         RIPE-NCC-END-MNT
+mnt-by:         IHOME-MNT
+status:         ASSIGNED
+source:         RIPE

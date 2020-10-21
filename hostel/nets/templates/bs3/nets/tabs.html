@@ -1,0 +1,29 @@
+<ul class="nav nav-tabs">
+
+    {% if perms.nets.add_net %}
+        <li role="presentation">
+            <a href="{% url 'nets' %}add">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+        </li>
+    {% endif %}
+
+    <li role="presentation" {% if tab == 'search' %}class="active"{% endif %}>
+        <a href="{% url 'search_net' %}">
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span></a>
+    </li>
+
+
+    {% for root_net in root_nets %}
+        <li role="presentation" {% if root.pk == root_net.pk %}class="active"{% endif %}><a
+                href="{% url 'nets' %}?root={{ root_net.pk }}">
+            <small>{{ root_net }}</small>
+        </a></li>
+    {% endfor %}
+
+    <li role="presentation" {% if not root and not tab == 'search' and not tab == 'settings' %}class="active"{% endif %}><a
+            href="{% url 'nets' %}?root=0"><b>Все</b></a></li>
+
+    <li role="presentation" {% if tab == 'settings' %}class="active"{% endif %}><a href="{% url 'root-nets' %}"><span class="glyphicon glyphicon-cog"
+                                                                  aria-hidden="true"></span></a></li>
+
+</ul>

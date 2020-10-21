@@ -1,0 +1,31 @@
+<ul class="nav navbar-nav">
+    <li {% if app == "docs" %} class="active" {% endif %}>
+        <a href="{% url 'agreements' %}">
+            <div class="color-marker color-agreement"></div>
+            Документы
+        </a>
+    </li>
+
+    <li {% if app == "companies" %} class="active" {% endif %}>
+        <a href="{% url 'companies' %}">
+            <div class="color-marker color-company"></div>
+            Компании
+        </a>
+    </li>
+
+
+    <li {% if app == "clients" %} class="active" {% endif %}>
+        <a href="{% url 'clients' %}">
+            <div class="color-marker color-client"></div>
+            Клиенты
+        </a>
+    </li>
+
+    <li {% if app == "employes" %} class="active" {% endif %}>
+        <a href="{% url 'employes' %}">
+            <div class="color-marker color-staff"></div>
+            Коллеги
+        </a>
+    </li>
+
+</ul>

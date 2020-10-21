@@ -1,0 +1,47 @@
+<div class="form-group {% if form.name.errors %}has-error{% endif %}">
+    <label>Площадка</label>
+    {{ form.name.errors }}
+    {{ form.name }}
+</div>
+
+<div class="form-group {% if form.city.errors %}has-error{% endif %}">
+    <label>Город</label>
+    {{ form.city.errors }}
+    {{ form.city }}
+</div>
+
+<div class="form-group {% if form.address.errors %}has-error{% endif %}">
+    <label>Адрес</label>
+    {{ form.address.errors }}
+    {{ form.address }}
+    <div class="help-block">Город сюда писать не надо</div>
+</div>
+
+
+<div class="form-group {% if form.contacts.errors %}has-error{% endif %}">
+    <label>Контактные данные</label>
+    {{ form.contacts.errors }}
+    {{ form.contacts }}
+    <div class="help-block">Если они отличаются от данных подрядчика</div>
+</div>
+
+<div class="form-group {% if form.organization.errors %}has-error{% endif %}">
+    <label>Организация</label>
+    {{ form.organization.errors }}
+    {{ form.organization }}
+    <div class="help-block">Клиент, представляющий юр. лицо площадки</div>
+</div>
+
+
+<div class="form-group {% if form.comment.errors %}has-error{% endif %}">
+    <label>Комментарий</label>
+    {{ form.comment.errors }}
+    {{ form.comment }}
+</div>
+
+<script>
+$(document).ready(function() {
+    $("#id_organization").select2();
+    $("#id_city").select2();
+})
+</script>

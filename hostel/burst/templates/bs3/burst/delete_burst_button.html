@@ -1,0 +1,26 @@
+<a class="btn btn-danger" data-toggle="modal" data-target="#delete_burstset">
+    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+</a>
+
+<div class="modal fade text-left" id="delete_burstset" tabindex="-1" role="dialog">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Удалить Burst set?</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" value="{{ burst_set.pk }}">
+                    <p>Действие необратимо</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Я еще подумаю...</button>
+                    <button name="action" value="delete_burst_set" class="btn btn-danger">Удалить</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

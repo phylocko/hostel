@@ -1,0 +1,45 @@
+<tr>
+
+    <td class="text-muted">{{ lease.pk }}</td>
+
+    <td class="info text-center">
+        {% if lease.is_ours %}
+            <span class="glyphicon glyphicon-ok"></span>
+        {% endif %}
+    </td>
+
+    <td class="success text-center">
+        {% if lease.is_bought %}
+            <span class="glyphicon glyphicon-euro"></span>
+        {% endif %}
+    </td>
+
+    <td style="width: 140px;">
+        <div class="color-marker color-lease"></div>
+        <b><a href="{% url 'lease' lease.pk %}">{{ lease.type }}</a></b>
+    </td>
+
+    <td>
+        {% if lease.organization %}
+            <div class="color-marker color-client"></div>
+            <a href="{% url 'client' lease.organization.pk %}">{{ lease.organization.netname }}</a>
+        {% endif %}
+    </td>
+
+    <td class="active">
+        {% if lease.identity %}
+            <a href="{% url 'lease' lease.pk %}">{{ lease.identity|default:''|truncatechars:60 }}</a>
+        {% endif %}
+    </td>
+
+    <td class="text-muted">
+        <small>{{ lease.addresses|default:''|truncatechars:60 }}</small>
+    </td>
+
+    <td class="text-right">
+        <a class="btn btn-xs btn-default" href="{% url 'update_lease' lease.pk %}">
+            <span class="glyphicon glyphicon-edit"></span>
+        </a>
+    </td>
+
+</tr>

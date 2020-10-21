@@ -1,0 +1,39 @@
+<div class="form-group {% if form.number.errors %}has-error{% endif %}">
+    <label class="control-label">Номер</label><br>
+    {{ form.number }}
+    {% for error in form.number.errors %}
+        <p class="error">{{ error }}</p>
+    {% endfor %}
+</div>
+
+<div class="form-group form-group-lg {% if form.description.errors %}has-error{% endif %}">
+    <label class="control-label">Описание</label><br>
+    {{ form.description }}
+    {% for error in form.description.errors %}
+        <p class="error">{{ error }}</p>
+    {% endfor %}
+</div>
+
+<div class="form-group {% if form.client.errors %}has-error{% endif %}">
+    <label class="control-label">Клиент</label><br>
+    {{ form.client }}
+    {% for error in form.client.errors %}
+        <p class="error">{{ error }}</p>
+    {% endfor %}
+</div>
+
+<div class="form-group {% if form.blacklisted.errors %}has-error{% endif %}">
+    <label class="control-label">{{ form.blacklisted }} В блэклисте</label><br>
+    {% for error in form.blacklisted.errors %}
+        <p class="error">{{ error }}</p>
+    {% endfor %}
+</div>
+
+<div class="form-group {% if form.spam.errors %}has-error{% endif %}">
+    <label class="control-label">{{ form.spam }} Это спам</label><br>
+
+    {% for error in form.spam.errors %}
+        <p class="error">{{ error }}</p>
+    {% endfor %}
+</div>
+

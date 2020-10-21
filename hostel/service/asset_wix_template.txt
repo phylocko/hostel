@@ -1,0 +1,9 @@
+password: _iHome_233
+as-set: AS-W-IX
+descr:          W-IX LTD AS-Macro
+members:        AS25478
+{clients}
+tech-c:         WIX-RIPE
+admin-c:        WIX-RIPE
+mnt-by:         W-IX-MNT
+source:         RIPE

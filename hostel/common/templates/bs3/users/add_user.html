@@ -1,0 +1,20 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Создать сотрудника{% endblock %}
+{% block content %}
+
+    {% include 'bs3/users/tabs.html' %}
+
+    <div class="container">
+
+
+        <h2>Добавление нового сотрудника
+            <button type="submit" form="user_data" class="btn btn-primary">Создать</button>
+        </h2>
+
+        <form id="user_data" METHOD="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% include 'bs3/users/user_form.html' %}
+        </form>
+    </div>
+
+{% endblock %}

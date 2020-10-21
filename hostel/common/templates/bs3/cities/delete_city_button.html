@@ -1,0 +1,41 @@
+<div class="panel panel-default">
+    <div class="panel-body text-right">
+        <a class="btn btn-danger" data-toggle="modal" data-target="#delete_city">Удалить город</a>
+    </div>
+</div>
+
+<div class="modal fade" id="delete_city" tabindex="-1" role="dialog">
+    <form method="POST" action="{% url 'delete_city' %}">
+        {% csrf_token %}
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Удалить город «{{ city.name }}»?</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" value="{{ city.pk }}">
+                    <b>Сущность "Город" может быть связана с:</b>
+                    <ul>
+                        <li>Сетями</li>
+                        <ul>
+                            {% for net in city.nets.all %}
+                            <li>{{ net.network }}</li>
+                            {% endfor %}
+                        </ul>
+                        <li>Клиентами</li>
+                        <li>Датацентрами</li>
+                        <li>Арендованными услугами</li>
+                    </ul>
+                    <b class="text-danger">Вы должны понимать последствия удаления, прежде чем продолжить!</b>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Я еще подумаю...</button>
+                    <input type="submit" class="btn btn-danger" value="Я понимаю последствия, удалить город">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

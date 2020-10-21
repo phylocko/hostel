@@ -1,0 +1,39 @@
+<tr>
+    <td class="text-muted">{{ lease.pk }}</td>
+    <td>
+        <div class="color-marker color-lease"></div>
+        <b><a href="{% url 'lease' lease.pk %}">{{ lease.type|upper }}</a></b><br>
+    </td>
+
+    <td>
+
+        {% if lease.identity %}
+            <div><b><a href="{% url 'lease' lease.pk %}">{{ lease.identity|truncatechars:72 }}</a></b></div>
+        {% endif %}
+
+        {% if lease.addresses %}
+            <div title="{{ lease.addresses }}">
+                <a href="{% url 'lease' lease.pk %}">{{ lease.addresses|truncatechars:72 }}</a>
+            </div>
+        {% endif %}
+
+        {% if lease.cities %}
+            <div class="text-muted">{{ lease.cities.all|join:' — ' }}</div>
+        {% endif %}
+
+        {% if lease.group %}
+            <span class="pull-right">
+                <div class="color-marker color-leasegroup"></div>
+                <a href="{% url 'lease_group' lease.group.pk %}">
+                    <b>{{ lease.group.description }}</b>
+                </a>
+            </span>
+        {% endif %}
+
+    </td>
+
+    <td class="text-right">
+        <label class="label label-primary">{{ lease.services.count|default:'' }}</label><br>
+        <label class="label label-info">{{ lease.subservices.count|default:'' }}</label>
+    </td>
+</tr>

@@ -1,0 +1,7 @@
+<ul class="nav nav-tabs">
+    <li role="presentation" {% if tab == "open" %}class="active"{% endif %}><a href="{% url 'issues' %}?tab=open">Открытые</a></li>
+    <li role="presentation" {% if tab == "all" %}class="active"{% endif %}><a href="{% url 'issues' %}?tab=all">Все</a></li>
+    <li role="presentation" {% if tab == "create_issue" %}class="active"{% endif %}><a href="{% url 'create_issue' %}">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    </a></li>
+</ul>

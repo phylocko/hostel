@@ -1,0 +1,15 @@
+<form method="GET" class="form-inline">
+    <div class="form-group">
+        <input type="text" id="page_search" name="search"
+               value="{{ search_string|default_if_none:'' }}" class="form-control"
+               placeholder="Поиск">
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary form-control">
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+        </button>
+    </div>
+</form>
+<script>
+    $('#page_search').focus();
+</script>

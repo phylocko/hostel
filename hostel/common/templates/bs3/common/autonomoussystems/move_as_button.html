@@ -1,0 +1,58 @@
+<a class="btn btn-success" data-toggle="modal" data-target="#move_as">
+    <span class="glyphicon glyphicon-glyphicon glyphicon-retweet" aria-hidden="true"></span>
+    Переместить AS
+</a>
+
+<div class="modal fade text-left" id="move_as" role="dialog">
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Перемещение AS другому клиенту</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="id_client" class="control-label">Клиент</label><br>
+                        <select id="id_client" name="client" class="form-control input-lg"></select>
+                    </div>
+
+                    <b>{{ autonomoussystem }}</b> будет привязана к указанному выше клиенту
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Я еще подумаю...</button>
+                    <button name="action" value="move_as" class="btn btn-success">Переместить AS</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    $("#id_client").select2({
+        width: '100%',
+        ajax: {
+            url: '/api/?page=clients&action=search',
+            dataType: 'json',
+            processResults: function (data) {
+                results = [];
+                for (key in data.clients) {
+                    results.push({id: data.clients[key]['id'], text: data.clients[key]['netname']})
+                }
+                return {
+                    results: results
+                };
+            },
+            data: function (params) {
+                var query = {
+                    filter: params.term,
+                };
+                return query
+            }
+        }
+    });
+</script>

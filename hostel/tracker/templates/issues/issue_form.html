@@ -1,0 +1,32 @@
+{% load static %}
+<div class="form-group {% if form.title.errors %}has-error{% endif %}">
+    <label>Заголовок</label>
+    {{ form.title.errors }}
+    {{ form.title }}
+</div>
+
+<div class="form-group {% if form.description.errors %}has-error{% endif %}">
+    <label>Описание</label>
+    {{ form.description.errors }}
+    {{ form.description }}
+</div>
+
+<div class="form-group {% if form.status.errors %}has-error{% endif %}">
+    <label>Статус</label>
+    {{ form.status.errors }}
+    {{ form.status }}
+</div>
+
+{% if not issue.filename %}
+    <div class="form-group {% if form.file.errors %}has-error{% endif %}">
+    <label>Скриншот</label>
+    {{ form.file.errors }}
+    <input {% if mode == "view" %}disabled{% endif %} type="file" name="file">
+    </div>
+{% else %}
+    <a href="{% static '/tracker/' %}{{ issue.filename }}" target="_blank">
+    <img class="img-thumbnail" src="{% static '/tracker/' %}{{ issue.filename }}">
+    </a>
+    <br>
+    <br>
+{% endif %}

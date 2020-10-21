@@ -1,0 +1,41 @@
+<table class="table">
+    <tr>
+        <th>Тип документа</th>
+        <td>
+            {% if application.application_type == 'akt' %}
+                Акт
+            {% elif application.application_type == 'order' %}
+                Заказ
+            {% elif application.application_type == 'application' %}
+                Приложение
+            {% else %}
+                Другое
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <th>Номер заказа/приложения</th>
+        <td>{{ application.order_number|default:'' }}</td>
+    </tr>
+
+    <tr>
+        <th>Дата</th>
+        <td>{{ application.date|date:'d.m.Y' }}</td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+            <label class="control-label"> Название</label><br>
+            {{ application.name }}
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+            <label class="control-label">Комментарий</label><br>
+            {{ application.comment|default:'' }}
+        </td>
+    </tr>
+
+</table>

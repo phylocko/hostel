@@ -1,0 +1,123 @@
+<div class="form-group {% if form.type.errors %}has-error{% endif %}">
+    <label>Тип</label>
+    {{ form.type.errors }}
+    {{ form.type }}
+</div>
+<div class="form-group {% if form.name.errors %}has-error{% endif %}">
+    <label>Тема письма с оповещением</label>
+    {{ form.name.errors }}
+    {{ form.name }}
+</div>
+<div class="form-group {% if form.time_start.errors %}has-error{% endif %}">
+    <label>Дата начала</label>
+    <div class="input-group date" id="time_start_group">
+        {{ form.time_start }}
+        <span class="input-group-addon">
+        <span class="glyphicon glyphicon-calendar"></span>
+    </span>
+    </div>
+    {{ form.time_start.errors }}
+</div>
+<div class="form-group {% if form.time_end.errors %}has-error{% endif %}">
+    <label>Дата окончания</label>
+    <div class="input-group date" id="time_end_group">
+        {{ form.time_end }}
+        <span class="input-group-addon">
+        <span class="glyphicon glyphicon-calendar"></span>
+    </span>
+    </div>
+    {{ form.time_end.errors }}
+</div>
+<script>
+    $('#time_start_group').datetimepicker({format: 'YYYY-MM-DD HH:mm:ss'});
+    $('#time_end_group').datetimepicker({format: 'YYYY-MM-DD HH:mm:ss'});
+</script>
+<div id="outage_period_group" class="form-group {% if form.outage_period.errors %}has-error{% endif %}">
+    <label>Период простоя (минут)</label>
+    {{ form.outage_period.errors }}
+    {{ form.outage_period }}
+    <div class="help-block">Заполняется только при необходимости.</div>
+</div>
+<div class="form-group {% if form.ticket.errors %}has-error{% endif %}">
+    <label>Тикет</label>
+    {{ form.ticket.errors }}
+    {{ form.ticket }}
+</div>
+<div class="form-group {% if form.provider.errors %}has-error{% endif %}">
+    <label>Виновник</label>
+    {{ form.provider.errors }}
+    {{ form.provider }}
+</div>
+<div class="form-group {% if form.provider_tt.errors %}has-error{% endif %}">
+    <label>Тикет виновника</label>
+    {{ form.provider_tt.errors }}
+    {{ form.provider_tt }}
+</div>
+<div class="checkbox" id="report_outage_group">
+    <label>{{ form.report_outage }} <b>Учесть в простоях</b></label>
+</div>
+<div class="checkbox">
+    <label>{{ form.closed }} <b>Завершено</b></label>
+</div>
+<div class="form-group {% if form.fiber.errors %}has-error{% endif %}">
+    <label>Пострадавшие услуги (если их нет в Lease)</label>
+    {{ form.fiber.errors }}
+    {{ form.fiber }}
+    <div class="help-block">
+        Умное поле, можно задать периоды простоя для подсчета. Например:<br>
+        <br>
+        L1-1234:<br>
+        2020-01-01 12:00 - 2020-01-01 18:15<br>
+        2020-01-01 18:40 - 2020-01-01 18:40<br>
+        2020-01-01 18:15 - 2020-01-01 19:20<br>
+    </div>
+</div>
+<div class="form-group {% if form.comment.errors %}has-error{% endif %}">
+    <label>Комментарий</label>
+    {{ form.comment.errors }}
+    {{ form.comment }}
+</div>
+<script>
+    function update_fields() {
+        $name = $("#id_name");
+        $type = $("#id_type");
+        $outage_period_group = $("#outage_period_group");
+        $report_outage_group = $("#report_outage_group");
+
+        var work_text = "Плановые работы на сети подрядчика";
+        var fail_text = "Авария на сети подрядчика";
+
+        if ($type.val() == "work") {
+            if ($name.val() == '' || $name.val() == fail_text) {
+                $name.val(work_text);
+            }
+            $outage_period_group.slideUp();
+            $report_outage_group.slideUp();
+        } else if ($type.val() == "failure") {
+            if ($name.val() == '' || $name.val() == work_text) {
+                $name.val(fail_text);
+            }
+            $outage_period_group.slideDown();
+            $report_outage_group.slideDown();
+
+        } else {
+            if ($name.val() == '' || $name.val() == work_text || $name.val() == fail_text) {
+                $name.val("");
+            }
+            $outage_period_group.slideDown();
+            $report_outage_group.slideDown();
+        }
+
+    }
+
+    update_fields();
+
+    $("#id_type").change(function () {
+        update_fields();
+    });
+
+
+    $(document).ready(function () {
+        $("#id_provider").select2();
+    });
+</script>

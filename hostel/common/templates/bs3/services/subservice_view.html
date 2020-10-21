@@ -1,0 +1,191 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Услуга {{ service }}{% endblock %}
+{% block content %}
+    {% load hostel_filters %}
+
+    <div class="container">
+        {% include 'bs3/common/broadcrumbs_subservice.html' %}
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>
+                    <div class="color-marker color-subservice"></div>
+                    {{ subservice }}
+                </h4>
+            </div>
+            <div class="col-md-4 text-right">
+                {% if perms.common.change_service %}
+                    <a class="btn btn-primary" href="{% url 'update_subservice' service.pk subservice.pk %}">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Редактировать
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                {% include 'bs3/services/subservice_data.html' %}
+
+                {% with service as object %}
+                    {% include 'bs3/common/created_updated.html' %}
+                {% endwith %}
+            </div>
+            <div class="col-md-8">
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs">
+                    <li {% if tab == 'params' %}class="active"{% endif %}>
+                        <a href="{% url 'subservice' service.pk subservice.pk %}?tab=params">Параметры</a>
+                    </li>
+                    <li {% if tab == 'leases' %}class="active"{% endif %}>
+                        <a href="{% url 'subservice' service.pk subservice.pk %}?tab=leases">
+                            <div class="color-marker color-lease"></div>
+                            Лизы <span class="badge">{{ subservice.leases.count|default:0 }}</span>
+                        </a>
+                    </li>
+                    <li {% if tab == 'bundles' %}class="active"{% endif %}>
+                        <a href="{% url 'subservice' service.pk subservice.pk %}?tab=bundles">
+                            <div class="color-marker color-bundle"></div>
+                            Бандлы <span class="badge">{{ subservice.bundle_vlans.count|default:0 }}</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+
+                    <br>
+
+                    {% if service.warnings %}
+                        <div class="alert alert-danger">
+                            <ul>
+                                {% for warning in service.warnings %}
+                                    <li>{{ warning }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+
+
+                    {% if tab == 'params' %}
+                        <div class="tab-pane active" id="params">
+                            {% if service.params.require_net %}{% include 'bs3/services/nets_panel.html' %}{% endif %}
+                        </div>
+
+                        {% if service.params.require_vlan %}
+                            {% with subservice.vlans.all as vlans %}
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Вланы [{{ vlans.count }}]
+                                            <span id="vlans_table_trigger" class="pull-right">
+                                                    <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                                                </span>
+                                        </h3>
+                                    </div>
+
+                                    {% include 'bs3/services/vlans_table_inpanel.html' %}
+
+                                    {% if perms.common.change_service %}
+                                        <div class="panel-footer text-right">
+                                            <a class="btn btn-sm btn-default"
+                                               href="{% url 'subservice_create_vlan' service.pk subservice.pk %}">
+                                                Создать
+                                            </a>
+                                            <a class="btn btn-sm btn-default"
+                                               href="{% url 'subservice_choose_vlan' service.pk subservice.pk %}">
+                                                Выбрать
+                                            </a>
+                                        </div>
+                                    {% endif %}
+
+                                </div>
+
+                                <script>
+                                    $('#vlans_table_trigger').click(function () {
+                                        $('#vlan_table').fadeToggle();
+                                    })
+                                </script>
+
+                            {% endwith %}
+                        {% endif %}
+
+
+                    {% endif %}
+
+                    {% if tab == 'leases' %}
+                        <div class="tab-pane active">
+                            {% with subservice.leases.all as leases %}
+
+                                <div class="panel panel-success">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Лизы [{{ leases.count }}]
+                                            <span id="leases_table_trigger" class="pull-right">
+                                                <span class="glyphicon glyphicon-list aria-hidden="true"></span>
+                                            </span>
+                                        </h3>
+                                    </div>
+
+                                    {% include 'bs3/services/leases_table_inpanel.html' %}
+
+                                    {% if perms.common.change_service %}
+                                        <div class="panel-footer">
+
+                                            <div class="text-right">
+                                                <a class="btn btn-sm btn-default" href="{% url 'subservice_choose_lease' service.pk subservice.pk %}">Выбрать</a>
+
+                                                <a href="{% url 'subservice_create_lease' service.pk subservice.pk %}" type="button" class="btn btn-default btn-sm">
+                                                    Создать
+                                                </a>
+                                            </div>
+
+                                        </div>
+                                    {% endif %}
+
+                                </div>
+
+                            {% endwith %}
+                        </div>
+                    {% endif %}
+
+                    {% if tab == 'bundles' %}
+
+                        <div class="tab-pane active" id="bundles">
+                            {% if service.params.require_port %}
+                                {% with subservice as service %}
+                                    {% include 'bs3/services/bundles_panel.html' %}
+                                    {% include 'bs3/clients/graphs_panel.html' %}
+                                {% endwith %}
+                            {% endif %}
+
+                        </div>
+                    {% endif %}
+
+                    {% if tab == 'ins' %}
+                        <div class="tab-pane active" id="ins">
+                            {% include 'bs3/common/panel_tables/ins_panel.html' %}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+            </div>
+        </div>
+        <div class="well text-right">
+            {% if service.rt and not service.status == 'on' %}
+                {% if service.name == 'inet2' or service.name == 'wix' %}
+                    {% if service.client.enabled %}
+                        {% include 'bs3/services/extend_test_period_button.html' %}
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+
+            {% if perms.common.delete_subservice %}
+                {% include 'bs3/services/delete_subservice_button.html' %}
+            {% endif %}
+        </div>
+    </div>
+
+
+    {% include 'bs3/spy/object_log.html' %}
+
+{% endblock %}

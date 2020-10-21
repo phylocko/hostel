@@ -1,0 +1,116 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Группа «{{ group }}»{% endblock %}
+{% block content %}
+
+    <div class="container">
+
+        <br>
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'groups' %}">Группы</a></li>
+            <li class="active">{{ group.name }}</li>
+        </ol>
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>{{ group }}</h4>
+            </div>
+            <div class="col-md-4 text-right">
+                {% if mode == 'edit' %}
+                    <a class="btn btn-default" href="{% url 'group' group.pk %}">Отмена</a>
+                    <button type="submit" form="group_form" class="btn btn-primary">Сохранить</button>
+                {% else %}
+                    {% if perms.auth.add_group %}
+                        <a class="btn btn-primary" href="{% url 'update_group' group.pk %}">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Редактировать
+                        </a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-4">
+                {% if mode == 'edit' %}
+                    <form id="group_form" method="post">
+                        {% csrf_token %}
+                        {% include 'bs3/groups/group_form.html' %}
+                    </form>
+                {% else %}
+                    {% include 'bs3/groups/group_data.html' %}
+                {% endif %}
+            </div>
+
+            <div class="col-md-4">
+                <h4>Разрешения</h4>
+                <ul class="list-group">
+                    {% for permission in permissions.all %}
+                        <li class="list-group-item">
+                            <form method="post">
+                                {% csrf_token %}
+                                {% if permission in group.permissions.all %}
+                                    <button class="btn btn-xs btn-success"
+                                            name="action"
+                                            value="change_permission_membership">
+                                        <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
+                                    </button>
+
+                                {% else %}
+                                    <button class="btn btn-xs btn-warning"
+                                            name="action"
+                                            value="change_permission_membership">
+                                        <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span>
+                                    </button>
+                                {% endif %}
+                                <input type="hidden" name="permission_id" value="{{ permission.pk }}">
+                                {{ permission.name }}
+
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="col-md-4">
+                <h4>Пользователи</h4>
+                <ul class="list-group">
+                    {% for group_user in users.all %}
+                        <li class="list-group-item">
+                            <form method="post">
+                                {% csrf_token %}
+                                {% if group_user in group.user_set.all %}
+                                    <button class="btn btn-xs btn-success"
+                                            name="action"
+                                            value="change_user_membership">
+                                        <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
+                                    </button>
+
+                                {% else %}
+                                    <button class="btn btn-xs btn-warning"
+                                            name="action"
+                                            value="change_user_membership">
+                                        <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span>
+                                    </button>
+                                {% endif %}
+                                <input type="hidden" name="user_id" value="{{ group_user.pk }}">
+                                {{ group_user.username }}
+
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <div class="container">
+        {% include 'bs3/groups/delete_button.html' %}
+    </div>
+
+{% endblock %}

@@ -1,0 +1,172 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Город {{ city }}{% endblock %}
+{% block content %}
+
+    {% include 'bs3/cities/cities_tabs.html' %}
+
+    <div class="container">
+        <br>
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'cities' %}">Города</a></li>
+            <li class="active">{{ city.name }}</li>
+        </ol>
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px; margin-top: 20px;">
+            <div class="col-md-8">
+                <h4>
+                    {% if city.name == "Москва" %}
+                        <span class="glyphicon glyphicon-star text-danger" aria-hidden="true"></span>
+                    {% endif %}
+                    {{ city.name }}
+                </h4>
+            </div>
+
+            <div class="col-md-4 text-right">
+                {% if mode == 'edit' %}
+                    <a class="btn btn-default" href="{% url 'cities' %}{{ city.pk }}/">Отмена</a>
+                    <button type="submit" form="city_form" class="btn btn-primary">Сохранить</button>
+                {% else %}
+                    {% if perms.common.change_city %}
+                        <a class="btn btn-primary" href="{% url 'cities' %}{{ city.pk }}/update/">
+                            <span class="glyphicon glyphicon-edit"></span> Редактировать</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-4">
+
+                {% if mode == 'edit' %}
+                    <!-- Форма -->
+                    <form method="POST" id="city_form">
+                        {% csrf_token %}
+                        {% include 'bs3/cities/city_form.html' %}
+                    </form>
+                {% else %}
+                    {% include 'bs3/cities/city_data.html' %}
+                {% endif %}
+
+                {% with city as object %}
+                    {% include 'bs3/common/created_updated.html' %}
+                {% endwith %}
+
+
+            </div>
+
+            <div class="col-md-8">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Площадки в городе [{{ city.datacenter_set.all.count }}]
+                            <span id="datacenter_table_trigger" class="pull-right">
+                                <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                            </span>
+                        </h3>
+                    </div>
+                    <div id="datacenter_table_container">
+                        <table class="table table-striped">
+
+                            {% for datacenter in city.datacenter_set.all %}
+                                <tr>
+                                    <td>
+                                        <div class="color-marker color-datacenter"></div>
+                                        <b><a href="{% url 'datacenter' datacenter.pk %}">{{ datacenter.name }}</a></b>
+                                    </td>
+                                    <td>{{ datacenter.address|default:'' }}</td>
+                                    <td class="text-right"><b>{{ datacenter.device.all.count|default:0 }}</b></td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td class="text-center text-muted">Пусто</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+                <script>
+                    {% if city.datacenter_set.all.count > 5 %}
+                        $('#datacenter_table_container').slideToggle();
+                    {% endif%}
+                    $('#datacenter_table_trigger').click(function () {
+                        $('#datacenter_table_container').slideToggle();
+                    })
+
+                </script>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Карта девайсов в городе {{ city.name }}</h3>
+                    </div>
+                    <div class="panel-body" id="graph_container"></div>
+                </div>
+                <script type="text/javascript">
+
+                    var url = '/api/?page=city&action=vis_graph&city_id={{ city.pk }}'
+
+                    $.ajax({
+                        url: url,
+                        success: function (data) {
+
+                            devices = data['nodes'];
+                            edges = data['edges'];
+
+                            var nodes = new vis.DataSet(devices);
+                            var edges = new vis.DataSet(edges);
+
+                            // create a network
+                            var container = document.getElementById('graph_container');
+
+                            // provide the data in the vis format
+                            var data = {
+                                nodes: nodes,
+                                edges: edges
+                            };
+
+                            var options = {
+                                layout: {
+                                    improvedLayout: true,
+                                },
+                                physics: {
+                                    stabilization: true
+                                },
+                                edges: {
+                                    scaling: {
+                                        label: true,
+                                    },
+                                    smooth: true,
+                                    color: {
+                                        color: '#666666',
+                                        highlight: '#6b89e3',
+                                        hover: '#848484',
+                                        inherit: 'from',
+                                        opacity: 1.0
+                                    },
+                                },
+                            }
+
+                            var network = new vis.Network(container, data, options);
+                        }
+                    });
+
+                </script>
+            </div>
+        </div>
+
+        {% if mode == 'view' %}
+            {% if perms.common.delete_city %}
+                {% include 'bs3/cities/delete_city_button.html' %}
+            {% endif %}
+        {% endif %}
+
+
+    </div>
+
+    {% include 'bs3/spy/object_log.html' %}
+
+{% endblock %}

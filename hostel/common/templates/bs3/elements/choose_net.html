@@ -1,0 +1,52 @@
+<script src="/static/hostel/apps/choose/controller.js"></script>
+<link href="/static/css/choose.css" rel="stylesheet">
+
+<div ng-app="Choose">
+
+    <div ng-controller="APIController">
+
+        <div class="form-group">
+
+            <input type="hidden" name="management_net" id="object_id" value="{{ device.management_net.pk|default:"" }}">
+
+            <div class="well well-sm fit" id="selected_object">
+                {{ device.management_net|default:"" }}
+            </div>
+
+            <input class="form-control filter"
+                   ng-change="get('/api/?page=search&object=net&q=' + filter + '&management_net=1')"
+                   placeholder="Начните вводить ip-адрес"
+                   ng-model-options='{ debounce: 400 }'
+                   class="form-control"
+                   autocomplete="off"
+                   ng-model="filter"
+                   id="filter"
+                   type='text'>
+
+        </div>
+
+        {% verbatim %}
+
+        <ul class="list-group">
+
+            <li class="list-group-item heighted" ng-repeat="net in objects">
+
+                <a href="#" ng-click="choose_object(net, net.fields.address)" title="Прицепить">{{ net.fields.address }}</a>
+                <span class="text-muted">{{ net.fields.description }}</span>
+
+
+
+                <a target="blank"
+                   title="Просмотреть сеть (откроется в новом окне)"
+                   href="/nets/{{ net.pk }}">
+                    <span class="glyphicon glyphicon-new-window pull-right" aria-hidden="true"></span>
+                </a>
+
+            </li>
+
+        </ul>
+
+        {% endverbatim %}
+
+    </div>
+</div>

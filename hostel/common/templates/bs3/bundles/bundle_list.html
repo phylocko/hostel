@@ -1,0 +1,51 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Бандлы{% endblock %}
+{% block content %}
+
+    {% include 'bs3/bundles/bundles_tabs.html' %}
+
+
+
+    <div class="container text-center">
+        <br>
+        <form action="{% url 'search_bundles' %}" method="GET" class="form-inline">
+
+            <div class="form-group">
+                <input type="text" name="search"
+                       value="{{ search_string|default:'' }}"
+                       class="form-control" autocomplete="off"
+                       placeholder="Ключевые слова"
+                       id="page_search">
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary form-control">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                </button>
+            </div>
+
+        </form>
+
+        <script>
+            $('#page_search').focus();
+        </script>
+    </div>
+
+
+
+    <table class="table">
+
+
+        {% include 'bs3/bundles/bundles_table_header.html' %}
+
+        {% for bundle in bundles %}
+            {% include 'bs3/bundles/bundles_table_row.html' %}
+        {% empty %}
+            <tr>
+                <td colspan="7" class="text-muted text-center"><h3>Пусто</h3></td>
+            </tr>
+        {% endfor %}
+    </table>
+
+
+{% endblock %}

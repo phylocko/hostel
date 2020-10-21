@@ -1,0 +1,50 @@
+{% load hostel_filters %}
+<table class="table">
+    <tr class="active">
+        <td colspan="2">
+            <label>Наименование</label><br>
+            {{ company.name|default:'' }}
+        </td>
+    </tr>
+    <tr>
+        <td><label>Клиент</label></td>
+        <td>
+            {% if company.client %}
+                <div class="color-marker color-client"></div>
+                <a href="{% url 'client' company.client.pk %}"><b>{{ company.client.netname }}</b></a>
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td><label>Город</label></td>
+        <th>
+            {% if company.city %}
+                <a href="{% url 'city' company.city.pk %}">{{ company.city }}</a>
+            {% endif %}
+        </th>
+    </tr>
+    <tr>
+        <td><label>RT#</label></td>
+        <td>{{ company.rt|ticket }}</td>
+    </tr>
+    <tr>
+        <td><label>ЭДО</label></td>
+        <td>{% if company.edm %}<span class="glyphicon glyphicon-ok text-success"></span>{% endif %}</td>
+    </tr>
+    <tr>
+        <td colspan="2">
+
+            <label>Комментарий</label>
+            <address>
+                {{ company.comment|linebreaksbr|default:'—' }}
+            </address>
+
+            <label>Контакты</label>
+            <address>
+                {{ company.contacts|linebreaksbr|default:'—' }}
+            </address>
+
+        </td>
+    </tr>
+</table>
+

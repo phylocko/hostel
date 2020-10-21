@@ -1,0 +1,14 @@
+{% load hostel_filters %}
+<tr>
+    <td class="active">
+        <b><a href="{% url 'service' service.pk %}" class="{{ service|service_text_class }}">{{ service }}</a></b>
+    </td>
+    <td>
+        <a href="{% url 'client' service.client.pk %}">{{ service.client }}</a>
+    </td>
+    <td class="hidden-md hidden-sm hidden-xs">
+        {{ service.rt|ticket }}
+    </td>
+    <td class="text-muted">{{ service.client.manager|default:'—' }}</td>
+    <td class="text-right text-muted"><small>{{ service.end_time|date:'Y-m-d' }}</small></td>
+</tr>

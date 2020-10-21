@@ -1,0 +1,37 @@
+{% if listing.paginator.num_pages > 1 %}
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+
+            {% if listing.paginator.num_pages < 15 %}
+
+                {% for page_number in listing.paginator.page_range %}
+                    <li {% if page_number == listing.number %}class="active"{% endif %}>
+                        <a href="?page={{ page_number }}">{{ page_number }}</a>
+                    </li>
+                {% endfor %}
+
+            {% else %}
+
+
+                {% if listing.has_previous %}
+                    <li><a href="?page={{ listing.previous_page_number }}"><b>&laquo;</b></a></li>
+                {% else %}
+                    <li class="disabled"><a href="#">&laquo;</a></li>
+                {% endif %}
+
+
+                <li class="active"><a href="#">{{ listing.number }} из {{ listing.paginator.num_pages }}</a></li>
+
+                {% if listing.has_next %}
+                    <li><a href="?page={{ listing.next_page_number }}"><b>&raquo;</b></a></li>
+                {% else %}
+                    <li class="disabled"><a href="#"><b>&raquo;</b></a></li>
+                {% endif %}
+
+            {% endif %}
+
+        </ul>
+    </nav>
+
+{% endif %}

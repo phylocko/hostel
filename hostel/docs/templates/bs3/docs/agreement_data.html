@@ -1,0 +1,55 @@
+{% load static %}
+<table class="table">
+    <tr class="active">
+        <td colspan="2">
+            <label>Компания</label><br>
+
+            {% if agreement.company %}
+                <a href="{% url 'company' agreement.company.pk %}"><b>{{ agreement.company.name }}</b></a>
+            {% else %}
+                <span class="text-muted">Не указана</span>
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td><label>Роль контрагента</label></td>
+        <td>
+            {% if agreement.partner_type == "provider" %}
+                <label class="label label-default">Поставщик</label>
+            {% else %}
+                <label class="label label-danger">Клиент</label>
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <td><label>Договор от</label></td>
+        <td>{{ agreement.agreement_date|date:'d.m.Y' }}</td>
+    </tr>
+    <tr>
+        <td><label>Договор расторгнут</label></td>
+        <td>
+            {% if agreement.is_terminated %}
+                <label class="label label-danger">Да</label>
+            {% else %}
+                <label class="label label-success">Нет</label>
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td><label>Скан договора</label></td>
+        <td>
+            {% if agreement.filename %}
+                <a href="{% static 'docs/' %}{{ agreement.FILE_FOLDER }}/{{ agreement.filename }}">Скачать</a>
+            {% else %}
+                <span class="text-muted">Не загружен</span>
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <label>Комментарий</label>
+            <address>{{ agreement.comment|default:'' }}</address>
+        </td>
+    </tr>
+</table>

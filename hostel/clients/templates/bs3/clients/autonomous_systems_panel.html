@@ -1,0 +1,48 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Автономные системы</h3>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ASN</th>
+            <th>Netname</th>
+            <th>AS-SET</th>
+            <th class="text-right">Услуги</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for asn in asns %}
+            <tr>
+                <td>
+                    <div class="color-marker color-asn"></div>
+                    <b><a href="{% url 'autonomous_system' asn.pk %}">{{ asn }}</a></b>
+                </td>
+
+                <td>{{ asn.engname|default:'—' }}</td>
+                <td>{{ asn.asset|default:'—' }}</td>
+
+                <td class="text-right"><label class="badge">{{ asn.services.all.count }}</label></td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="4" class="text-muted text-center">Пусто</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
+
+</div>
+
+<br>
+{% if perms.common.add_autonomoussystem %}
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <a class="btn btn-primary" href="{% url 'create_autonomous_system' %}?client={{ client.pk }}">Добавить
+                автономную систему</a>
+        </div>
+    </div>
+    <br>
+{% endif %}

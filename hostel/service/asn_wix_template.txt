@@ -1,0 +1,90 @@
+password: _iHome_233
+aut-num:        AS50384
+as-name:        W-IX_LTD
+descr:          W-IX LTD
+org:            ORG-WA155-RIPE
+sponsoring-org: ORG-IJ5-RIPE
+import:         from AS8631 accept AS-MSKROUTESERVER
+export:         to AS8631 announce AS-W-IX
+mp-import:      afi ipv6.unicast from AS8631 accept AS-MSKROUTESERVER
+mp-export:      afi ipv6.unicast to AS8631 announce AS-W-IX-IPVSIX
+import:         from AS6695 accept AS-DECIX
+export:         to AS6695 announce AS-W-IX
+mp-import:      afi ipv6.unicast from AS6695 accept AS-DECIX-V6
+mp-export:      afi ipv6.unicast to AS6695 announce AS-W-IX-IPVSIX
+import:         from AS1200 accept ANY
+export:         to AS1200 announce AS-W-IX
+mp-import:      afi ipv6.unicast from AS1200 accept ANY
+mp-export:      afi ipv6.unicast to AS1200 announce AS-W-IX-IPVSIX
+import:         from AS6777 accept ANY AND NOT <^[AS3216 AS3255 AS3327 AS5568
+                AS8342 AS8359 AS8492 AS8641
+                AS8732 AS9002 AS9031 AS12389
+                AS12695 AS13238 AS13249 AS15169
+                AS16265 AS16276 AS21011 AS21219
+                AS28917 AS29076 AS30751
+                AS31133 AS31500 AS35320 AS39792
+                AS42861 AS47541 AS47542 AS6697
+                AS20485 AS42861]>
+export:         to AS6777 action community .= {{ 6777:6777, 6777:3216, 6777:3255,
+                6777:3327, 6777:5568, 6777:8342,
+                6777:8359, 6777:8492, 6777:8641,
+                6777:8732, 6777:9002, 6777:9031,
+                6777:12389, 6777:12695, 6777:13238,
+                6777:13249, 6777:15169, 6777:16265,
+                6777:16276, 6777:21011, 6777:21219,
+                6777:28917, 6777:29076,
+                6777:30751, 6777:31133, 6777:31500,
+                6777:35320, 6777:39792, 6777:42861,
+                6777:47541, 6777:47542, 6777:6697,
+                6777:20485, 6777:42861 }}; announce AS-W-IX
+mp-import:      afi ipv6.unicast from AS6777 accept ANY
+mp-export:      afi ipv6.unicast to AS6777 announce AS-W-IX-IPVSIX
+import:         from AS31210 accept AS-DTEL-IX
+export:         to AS31210 announce AS-W-IX
+mp-import:      afi ipv6.unicast from AS31210 accept AS-DTEL-IX-V6
+mp-export:      afi ipv6.unicast to AS31210 announce AS-W-IX-IPVSIX
+{clients}
+remarks:
+remarks:        communities
+remarks:        50384:3001 msk-ix
+remarks:        50384:3007 dtel-ix
+remarks:        50384:3051 de-cix
+remarks:        50384:3052 ams-ix
+remarks:
+remarks:
+remarks:        Cities:
+{cities}
+remarks:
+remarks:        RS accepts:
+remarks:        50384:6666 blackhole
+remarks:        0:as - do not advertise to as
+remarks:
+remarks:        city = 61000 + 40xx = 650xx
+remarks:        where 40xx - city community
+remarks:
+remarks:        in order of specifity:
+remarks:        0:peeras - no ann to peer
+remarks:        myas:peeras - ann to peer
+remarks:        0:city - no ann to city
+remarks:        myas:city - ann to city
+remarks:        0:myas - no ann to any
+remarks:
+remarks:        65501:peeras - 1 prep to peer or city (additive)
+remarks:        65502:peeras - 2 prep to peer or city (additive)
+remarks:        i.e. up to 6 prepends to peer at city
+remarks:
+remarks:        uplink:
+remarks:        mark
+remarks:        50384:30xx
+remarks:
+remarks:        ctrl
+remarks:        50384:5xxy
+remarks:        y=0 noadv
+remarks:        1<=y<=3 prepend 50384 y times
+remarks:
+admin-c:        WIX-RIPE
+tech-c:         WIX-RIPE
+mnt-by:         RIPE-NCC-END-MNT
+mnt-by:         W-IX-MNT
+status:         ASSIGNED
+source:         RIPE

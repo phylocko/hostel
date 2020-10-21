@@ -1,0 +1,31 @@
+<style>
+    .terminal {
+        color: green;
+        background-color: #000;
+        font-family: "Courier New", Courier, monospace;
+        padding: 6px;
+        white-space: nowrap;
+        overflow: hidden;
+        line-height:14px;
+        text-overflow: ellipsis;
+    }
+</style>
+<div class="panel panel-default">
+
+    <div class="panel-heading"><h3 class="panel-title">Spy</h3></div>
+
+    <div class="terminal">
+        # tail /var/logs/hostel.log | tail 20<br>
+            {% for spy in spy_list %}
+
+                    <{{ spy.time|date:"Y-m-d H:i" }}> <b>{{ spy.user }}</b> {{ spy.action }}d {{ spy.object_name|lower }} <b>'{{ spy.object_str }}'</b>
+                    {% if spy.client %}
+                    for {{ spy.client.netname }}
+                    {% endif %}
+                    <br>
+
+            {% endfor %}
+        {{ user }}@hostel#
+    </div>
+
+</div>

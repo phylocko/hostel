@@ -1,0 +1,84 @@
+{% extends 'bs3/base.html' %}
+{% block title %}*Создать инцидент{% endblock %}
+{% block content %}
+
+    {% include 'bs3/ins/ins_tabs.html' %}
+
+    <div class="container">
+
+        <br>
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>
+                    <div class="color-marker color-ins"></div>
+                    Создание нового инцидента
+                </h4>
+            </div>
+            <div class="col-md-4 text-right">
+                <button type="submit" form="ins_form" class="btn btn-primary">Создать</button>
+            </div>
+        </div>
+
+        <!-- Колонка с общими данными -->
+        <div class="row">
+
+
+            <div class="col-md-3">
+            </div>
+
+
+            <div class="col-md-6">
+
+                <div class="alert alert-info">
+                    В тикете RT должны быть указаны CientName, время начала и время окончания.
+                </div>
+
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Создать INS из тикета RT</h3>
+                    </div>
+
+                    <div class="panel-body">
+
+
+                        <!-- Данные -->
+                        <form id="ins_form" METHOD="POST">
+                            {% csrf_token %}
+                            <div class="form-group {% if form.rt.errors %}has-error{% endif %}">
+                                <label class="control-label">#RT</label>
+                                {% for error in form.rt.errors %}
+                                    <span class="error">{{ error }}</span>
+                                {% endfor %}<br>
+                                {{ form.rt }}
+                            </div>
+                            <div class="form-group {% if form.incident_type.errors %}has-error{% endif %}">
+                                <label class="control-label">Тип</label>
+                                {% for error in form.incident_type.errors %}
+                                    <span class="error">{{ error }}</span>
+                                {% endfor %}<br>
+                                {{ form.incident_type }}
+                            </div>
+                            <div class="form-group {% if form.name.errors %}has-error{% endif %}">
+                                <label class="control-label">Тема</label>
+                                {% for error in form.name.errors %}
+                                    <span class="error">{{ error }}</span>
+                                {% endfor %}<br>
+                                {{ form.name }}
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

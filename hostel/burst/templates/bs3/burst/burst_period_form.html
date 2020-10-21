@@ -1,0 +1,11 @@
+<div class="form-group {% if form.year.errors %}has-error{% endif %}">
+    <label>Год</label>
+    {{ form.year.errors }}
+    {{ form.year }}
+</div>
+
+<div class="form-group {% if form.month.errors %}has-error{% endif %}">
+    <label>Месяц</label>
+    {{ form.month.errors }}
+    {{ form.month }}
+</div>

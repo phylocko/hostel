@@ -1,0 +1,50 @@
+<h3>Запрос на L2-канал</h3>
+
+{% if form.non_field_errors %}
+    <div class="text-danger">
+        {% for error in form.non_field_errors %}
+            <p class="form-error">{{ error }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<div class="form-group {% if form.parent_rt.errors %}has-error{% endif %}">
+    <label class="control-label">Родительская заявка RT</label>
+    {{ form.parent_rt.errors }}
+    {{ form.parent_rt }}
+    <div class="help-block">Созданный тикет станет потомком</div>
+</div>
+
+<div class="form-group">
+    <label class="control-label" for="id_service_type">Тип услуги</label>
+    {{ form.service_type }}
+</div>
+
+
+<div class="form-group {% if form.ports.errors %}has-error{% endif %}">
+    <label class="control-label">Порт/Порты включения</label>
+    {{ form.ports.errors }}
+    {{ form.ports }}
+    <div class="help-block">Например: mrxst-sw0 port 2</div>
+</div>
+
+<div class="form-group {% if form.addresses.errors %}has-error{% endif %}">
+    <label class="control-label">Точки включения (адреса)</label>
+    {{ form.addresses.errors }}
+    {{ form.addresses }}
+    <div class="help-block">Например: Москва, Бутлерова, 7 - Нижегородская, 32</div>
+</div>
+
+
+<div class="form-group {% if form.contacts.errors %}has-error{% endif %}">
+    <label class="control-label">Контактные данные</label>
+    {{ form.contacts.errors }}
+    {{ form.contacts }}
+    <div class="help-block">С кем взаимодействовать по согласованию и включению</div>
+</div>
+
+<div class="form-group {% if form.comment.errors %}has-error{% endif %}">
+    <label class="control-label">Что бы вы хотели добавить от себя?</label>
+    {{ form.comment.errors }}
+    {{ form.comment }}
+</div>

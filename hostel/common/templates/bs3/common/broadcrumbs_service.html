@@ -1,0 +1,9 @@
+<ol class="breadcrumb">
+    <li><a href="{% url 'clients' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+    <li><a href="{% url 'client' service.client.pk %}">{{ service.client }}</a></li>
+
+    {% if service.asn %}
+        <li><a href="{% url 'autonomous_system' service.asn.pk %}">{{ service.asn }}</a></li>
+    {% endif %}
+    <li class="active">{{ service }}</li>
+</ol>

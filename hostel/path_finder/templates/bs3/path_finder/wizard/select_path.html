@@ -1,0 +1,298 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Path Finder: Select path{% endblock %}
+{% block content %}
+
+    <style>
+        .cli {
+            font-family: Courier;
+            color: #cccccc;
+            background-color: #333333;
+        }
+    </style>
+
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'select_bundles' %}">Path finder: Выбор бандлов</a></li>
+            <li class="active">Выбор пути</li>
+        </ol>
+        <br>
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8"><h4>Выбор пути</h4></div>
+
+            <div class="col-md-4 text-right">
+                <button type="submit" form="bundles_form" class="btn btn-primary" name="action" value="update">Показать</button>
+            </div>
+        </div>
+
+        <form id="bundles_form" METHOD="GET" action="{% url 'select_path' %}">
+
+            <input type="hidden" name="source_id" value="{{ source_bundle.pk }}">
+            <input type="hidden" name="target_id" value="{{ target_bundle.pk }}">
+
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <label>Построение пути от source до target</label>
+                    <table class="table">
+                        <tr>
+                            <th class="active">Source</th>
+
+                            <td>
+                                <div class="color-marker color-bundle"></div>
+                                <b><a href="{% url 'bundle' source_bundle.pk %}">{{ source_bundle.name }}</a></b>
+                            </td>
+                            <td class="text-muted">{{ source_bundle.description }}</td>
+                            <td>
+                                <a href="{% url 'device' source_bundle.device.pk %}">{{ source_bundle.device.netname }}</a>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th class="active">Target</th>
+
+                            <td>
+                                <div class="color-marker color-bundle"></div>
+                                <b><a href="{% url 'bundle' target_bundle.pk %}">{{ target_bundle.name }}</a></b>
+                            </td>
+                            <td class="text-muted">{{ target_bundle.description }}</td>
+                            <td>
+                                <a href="{% url 'device' target_bundle.device.pk %}">{{ target_bundle.device.netname }}</a>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Vlan ID</th>
+                            <td colspan="3">{{ vlan_id| default:'' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Vlan Name</th>
+                            <td colspan="3">{{ vlan_name| default:'' }}</td>
+                        </tr>
+                    </table>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <div class="form-group">
+                        <label>Vlan ID</label>
+                        <input type="text" name="vlan_id" class="form-control"
+                               placeholder="Vlan ID"
+                               value="{{ vlan_id|default:'' }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Vlan Name</label>
+                        <input type="text" name="vlan_name" class="form-control"
+                               placeholder="Vlan name"
+                               value="{{ vlan_name|default:'' }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Исключить девайсы из пути</label>
+                        <input type="text" name="exclude_netnames" class="form-control"
+                               placeholder="Исключаемые нетнеймы, через пробел"
+                               value="{{ exclude_netnames|join:' ' }}">
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Выбор пути</label>
+                        <select name="requested_path" size="6" class="form-control" style="font-size: 20px;">
+                            {% for suggested_path in suggested_paths.paths %}
+                                <option value="{{ suggested_path|join:' ' }}" {% if requested_path == suggested_path %}selected{% endif %}>
+                                    {{ suggested_path|join:' — ' }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="text-danger">Применить грязный хак</label>
+                        <input type="text" class="form-control" name="forced_path" placeholder="Нетнеймы через пробел" value="{{ forced_path|join:' ' }}">
+                        <div class="help-block">Если по каким-то причинам нужен не кратчайший путь, грязный хак спасет</div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+        {% if full_path and requested_path in suggested_paths.paths %}
+        <h3>Computed path</h3>
+
+        <div class="well well-sm form-inline text-right">
+
+            <div class="form-group">
+                <label>Vlan ID</label>
+                <input class="form-control" id="id_vlan_id" placeholder="%TAG%" value="{{ vlan_id|default:'' }}">
+            </div>
+            <div class="form-group">
+                <label>Vlan Name</label>
+                <input class="form-control" id="id_vlan_name" placeholder="%NAME%" value="{{ vlan_name|default:'' }}">
+            </div>
+
+            <button id="apply_button" class="btn btn-success">Подставить в команды</button>
+        </div>
+
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Device</th>
+                <th>Commands</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for device in full_path.computed_path %}
+                <tr>
+                    <td>
+                        <b>{{ device.device }}</b><br>
+                        <div class="text-muted">{{ device.vendor|title }}</div>
+                    </td>
+
+                    <td class="cli">
+
+                        {% if device.type == 'switch' %}
+
+                            {% if device.vendor == 'juniper' %}
+                                set vlan <span class="vlan_name">{% if vlan_name %}{{ vlan_name }}{% else %}%NAME%{% endif %}</span>
+                                vlan-id <span class="vlan_id">{% if vlan_id %}{{ vlan_id }}{% else %}%TAG%{% endif %}</span><br>
+                                {% for port in device.ports %}
+                                    set interfaces {{ port }} unit 0 family ethernet-switching vlan
+                                    members <span class="vlan_name">{% if vlan_name %}{{ vlan_name }}{% else %}%NAME%{% endif %}</span><br>
+                                {% endfor %}
+                                </td>
+
+                            {% elif device.vendor == 'extreme' %}
+                                create vlan <span class="vlan_name">{% if vlan_name %}{{ vlan_name }}{% else %}%NAME%{% endif %}</span> tag
+                                <span class="vlan_id">{% if vlan_id %}{{ vlan_id }}{% else %}%TAG%{% endif %}</span><br>
+                                configure vlan <span class="vlan_name">{% if vlan_name %}{{ vlan_name }}{% else %}%NAME%{% endif %}</span> add ports
+                                {{ device.ports|join:' ' }} tagged
+                            {% endif %}
+
+                        {% elif device.type == 'router' %}
+                            op ccc-setup remote-address {{ device.ccc_params.remote_address }}
+                            vlan-id <span class="vlan_id">{% if vlan_id %}{{ vlan_id }}{% else %}%TAG%{% endif %}</span>
+                            interface {{ device.ccc_params.interface }}
+                            description <span class="vlan_name">{% if vlan_name %}{{ vlan_name }}{% else %}%NAME%{% endif %}</span>
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="row">
+
+            <div class="col-md-12">
+                <h3>Завести услугу</h3>
+
+                <form method="POST">
+                {% csrf_token %}
+                <div class="form-group {% if service_form.client.errors %}has-error{% endif %}">
+                    <label class="control-label">Клиент</label>
+                    {{ service_form.client }}
+                    {{ service_form.client.errors }}
+                </div>
+
+                <div class="form-group {% if service_form.service_type.errors %}has-error{% endif %}">
+                    <label class="control-label">Тип</label>
+                    {{ service_form.service_type }}
+                    {{ service_form.service_type.errors }}
+                </div>
+
+                <div class="form-group {% if service_form.cities.errors %}has-error{% endif %}">
+                    <label class="control-label">Города предоставления</label>
+                    {{ service_form.cities.errors }}
+                    {{ service_form.cities }}
+                </div>
+
+                <div class="form-group {% if service_form.rt.errors %}has-error{% endif %}">
+                    <label class="control-label">RT#</label>
+                    {{ service_form.rt }}
+                    {{ service_form.rt.errors }}
+                </div>
+
+                <div class="form-group {% if service_form.description.errors %}has-error{% endif %}">
+                    <label class="control-label">Описание</label>
+                    {{ service_form.description.errors }}
+                    {{ service_form.description }}
+                </div>
+
+                <div class="form-group {% if service_form.comment.errors %}has-error{% endif %}">
+                    <label class="control-label">Комментарий</label>
+                    {{ service_form.comment }}
+                    {{ service_form.comment.errors }}
+                </div>
+                
+                <div class="form-group {% if service_form.vlan.errors %}has-error{% endif %}">
+                    <label class="control-label">Vlan</label>
+                    {{ service_form.vlan.errors }}
+                    {{ service_form.vlan }}
+                </div>
+                
+
+                <div class="form-group {% if service_form.vlan_id.errors %}has-error{% endif %}">
+                    <label class="control-label">Vlan ID</label>
+                    {{ service_form.vlan_id }}
+                    {{ service_form.vlan_id.errors }}
+                </div>
+
+                <div class="form-group {% if service_form.vlan_name.errors %}has-error{% endif %}">
+                    <label class="control-label">Vlan Name</label>
+                    {{ service_form.vlan_name }}
+                    {{ service_form.vlan_name.errors }}
+                </div>
+
+                <button class="btn btn-primary form-control">Создать услугу</button>
+
+                <script>
+                    $('#id_client').select2();
+                    $('#id_cities').select2();
+                    $('#id_vlan').select2();
+                </script>
+
+                </form>
+
+            </div>
+
+    </div>
+{% else %}
+    <div class="help-block text-center">Выберите один из предложенных путей</div>
+{% endif %}
+
+    </div>
+
+    <script>
+        $('#apply_button').click(function () {
+            var vlan_id = $('#id_vlan_id').val();
+            var vlan_name = $('#id_vlan_name').val();
+
+            if (vlan_id && vlan_name) {
+
+                $('span.vlan_id').each(function (i, el) {
+                    $(el).html(vlan_id);
+                });
+
+                $('span.vlan_name').each(function (i, el) {
+                    $(el).html(vlan_name);
+                });
+            } else {
+                alert('Укажите Vlan ID и Vlan Name');
+            }
+        });
+    </script>
+
+{% endblock %}

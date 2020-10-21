@@ -1,0 +1,47 @@
+{% load hostel_filters %}
+<table class="table">
+    <thead>
+    <tr>
+        <th>Услуга</th>
+        <th>Клиент</th>
+        <th>Описание</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    {% for service in incident.services.all|dictsort:'client.netname' %}
+        <tr>
+            <td>
+                <div class="color-marker color-service"></div>
+                <b><a href="{% url 'service' service.pk %}" class="{{ service|service_text_class }}">{{ service }}</a></b>
+            </td>
+            <td>
+                <div class="color-marker color-client"></div>
+                <b>{{ service.client.netname }}</b>
+            </td>
+            <td>
+                <small class="text-muted">{{ service.description|default:'—'|truncatechars:50 }}</small>
+            </td>
+            <td>
+                {% if not service.client.email %}
+                    <span class="glyphicon glyphicon-warning-sign text-warning" title="Отсутствует email"></span>
+                {% endif %}
+            </td>
+            <td class="text-right">
+                {% if perms.ins.change_incident %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="service_id" value="{{ service.pk }}">
+                        <button class="btn btn-xs btn-default" name="action" value="delete_service">
+                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                        </button>
+                    </form>
+                {% endif %}
+            </td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td class="text-center text-muted" colspan="5">Пусто</td>
+        </tr>
+    {% endfor %}
+</table>

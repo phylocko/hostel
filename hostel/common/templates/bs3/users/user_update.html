@@ -1,0 +1,33 @@
+{% extends 'bs3/base.html' %}
+{% block title %}{{ manager }}{% endblock %}
+{% block content %}
+    {% load static %}
+
+    {% include 'bs3/users/tabs.html' %}
+
+
+    <div class="container">
+        <br>
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>{{ manager }}</h4>
+            </div>
+            <div class="col-md-4 text-right">
+                <a class="btn btn-default" href="{% url 'user' user.pk %}">Отмена</a>
+                <button type="submit" form="user_form" class="btn btn-primary">Сохранить</button>
+            </div>
+        </div>
+
+        <form id="user_form" METHOD="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% include 'bs3/users/user_form.html' %}
+
+        </form>
+
+    </div>
+
+    {% include 'bs3/spy/object_log.html' %}
+
+{% endblock %}

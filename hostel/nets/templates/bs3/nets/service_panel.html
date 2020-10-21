@@ -1,0 +1,36 @@
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Услуга и клиент</h3>
+                        </div>
+                        <div class="panel-body">
+
+
+                            {% if service %}
+                            <h4>Услуга</h4>
+                            <div class="well well-sm">&nbsp;
+                                <a href="../common/?page=service&id={{ service.pk }}">
+                                    {{ net.service.name|title }}
+                                </a>
+                            </div>
+                            {% endif %}
+
+                            {% if service.client %}
+                            <h4>Клиент</h4>
+                            <div class="well well-sm">
+                                <a href="../clients/?page=client&mode=view&id={{ service.client.pk }}">
+                                {{ service.client.clientname }}
+                                </a>
+                            </div>
+                            {% endif %}
+
+                            {% if service.vlan %}
+                            <h4>Vlan</h4>
+                            <div class="well well-sm">
+                                <a href="../vlans/?page=vlan&action=view&id={{ service.vlan.pk }}">
+                                <b>{{ service.vlan.vlannum }}</b> {{ service.vlan.vname }}</a>
+                            </div>
+                            {% endif %}
+
+                        </div>
+                    </div>

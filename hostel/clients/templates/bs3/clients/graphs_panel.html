@@ -1,0 +1,44 @@
+<style>
+    .mrtg_graph {
+        width: 50%;max-height: 155px;
+    }
+</style>
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h3 class="panel-title">Графики <span id="graphs_table_trigger" class="pull-right">
+            <span class="glyphicon glyphicon-list" aria-hidden="true">
+        </span></h3>
+    </div>
+
+    <div id="graphs_table_container">
+        <table class="table">
+        {% for bundle in bundles %}
+        {% for port in bundle.traffic_ports %}
+        <tr>
+            <td colspan="8">
+                <b>{{ bundle.device }}</b> — {{ port.name }} <span class="text-muted">{{ port.description }}</span><br>
+
+                <a href="{{ bundle.mrtg_url }}.html">
+                    <img class="mrtg_graph" alt="{{ port.name }}" src="{{ bundle.mrtg_url }}-day.png">
+                    <img class="mrtg_graph pull-right" src="{{ bundle.mrtg_url }}-week.png">
+                </a>
+
+            </td>
+        </tr>
+        {% endfor %}
+        {% empty %}
+        <tr>
+            <td colspan="8" class="text-muted text-center">Портов не обнаружено</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+    </div>
+</div>
+
+<script>
+    $('#graphs_table_trigger').click(function(){
+        $('#graphs_table_container').slideToggle();
+    })
+</script>

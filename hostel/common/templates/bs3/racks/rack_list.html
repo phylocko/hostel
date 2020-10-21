@@ -1,0 +1,41 @@
+{% extends 'bs3/base.html' %}
+{% block title %}{{ rack }}{% endblock %}
+{% block content %}
+
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li class="active">Стойки</li>
+        </ol>
+
+        <div class="row">
+            <div class="col-md-12 text-right">
+                <a href="{% url 'create_rack' %}" class="btn btn-primary">Создать</a>
+            </div>
+        </div>
+
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Расположение</th>
+                <th>Площадка</th>
+                <th class="text-center">Девайсы</th>
+                <th class="text-center">Высота</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for rack in racks %}
+                <tr>
+                    <td><a href="{% url 'rack' rack.pk %}">{{ rack.location }}</a></td>
+                    <td>{{ rack.datacenter }}</td>
+                    <th class="text-center active">{{ rack.device_count }}</th>
+                    <th class="text-center">{{ rack.height }}U</th>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+{% endblock %}

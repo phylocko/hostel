@@ -1,0 +1,20 @@
+<tr>
+    <td class="hidden-xs hidden-sm hidden-md text-muted">{{ bundle.pk }}</td>
+    <td class="active">
+        <div class="color-marker color-bundle"></div>
+        <a href="{% url 'bundle' bundle.pk %}"><b>{{ bundle.name }}</b></a></td>
+    <td><a href="{% url 'device' bundle.device.pk %}"><div class="color-marker color-device"></div> {{ bundle.device.netname }}</td>
+    <td>{{ bundle.description|default:'' }}</td>
+    <td class="hidden-xs">
+        {% if bundle.remote_device %}
+            <div class="color-marker color-device"></div>
+            <a href="{% url 'device' bundle.remote_device.pk %}">{{ bundle.remote_device }}</a>
+        {% endif %}
+    </td>
+    <td class="hidden-xs hidden-sm text-muted">
+        <small>{{ bundle.created|date:'Y-m-d H:i' }}</small>
+    </td>
+    <td class="hidden-xs hidden-sm">
+        <small>{{ bundle.updated|date:'Y-m-d H:i' }}</small>
+    </td>
+</tr>

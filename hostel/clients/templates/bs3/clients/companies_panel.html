@@ -1,0 +1,15 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Компании</h3>
+    </div>
+    <ul class="list-group">
+        {% for company in client.companies.all %}
+            <li class="list-group-item">
+                <div class="color-marker color-company"></div>
+                <a href="{% url 'company' company.pk %}"><b>{{ company }}</b></a>
+            </li>
+        {% empty %}
+            <li class="list-group-item text-center text-muted">Компаний нет</li>
+        {% endfor %}
+    </ul>
+</div>

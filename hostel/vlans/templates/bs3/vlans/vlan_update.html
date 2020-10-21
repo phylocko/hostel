@@ -1,0 +1,51 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Vlan {{ vlan }}{% endblock %}
+{% block content %}
+
+    {% include 'bs3/vlans/vlans_tabs.html' %}
+
+
+    <div class="container">
+        <br>
+        {% include 'bs3/vlans/broadcrumbs_vlan.html' %}
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>{{ vlan }}</h4>
+            </div>
+            <div class="col-md-4 text-right">
+                <a class="btn btn-default" href="{% url 'vlans' %}{{ vlan.pk }}">Отмена</a>
+                <button type="submit" form="vlanData" class="btn btn-primary">Сохранить</button>
+            </div>
+
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-4">
+            </div>
+
+            <div class="col-md-4">
+                <form id="vlanData" METHOD="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" placeholder="vlan_id" value="{{ vlan.pk }}">
+                    {% include 'bs3/vlans/vlan_form.html' %}
+                </form>
+
+                {% with vlan as object %}
+                    {% include 'bs3/common/created_updated.html' %}
+                {% endwith %}
+            </div>
+
+            <div class="col-md-4">
+            </div>
+
+        </div>
+    </div>
+
+    {% include 'bs3/spy/object_log.html' %}
+
+{% endblock %}

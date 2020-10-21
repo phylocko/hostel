@@ -1,0 +1,128 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Path Finder: Select bundles{% endblock %}
+{% block content %}
+
+    <div class="container">
+        &nbsp;
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li class="active">Path finder: Выбор бандлов</li>
+        </ol>
+        <br>
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+
+                <h4>Выбор бандлов</h4>
+            </div>
+            <div class="col-md-4 text-right">
+                <button type="submit" form="bundles_form" class="btn btn-default">Проверить бандлы</button>
+                {% if source_bundle and target_bundle %}
+                <button type="submit" form="checked_form" class="btn btn-primary">Продолжить</button>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Колонка с общими данными клиента -->
+        <div class="row">
+
+            <div class="col-md-3">
+            </div>
+
+            <div class="col-md-6">
+
+                <!-- Данные клиента -->
+                <form id="bundles_form" METHOD="GET" action="{% url 'select_bundles' %}">
+                    <h3>Точки включения</h3>
+
+                    <div class="form-group has-feedback {% if source and not source_bundle %}has-error{% elif source_bundle %}has-success{% endif %}">
+                        <label class="control-label">Source</label>
+                        <input type="text" name="source" class="form-control" placeholder="1073 или 'mr-sw0 19'" value="{{ source|default:'' }}">
+                        {% if source_bundle %}<span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true"></span>{% endif %}
+                        {% if source and not source_bundle %}<div class="help-block">Бандл не найден</div>{% endif %}
+                    </div>
+
+
+                    <div class="form-group has-feedback {% if target and not target_bundle %}has-error{% elif target_bundle %}has-success{% endif %}">
+                        <label class="control-label">Target</label>
+                        <input type="text" name="target" class="form-control" placeholder="1073 или 'mr-sw0 19'" value="{{ target|default:'' }}">
+                        {% if target_bundle %}<span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true"></span>{% endif %}
+                        {% if target and not target_bundle %}<div class="help-block">Бандл не найден</div>{% endif %}
+                    </div>
+
+                </form>
+
+                <br>
+
+                <h3>Найденные бандлы</h3>
+                {% if source_bundle or target_bundle %}
+
+                    <label>Построение пути от source до target</label>
+                    <table class="table">
+
+                        {% if source_bundle %}
+                        <tr>
+                            <th class="active">Source</th>
+
+                            <td>
+                                <div class="color-marker color-bundle"></div>
+                                <b><a href="{% url 'bundle' source_bundle.pk %}">{{ source_bundle.name }}</a></b>
+                            </td>
+                            <td class="text-muted">{{ source_bundle.description }}</td>
+                            <td>
+                                <a href="{% url 'device' source_bundle.device.pk %}">{{ source_bundle.device.netname }}</a>
+                            </td>
+                        </tr>
+
+                        {% endif %}
+
+                        {% if target_bundle %}
+                        <tr>
+                            <th class="active">Target</th>
+
+                            <td>
+                                <div class="color-marker color-bundle"></div>
+                                <b><a href="{% url 'bundle' target_bundle.pk %}">{{ target_bundle.name }}</a></b>
+                            </td>
+                            <td class="text-muted">{{ target_bundle.description }}</td>
+                            <td>
+                                <a href="{% url 'device' target_bundle.device.pk %}">{{ target_bundle.device.netname }}</a>
+                            </td>
+                        </tr>
+
+                        {% endif %}
+
+                    </table>
+
+                {% endif %}
+
+                {% if source_bundle and target_bundle %}
+                <form id="checked_form" METHOD="GET" action="{% url 'select_path' %}">
+
+                    <input type="hidden" name="source_id" value="{{ source_bundle.pk }}">
+                    <input type="hidden" name="target_id" value="{{ target_bundle.pk }}">
+
+                    <div class="form-group">
+                        <label>Vlan ID</label>
+                        <input type="text" name="vlan_id" class="form-control" placeholder="Vlan ID" value="{{ vlan_id }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Vlan Name</label>
+                        <input type="text" name="vlan_name" class="form-control" placeholder="Vlan Name" value="{{ vlan_name }}">
+                    </div>
+
+                </form>
+                {% else %}
+                    <div class="text-muted text-center">Укажите точки включения</div>
+                {% endif %}
+
+            </div>
+
+            <div class="col-md-3">
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

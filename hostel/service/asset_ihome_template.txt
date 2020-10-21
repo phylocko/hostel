@@ -1,0 +1,9 @@
+password: _iHome_233
+as-set: AS-IHOME
+descr:          iHome LLC AS-Macro
+members:        AS25478
+{clients}
+tech-c:         IHOM-RIPE
+admin-c:        IHOM-RIPE
+mnt-by:         IHOME-MNT
+source:         RIPE

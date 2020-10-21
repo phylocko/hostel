@@ -1,0 +1,9 @@
+<ul class="nav navbar-nav">
+    <li {% if app == "devices" %} class="active" {% endif %}><a href="{% url 'devices' %}"><div class="color-marker color-device"></div>dev</a></li>
+    <li {% if app == "bundles" %} class="active" {% endif %}><a href="{% url 'bundles' %}"><div class="color-marker color-bundle"></div>bdl</a></li>
+    <li {% if app == "vlans" %} class="active" {% endif %}><a href="{% url 'vlans' %}"><div class="color-marker color-vlan"></div>vlan</a></li>
+    <li {% if app == "lease" %} class="active" {% endif %}><a href="{% url 'leases' %}"><div class="color-marker color-lease"></div>lease</a></li>
+    <li {% if app == "datacenter" %} class="active" {% endif %}><a href="{% url 'datacenters' %}"><div class="color-marker color-datacenter"></div>dc</a></li>
+    <li {% if app == "clients" %} class="active" {% endif %}><a href="{% url 'clients' %}"><div class="color-marker color-client"></div>client</a></li>
+    <li {% if app == "docs" %} class="active" {% endif %}><a href="{% url 'agreements' %}"><div class="color-marker color-agreement"></div>doc</a></li>
+</ul>

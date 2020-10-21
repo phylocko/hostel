@@ -1,0 +1,95 @@
+<div class="tab-pane active" id="settings">
+
+    <div class="well well-sm">
+        <form method="get" class="form-inline">
+
+            <div class="form-group ">
+                <label class="control-label">Дата начала</label><br>
+                <div class="input-group" id="start_date_group">
+                    {{ form.start_date }}
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+
+            <div class="form-group ">
+                <label class="control-label">Дата окончания</label><br>
+                <div class="input-group" id="end_date_group">
+                    {{ form.end_date }}
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+
+            <div class="form-group pull-right">
+                <label class="control-label">&nbsp;</label><br>
+                <button class="btn btn-success"
+                        type="submit"
+                        name="action"
+                        value="calculate">
+                    Посчитать
+                </button>
+            </div>
+
+
+        </form>
+    </div>
+
+    {% if calculation %}
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Подсчет</h3>
+                    </div>
+
+                    <table class="table">
+                        <tr>
+                            <th>Порт</th>
+                            <th class="text-center">Трафик</th>
+                            <th class="text-center">Берст</th>
+                            <th class="text-center">Стоимость</th>
+                            <th class="text-center">Стоимость с НДС</th>
+                            <th class="text-center">Направление</th>
+                        </tr>
+
+                        {% if calculation %}
+                            <tr>
+                                <td>Все порты</td>
+                                <td class="text-center">{{ calculation.traffic }}</td>
+                                <td class="text-center">{{ calculation.burst_traffic }}</td>
+                                <td class="text-center">{{ calculation.burst_cost }}</td>
+                                <td class="text-center">{{ calculation.burst_cost_taxed }}</td>
+                                <td class="text-center">{{ calculation.direction|upper }}</td>
+                            </tr>
+                        {% endif %}
+
+                        <tr>
+                            <th>Порт</th>
+                            <th class="text-center">Входящий</th>
+                            <th class="text-center">Исходящий</th>
+                            <th colspan="3" class="active"></th>
+                        </tr>
+
+                        {% for data in separated_calculation %}
+                            <tr>
+                                <td>{{ data.port }}</td>
+                                <td class="text-center">{{ data.total_in }}</td>
+                                <td class="text-center">{{ data.total_out }}</td>
+                                <td class="active" colspan="3"></td>
+                            </tr>
+                        {% endfor %}
+
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+    {% endif %}
+
+</div>
+
+<script>
+    $('#start_date_group').datetimepicker({format: 'YYYY-MM-DD'});
+    $('#end_date_group').datetimepicker({format: 'YYYY-MM-DD'});
+</script>

@@ -1,0 +1,46 @@
+{% extends 'bs3/base.html' %}
+{% block title %}*Создание услуги{% endblock %}
+{% block content %}
+
+
+<div class="container">
+
+    <ol class="breadcrumb">
+        <li><a href="{% url 'clients' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+        <li><a href="{% url 'client' client.pk %}">{{ client }}</a></li>
+        <li class="active">Создать услугу</li>
+    </ol>
+
+
+    <!-- Заголовок, кнопка редактирования -->
+    <div class="row" style="margin-bottom: 16px;">
+        <div class="col-md-8">
+            <h4>
+                <div class="color-marker color-service"></div>
+                Создать услугу
+            </h4>
+        </div>
+        <div class="col-md-4 text-right">
+            <button type="submit" form="client_data" class="btn btn-primary">Создать</button>
+            <a href="{% url 'client' client.pk %}" class="btn btn-default">Отмена</a>
+        </div>
+    </div>
+
+
+    <form id="client_data" METHOD="POST">
+        {% csrf_token %}
+
+        <div class="row">
+
+            <div class="col-md-3"></div>
+
+            <div class="col-md-6">
+                {% include 'bs3/services/service_form.html' %}
+            </div>
+
+            <div class="col-md-3"></div>
+
+        </div>
+    </form>
+
+    {% endblock %}

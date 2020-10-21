@@ -1,0 +1,59 @@
+{% load hostel_filters %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Адреса [{{ service.net.all.count }}]
+            <span id="nets_table_trigger" class="pull-right">
+                <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+            </span>
+        </h3>
+    </div>
+
+        <table class="table table-hover" id="nets_table">
+            {% for net in service.net.all %}
+                <tr>
+                    <td>
+                        <div class="color-marker color-net"></div>
+                        <b><a {% if net.status == '-' %}class="text-danger"{% endif %} href="
+                                {% url 'nets' %}{{ net.pk }}">{{ net.network }}</a></b>
+                    </td>
+                    <td>{{ net.city|default:'—' }}</td>
+                    <td>{{ net.rt|ticket }}</td>
+                    <td>{% if net.status == '+' %}<span class="glyphicon glyphicon-ok text-success"></span>{% else %}{% endif %}</td>
+
+                    <td class="text-right">
+                        {% if perms.common.change_service %}
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="net_id" value="{{ net.pk }}">
+                                <button class="btn btn-xs btn-default" name="action" value="release_net">
+                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                </button>
+                            </form>
+                        {% endif %}
+                    </td>
+
+                </tr>
+            {% empty %}
+                <tr>
+                    <td class="text-center text-muted">Пусто</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        {% if perms.common.change_service %}
+            <div class="panel-footer text-right">
+                <a class="btn btn-sm btn-default"
+                   href="{% url 'nets' %}create-for-service/?service_id={{ service.pk }}">Создать</a>
+                <a class="btn btn-sm btn-default" href="{% url 'nets' %}assign-to-service/?service={{ service.pk }}">Выбрать</a>
+            </div>
+        {% endif %}
+
+</div>
+<script>
+    {% if service.net.all.count > 5 %}$('#nets_table_container').slideToggle();{% endif %}
+    $('#nets_table_trigger').click(function () {
+        $('#nets_table').fadeToggle();
+    })
+
+
+</script>

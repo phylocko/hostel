@@ -1,0 +1,38 @@
+{% load hostel_filters %}
+
+<tr>
+
+    <td class="hidden-md hidden-sm hidden-xs text-muted">{{ client.pk }}</td>
+
+    <td class="active">
+        <div class="color-marker color-client"></div>
+        <b>
+        <a class="{% if client.enabled %}text-success{% else %}text-danger{% endif %}"
+           href="{% url 'client' client.pk %}">{{ client.netname }}</a>
+        </b>
+
+    </td>
+
+    <td class="hidden-md hidden-sm hidden-xs">{{ client.ticket|ticket }}</td>
+
+
+    <td>
+        {{ client.city|default:"" }}
+    </td>
+
+    <td>
+        {% if client.manager %}
+            <a href="{% url 'employee' client.manager.pk %}">{{ client.manager }}</a>
+        {% endif %}
+    </td>
+
+    <td class="hidden-xs"><a name="client_{{ client.pk }}" href="{% url 'client' client.pk %}">
+        {{ client.clientname|truncatewords:6 }}</a>
+    </td>
+
+    <td class="hidden-md hidden-sm hidden-xs text-muted">
+        <div style="width: 100%; overflow: hidden; height: 20px;">{{ client.comment|default:""|truncatewords:10 }}</div>
+    </td>
+
+
+</tr>

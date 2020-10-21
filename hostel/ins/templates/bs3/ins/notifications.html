@@ -1,0 +1,150 @@
+{% if perms.ins.add_notification %}
+    {% if incident.clients.all or incident.services.all or incident.subservices.all %}
+        <form method="POST">
+            {% csrf_token %}
+            <div class="panel panel-default">
+
+                <div class="panel-heading"><h3 class="panel-title">Добавить оповещение</h3></div>
+                <div class="panel-body">
+
+                    <div class="form-group {% if notification_form.text.errors %}has-error{% endif %}">
+                        <label class="control-label">Сообщение</label>
+                        {% for error in notification_form.text.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}<br>
+                        {{ notification_form.text }}
+                    </div>
+
+                </div>
+
+                <div class="panel-footer text-right">
+
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Шаблоны <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+
+                            <li><a><b>Авария:</b></a></li>
+                            <li><a onclick="failure_ru()">Началась</a></li>
+                            <li><a onclick="failure_finished_ru()">Закончилась</a></li>
+
+                            <li role="separator" class="divider"></li>
+
+                            <li><a><b>Работы:</b></a></li>
+                            <li><a onclick="maintennance_ru()">Запланированы</a></li>
+                            <li><a onclick="maintennance_en()">Zaplanirovany</a></li>
+                            <li><a onclick="maintennance_off_ru()">Завершены</a></li>
+                            <li><a onclick="maintennance_cancelled_ru()">Отменены</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a onclick="clear_text()"><span class="glyphicon glyphicon-erase" aria-hidden="true"></span> Очистить текст</a></li>
+
+                        </ul>
+                    </div>
+
+                    <button name="action" value="add_notification" type="submit" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-envelope"></span> Отправить письма
+                    </button>
+
+                </div>
+
+            </div>
+        </form>
+
+        <script>
+            function clear_text() {
+                $('#id_text').val('Уважаемые клиенты!\n\n')
+                $('#id_text').focus()
+            }
+
+            function maintennance_en() {
+
+                var txt = "Dear peers,\n\n" +
+                    "Please be informed about a scheduled maintenance in the network of our partner with the following details:\n\n" +
+                    "Start time: {{ incident.time_start|date:'Y-m-d H:i' }} (GMT+4)\n" +
+                    "End time: {{ incident.time_end|date:'Y-m-d H:i' }} \n\n" +
+                    "Expected downtime should not exceed 5 hours in the mentioned time interval.\n" +
+                    "Apologies for any inconvenience caused." +
+                    "Our ticket regarding this maintenance is #{{ incident.rt }}."
+                $('#id_text').val(txt)
+            }
+
+            function failure_ru() {
+                var txt = "Уважаемые клиенты!\n\n" +
+                    "Оповещаем вас об аварии на сети канального оператора.\n" +
+                    "Время аварии: {{ incident.time_start|date:'Y-m-d H:i' }} (МСК)\n" +
+                    "О сроках восстановления сообщим по мере поступления информации."
+
+                $('#id_text').val(txt)
+            }
+
+            function failure_finished_ru() {
+                var txt = "Уважаемые клиенты!\n\n" +
+                    "Оповещаем вас об устранении аварии\n" +
+                    "Время устранения: {{ incident.time_end|date:'Y-m-d H:i' }} (МСК)\n" +
+                    "Просим подтвердить восстановление сервисов."
+
+                $('#id_text').val(txt)
+            }
+
+            function maintennance_ru() {
+                var txt = "Уважаемые клиенты!\n\n" +
+                    "Оповещаем о планово-профилактических работах подрядчика.\n" +
+                    "Ожидается перерыв сервиса по следующим услугам:\n\n" +
+                    "%services%\n\n" +
+                    "Время начала: {{ incident.time_start|date:'Y-m-d H:i' }} (МСК)\n" +
+                    "Окончание:    {{ incident.time_end|date:'Y-m-d H:i' }} \n\n" +
+                    "Приносим извинения за неудобства в работе."
+
+                $('#id_text').val(txt)
+            }
+
+            function maintennance_off_ru() {
+                var txt = "Уважаемые клиенты!\n\n" +
+                    "Оповещаем о завершении планово-профилактических работ.\n" +
+                    "Просим подтвердить восстановление связи.\n\n" +
+                    "Заранее спасибо!"
+
+                $('#id_text').val(txt)
+            }
+
+            function maintennance_cancelled_ru() {
+                var txt = "Уважаемые клиенты!\n" +
+                    "Данные работы были отменены.\n\n" +
+                    "Приносим извинения за неудобства в работе.\n";
+
+                $('#id_text').val(txt)
+            }
+
+        </script>
+    {% else %}
+        <div class="alert alert-warning">Не выбраны клиенты или услуги.</div>
+    {% endif %}
+{% else %}
+    <div class="alert alert-warning">Вы не можете отправлять оповещения</div>
+{% endif %}
+
+
+{% for notification in notifications.all %}
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {{ notification.subject }}
+            </h3>
+        </div>
+        <div class="panel-body">
+            {{ notification.text|linebreaks }}
+
+        </div>
+        <div class="panel-footer text-muted">
+            <small class="pull-right text-muted">{{ notification.date_added|date:'Y-m-d H:i:s' }}
+                by {{ notification.who_added.nickname }}
+            </small>
+
+            <small>
+                <a href="{% url 'notification' incident.pk notification.pk %}">Адресатов: {{ notification.notificationmessage_set.count }}</a>
+            </small>
+        </div>
+    </div>
+{% endfor %}

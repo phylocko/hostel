@@ -1,0 +1,35 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Клиент</th>
+        <th>Email</th>
+        <th></th>
+    </tr>
+    </thead>
+    {% for client in incident.clients.all %}
+        <tr>
+            <td>
+                <div class="color-marker color-client"></div>
+                <b>{{ client.netname }}</b>
+            </td>
+            <td>{{ client.email|default:'—'|truncatechars:70 }}</td>
+            <td class="text-right text-danger">
+                {% if perms.ins.change_incident %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{ client.pk }}" name="client_id">
+                        <button type="submit" name="action" value="delete_client"
+                                class="btn btn-default btn-xs">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </form>
+                {% endif %}
+
+            </td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td colspan="3" class="text-muted text-center">Пусто</td>
+        </tr>
+    {% endfor %}
+</table>

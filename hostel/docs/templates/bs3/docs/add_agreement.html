@@ -1,0 +1,52 @@
+{% extends 'bs3/base.html' %}
+{% block title %}*Создать договор{% endblock %}
+{% block content %}
+
+{% include 'bs3/docs/docs_tabs.html' %}
+
+<div class="container">
+
+
+    <br>
+
+    <ol class="breadcrumb">
+        <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+        <li><a href="{% url 'agreements' %}">Документы</a></li>
+        <li class="active">Создание нового договора</li>
+    </ol>
+
+
+    <!-- Заголовок, кнопка редактирования -->
+    <div class="row" style="margin-bottom: 16px;">
+        <div class="col-md-8">
+	        <h4>
+                <div class="color-marker color-agreement"></div>
+                Создание нового договора
+            </h4>
+        </div>
+        <div class="col-md-4 text-right">
+            <button type="submit" id="submit_button" form="agreement_data" class="btn btn-primary pull-right">Создать договор</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2">
+        </div>
+
+        <div class="col-md-8">
+
+
+            <form id="agreement_data" METHOD="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% include 'bs3/docs/agreement_form.html' %}
+            </form>
+
+        </div>
+
+        <div class="col-md-2">
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

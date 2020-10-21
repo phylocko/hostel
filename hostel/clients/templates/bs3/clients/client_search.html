@@ -1,0 +1,42 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Клиенты{% endblock %}
+{% block content %}
+
+    {% include 'bs3/clients/tabs.html' %}
+
+    <div class="container-fluid text-center">
+        <br>
+        <form method="GET" class="form-inline">
+            <div class="form-group">
+                <input type="text" name="search" id="page_search" autocomplete="off"
+                       value="{{ search_string|default:"" }}" class="form-control"
+                       placeholder="Поиск по клиентам">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary form-control">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                </button>
+            </div>
+        </form>
+        <script>
+            $('#page_search').focus();
+        </script>
+
+        {#        <b>Найдено {{ clients.count }} клиентов</b>#}
+    </div>
+
+    {% if clients %}
+        <table class="table table-hover">
+            {% include 'bs3/clients/clientsTableHeader.html' %}
+            <tbody>
+            {% for client in clients %}
+                {% include 'bs3/clients/clientsTableRow.html' %}
+            {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center"><b>Пусто</b></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

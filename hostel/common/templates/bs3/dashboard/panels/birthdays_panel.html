@@ -1,0 +1,76 @@
+{% load static %}
+{% if upcoming_birthdays or birthday_today %}
+
+
+    <style>
+        .today_birthday {
+            background: linear-gradient(#808080, #B2B2B2);
+            text-align: center;
+            padding: 10px;
+            padding-bottom: 20px;
+            color: #ebebeb;
+        }
+        .today_birthday b {
+            font-size: 20px;
+            color: #FFFFFF;
+        }
+    </style>
+    <div class="panel panel-default birthday_panel">
+
+        <div class="panel-heading"><h3 class="panel-title">Дни Рождения 🎂</h3></div>
+
+        {% if birthday_today %}
+
+                {% for manager in birthday_today %}
+                <div class="today_birthday">
+                <span>{{ manager.birthday|date:"d M" }}</span>
+                <br>
+                {% if manager.avatar_filename %}
+                <img class="img-circle" style="height: 60px;" src="{% static '/user_photos/' %}{{ manager.avatar_filename }}">
+                {% else %}
+                <img class="img-circle" style="height: 60px;" src="{% static '/i/' %}no-photo.jpg">
+                {% endif %}
+                <br>
+                {% if manager.gender == 'female' %}
+                    <b>🌸</b>
+                    {% else %}
+                    <b>🍕</b>
+                    {% endif %}
+                <b>{{ manager.firstname }} {{ manager.lastname }}</b>
+                <br>
+                {% if manager.position %}
+                    <span>Лучший {{ manager.position|lower }} <br>и&nbsp;просто хороший&nbsp;человек.</span>
+                {% else %}
+                    <span>Наверняка хороший&nbsp;человек, <br>хоть его должность нам и неизвестна.</span>
+                {% endif %}
+
+                {% if manager.nickname == 'danil' %}
+                    Улыбок тебе, дед Мокар!
+                {% endif %}
+
+                {% if not manager.avatar_filename %}
+                    {% if manager.gender == 'female' %}
+                        <p>Желаем ей загрузить аватарку в Hostel!</p>
+                    {% else %}
+                        <p>Желаем ему загрузить аватарку в Hostel!</p>
+                    {% endif %}
+                {% endif %}
+
+                </div>
+                {% endfor %}
+
+
+        {% endif %}
+
+        <table class="table">
+            {% for manager in upcoming_birthdays %}
+            <tr>
+                <td class="active">
+                    &nbsp;<a href="{% url 'employee' manager.pk %}">{{ manager.first_name }} {{ manager.last_name }}</a>
+                </td>
+                <td class="text-muted">{{ manager.birthday|date:"d M" }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endif %}

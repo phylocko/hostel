@@ -1,0 +1,44 @@
+{% extends 'bs3/base.html' %}
+{% block title %}{{ datacenter }}{% endblock %}
+{% block content %}
+
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'racks' %}">Стойки</a></li>
+            <li class="active">{{ rack }}</li>
+        </ol>
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>{{ rack }}</h4>
+            </div>
+            <div class="col-md-4 text-right">
+                <a class="btn btn-default" href="{% url 'rack' rack.pk %}">Отмена</a>
+                <button type="submit" form="rack_form" class="btn btn-primary">Сохранить</button>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-3"></div>
+
+            <div class="col-md-6">
+                <form id="rack_form" method="post">
+                    {% csrf_token %}
+                    {% include 'bs3/racks/rack_form.html' %}
+                    <script>
+                        $('#id_datacenter').select2();
+                    </script>
+                </form>
+            </div>
+
+            <div class="col-md-3"></div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

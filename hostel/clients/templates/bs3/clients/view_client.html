@@ -1,0 +1,151 @@
+{% extends 'bs3/base.html' %}
+{% block title %}{{ client.netname }}{% endblock %}
+{% block content %}
+
+    {% include 'bs3/clients/tabs.html' %}
+    <br>
+
+    <div class="container">
+        {% include 'bs3/clients/broadcrumbs_client.html' %}
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>
+                    <div class="color-marker color-client"></div>
+                    #{{ client.pk }} {{ client.netname }}</h4>
+            </div>
+            <div class="col-md-4 text-right">
+                {% if perms.clients.change_client %}
+                    <a class="btn btn-primary" href="{% url 'clients' %}{{ client.pk }}/update/">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Редактировать
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Колонка с общими данными клиента -->
+        <div class="row">
+
+            <div class="col-md-4">
+
+                {% include 'bs3/clients/client_data.html' %}
+
+                <h4>Опции</h4>
+                <table class="table">
+                    <tr>
+                        <td colspan="2">
+                            <p>
+                                <a href="{% url 'export_services' client.pk %}?links=0" target="_blank">
+                                    <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Список услуг
+                                </a></p>
+                            <p>
+                                <a href="{% url 'request_service' client.pk %}">
+                                    <span class="glyphicon glyphicon-time" aria-hidden="true"></span> Запрос на услугу
+                                </a></p>
+
+                        </td>
+                    </tr>
+                </table>
+
+                {% with client as object %}
+                    {% include 'bs3/common/created_updated.html' %}
+                {% endwith %}
+
+            </div>
+
+            <!-- Широкая колонка с услугами и графиками -->
+            <div class="col-md-8">
+
+                <div>
+
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+
+                        <li role="presentation" {% if tab == 'services' %}class="active"{% endif %}>
+                            <a href="{% url 'client' client.pk %}?tab=services">
+                                <div class="color-marker color-service"></div>Услуги
+                                <label class="label label-default">{{ client.services.count}}</label>
+                            </a>
+                        </li>
+
+                        <li role="presentation" {% if tab == 'bgp' %}class="active"{% endif %}>
+                            <a href="{% url 'client' client.pk %}?tab=bgp"><div class="color-marker color-asn"></div> BGP
+                            <label class="label label-default">{{ client.asns.count}}</label></a>
+                        </li>
+
+                        <li role="presentation" {% if tab == 'leases' %}class="active"{% endif %}>
+                            <a href="{% url 'client' client.pk %}?tab=leases"><div class="color-marker color-lease"></div> Лизы
+                            <label class="label label-default">{{ client.lease_set.count}}</label></a>
+                        </li>
+
+                        <li role="presentation" {% if tab == 'companies' %}class="active"{% endif %}>
+                            <a href="{% url 'client' client.pk %}?tab=companies"><div class="color-marker color-company"></div> Компании
+                            <label class="label label-default">{{ client.companies.count }}</label></a>
+                        </li>
+
+                        <li role="presentation" {% if tab == 'graphs' %}class="active"{% endif %}>
+                            <a href="{% url 'client' client.pk %}?tab=graphs"><div class="color-marker color-bundle"></div> Графики
+                            <label class="label label-default">{{ client.bundles.count}}</label></a>
+                        </li>
+
+                        <li role="presentation" {% if tab == 'archive' %}class="active"{% endif %}>
+                            <a href="{% url 'client' client.pk %}?tab=archive"> Архив
+                            <label class="label label-default">{{ client.archived_services.count}}</label></a>
+                        </li>
+
+                    </ul>
+
+                    <br>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+
+                        <div class="tab-pane active">
+
+                            {% if tab == 'services' %}
+                                {% include 'bs3/clients/services_panel.html' %}
+
+                            {% elif tab == 'bgp' %}
+                                {% include 'bs3/clients/autonomous_systems_panel.html' %}
+
+                            {% elif tab == 'leases' %}
+                                {% include 'bs3/clients/leases_panel.html' %}
+
+                            {% elif tab == 'companies' %}
+                                {% include 'bs3/clients/companies_panel.html' %}
+
+                            {% elif tab == 'graphs' %}
+                                {% include 'bs3/clients/graphs_panel.html' %}
+
+                            {% elif tab == 'archive' %}
+                                {% include 'bs3/clients/archived_services_panel.html' %}
+
+                            {% endif %}
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+
+
+        <div class="well text-right">
+
+            {% include 'bs3/clients/disturb_client.html' %}
+
+            {% if perms.clients.delete_client %}
+                {% include 'bs3/clients/delete_button.html' %}
+            {% endif %}
+        </div>
+
+        <br>
+
+    </div>
+
+    {% include 'bs3/spy/object_log.html' %}
+
+{% endblock %}

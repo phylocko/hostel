@@ -1,0 +1,69 @@
+{% extends 'bs3/base.html' %}
+{% block title %}{{ entry }}{% endblock %}
+{% block content %}
+
+    {% include 'bs3/store/store_tabs.html' %}
+
+    <div class="container">
+
+        <br>
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>
+                    <div class="color-marker color-entry"></div>
+                    {{ entry.type|title }} {{ entry.vendor|title }} {{ entry.model }}
+                </h4>
+            </div>
+            <div class="col-md-4 text-right">
+                {% if mode == 'edit' %}
+                    <a class="btn btn-default" href="{% url 'store' %}{{ entry.pk }}">Отмена</a>
+                    <button type="submit" form="entryData" class="btn btn-danger">Сохранить</button>
+
+                {% else %}
+                    {% if perms.store.change_entry %}
+                        <a class="btn btn-primary" href="{% url 'store' %}{{ entry.pk }}/update/">
+                            <span class="glyphicon glyphicon-edit"></span> Редактировать</a>
+                    {% endif %}
+
+                {% endif %}
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-4">
+
+                <div class="well well-sm text-center">
+                    {% if entry.device %}
+                        Используется как <b><a href="{% url 'device' entry.device.pk %}">{{ entry.device }}</a></b>
+                    {% else %}
+                        <b>Не используется</b>
+                    {% endif %}
+                </div>
+
+                {% include 'bs3/store/entry_data.html' %}
+
+                {% with entry as object %}
+                    {% include 'bs3/common/created_updated.html' %}
+                {% endwith %}
+
+            </div>
+
+            <div class="col-md-8"></div>
+
+        </div>
+
+        {% if mode == 'view' %}
+            {% if perms.store.delete_entry %}
+                {% include 'bs3/store/delete_button.html' %}
+            {% endif %}
+        {% endif %}
+
+    </div>
+
+    {% include 'bs3/spy/object_log.html' %}
+
+{% endblock %}

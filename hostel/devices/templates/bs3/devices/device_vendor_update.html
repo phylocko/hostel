@@ -1,0 +1,55 @@
+{% extends 'bs3/base.html' %}
+{% block title %}{{ device }}{% endblock %}
+{% block content %}
+
+    {% include 'bs3/devices/devices_tabs.html' %}
+
+    <br>
+
+
+    <div class="row">
+
+        <div class="col-md-4"></div>
+
+        <div class="col-md-4">
+
+            <form method="post">
+
+                {% csrf_token %}
+
+                <div class="list-group">
+
+                    <div class="list-group-item list-group-item-success">
+                        <h4 class="list-group-item-heading">{{ device_vendor }}</h4>
+                    </div>
+
+                    <div class="list-group-item">
+                        {% include 'bs3/devices/device_vendor_form.html' %}
+                    </div>
+
+                    <div class="list-group-item">
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+        <div class="col-md-4"></div>
+
+    </div>
+
+    <div class="row">
+
+        {% if perms.devices.delete_device_type %}
+            {% if mode == 'view' %}
+            {% endif %}
+        {% endif %}
+
+    </div>
+
+    {% include 'bs3/spy/object_log.html' %}
+
+{% endblock %}

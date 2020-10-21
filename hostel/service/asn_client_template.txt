@@ -1,0 +1,4 @@
+import:         from AS{client_asn} action pref={client_pref}; accept {client_asset}	# {netname}
+mp-import:      afi ipv6.unicast from AS{client_asn} accept {client_asset6}
+export:         to AS{client_asn} announce {announce}
+mp-export:      afi ipv6.unicast to AS{client_asn} announce {announce6}

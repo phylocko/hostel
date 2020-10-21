@@ -1,0 +1,53 @@
+<a class="btn btn-primary" data-toggle="modal" data-target="#disturb_datacenter">
+    <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+</a>
+
+<div class="modal fade text-left" id="disturb_datacenter" tabindex="-1" role="dialog">
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Обращение в датацентр</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="id_subject">Тема сообщения</label>
+                        <input class="form-control" name="subject" id="id_subject"
+                               value="{{ datacenter.city.name }}, {{ datacenter.address }}. Размещение оборудования." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_support_email">Email</label>
+                        <input type="text" class="form-control" required
+                               name="email" id="id_support_email"
+                               value="{% if datacenter.organization.support_email %}{{ datacenter.organization.support_email|default:'' }}{% else %}{{ datacenter.organization.email|default:'' }}{% endif %}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_message">Текст сообщения</label>
+                        <textarea class="form-control" name="message" id="id_message" rows="8">{{ disturb_message }}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="parent_id">Родительский #RT</label>
+                        <input type="text" class="form-control"
+                               name="parent_id" id="parent_id"
+                               value="">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary" name="action" value="disturb_datacenter">
+                        <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Обратиться в датацентр
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

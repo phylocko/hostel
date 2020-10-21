@@ -1,0 +1,88 @@
+<style>
+    .rack-table {
+        width: 100%;
+    }
+
+    .rack-table td {
+        padding: 6px
+    }
+
+    .rack-table .unit_label {
+        width: 30px;
+        color: #929292;
+        background-color: #2a2a2a;
+    }
+
+    .rack-table .empty {
+        background-color: #e0e0e0;
+        border-bottom: solid 1px #b3b3b3;
+    }
+
+    .rack-table .empty:hover {
+        background-color: #afafaf;
+        border-bottom: solid 1px #b3b3b3;
+    }
+
+    .rack-table .device {
+        background-color: #708a8e;
+        border-top: solid 1px #7b7b7b;
+        border-bottom: solid 1px #7b7b7b;
+    }
+
+    .rack-table .device:hover {
+        background-color: #4b6e71;
+    }
+
+    .rack-table .other-device-blocking {
+        background-color: #666666;
+        color: #8e8e8e;
+    }
+
+    .rack-table .other-device-info {
+        background-color: #e0e0e0;
+        color: #e0e0e0;
+        border-bottom: solid 1px #b3b3b3;
+    }
+
+    .rack-table .other-device-info:hover {
+        color: #a3a3a3;
+    }
+
+    .rack-table .device a {
+        color: white;
+    }
+
+</style>
+
+<table class="rack-table">
+    {% for unit in schema %}
+        <tr>
+
+            <td class="text-muted text-center unit_label">
+                <small>{{ unit.number|default:':)' }}</small>
+            </td>
+
+            {% if unit.type == 'DEVICE' %}
+
+                <td rowspan="{{ unit.device.store_entry.unit_height }}" class="unit device text-center">
+                    <a href="{% url 'device' unit.device.pk %}"><b>{{ unit.device }}</b></a>
+                </td>
+
+            {% elif unit.type == 'OTHER_DEVICE_BLOCKING' %}
+                <td class="unit other-device-blocking text-center">
+                   {{ unit.device }}
+                </td>
+
+            {% elif unit.type == 'OTHER_DEVICE_INFO' %}
+                <td class="unit other-device-info text-center">
+                    {{ unit.device }}
+                </td>
+
+            {% elif unit.type == 'EMPTY' %} {# SKIP or OTHER_DEVICE_INFO #}
+                <td class="unit empty"></td>
+
+            {% endif %}
+
+        </tr>
+    {% endfor %}
+</table>

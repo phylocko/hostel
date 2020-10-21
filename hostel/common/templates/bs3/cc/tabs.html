@@ -1,0 +1,4 @@
+<ul class="nav nav-tabs">
+    <li role="presentation" {% if tab == 'numbers' %}class="active"{% endif %}><a href="{% url 'numbers' %}">Номера</a></li>
+    <li role="presentation" {% if tab == 'calls' %}class="active"{% endif %}><a href="{% url 'calls' %}">Звонки</a></li>
+</ul>

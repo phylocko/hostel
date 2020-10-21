@@ -1,0 +1,51 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">INS [{{ incidents.count }}]</h3>
+    </div>
+
+    <table class="table table-striped">
+
+        {% for incident in incidents %}
+            <tr class="{% if incident.progress == 'now' %}warning{% endif %}">
+                <td>
+                    <div class="color-marker color-ins"></div>
+                    <b><a href="{% url 'ins' %}{{ incident.pk }}">{{ incident }}</a></b><br>
+                </td>
+
+                <td>
+                    {% if incident.type == 'work' %}
+                        <label class="label label-primary">Работы</label>
+                    {% elif incident.type == 'failure' %}
+                        <label class="label label-danger">Авария</label>
+                    {% else %}
+                        <label class="label label-default">Другое</label>
+                    {% endif %}
+
+                </td>
+                <td>
+                    {% if incident.closed %}
+                        <span class="text-muted"><s>{{ incident.name|truncatechars:50 }}</s></span>
+                    {% else %}
+                        <a href="{% url 'incident' incident.pk %}"><b>{{ incident.name|truncatechars:50 }}</b></a>
+                    {% endif %}
+                </td>
+
+                <td class="text-right text-muted">
+                    <small>
+                        {% if incident.progress == 'now' %}
+                            <b>Cейчас</b>
+                        {% else %}
+                        {{ incident.time_start|date:'Y-m-d' }}
+                        {% endif %}
+                    </small>
+                </td>
+
+            </tr>
+        {% empty %}
+            <tr>
+                <td class="text-muted text-center">Пусто</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+</div>

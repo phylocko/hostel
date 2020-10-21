@@ -1,0 +1,75 @@
+{% extends 'bs3/base.html' %}
+{% load hostel_filters %}
+{% block title %}Номер{% endblock %}
+{% block content %}
+
+    {% include 'bs3/cc/tabs.html' %}
+
+
+    <div class="container">
+        <br>
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>
+                    <div class="color-marker color-phone"></div>
+                    {{ phone.number }}
+                </h4>
+            </div>
+            <div class="col-md-4 text-right">
+                <a class="btn btn-primary" href="{% url 'update_number' phone.pk %}">
+                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Редактировать
+                </a>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-4">
+                {% include 'bs3/cc/phone_data.html' %}
+            </div>
+
+            <div class="col-md-8">
+                {% if phone.call_set.count > 200 %}
+                    <div class="alert alert-warning">
+                        Показаны последние 200 звонков из {{ phone.call_set.count }}
+                    </div>
+                {% endif %}
+                <table class="table table-hover table-condensed">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Клиент</th>
+                        <th class="hidden-xs">Номер</th>
+                        <th class="text-right">Время</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for call in calls %}
+                        <tr>
+                            <td class="text-muted">{{ call.pk }}</td>
+                            <td>
+                                {% if call.phone.client %}
+                                    <div class="color-marker color-client"></div>
+                                    <b><a href="{% url 'client' call.phone.client.pk %}">{{ call.phone.client }}</a></b>
+                                {% endif %}
+                            </td>
+                            <td class="hidden-xs">
+                                <a href="{% url 'number' call.phone.pk %}">{{ call.phone.show_phone }}</a>
+                            </td>
+                            <td class="text-right">{{ call.time|date:'Y-m-d H:i:s' }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">Пусто</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

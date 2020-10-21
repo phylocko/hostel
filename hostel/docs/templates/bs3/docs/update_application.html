@@ -1,0 +1,59 @@
+{% extends 'bs3/base.html' %}
+{% load static %}
+{% block title %}{{ application }}{% endblock %}
+{% block content %}
+
+    {% include 'bs3/docs/docs_tabs.html' %}
+
+    <div class="container">
+
+        <br>
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'agreements' %}">Документы</a></li>
+            {% if application.agreement %}
+                <li>
+                    <a href="{% url 'agreement' application.agreement.pk %}">
+                        {{ application.agreement.agreement_number }}
+                    </a>
+                </li>
+            {% endif %}
+            <li class="active">{{ application }}</li>
+        </ol>
+
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>{{ application }}</h4>
+            </div>
+            <div class="col-md-4 text-right">
+                <a class="btn btn-default" href="{% url 'application' application.pk %}">Отмена</a>
+                <button type="submit" form="doc_data" class="btn btn-danger">Сохранить</button>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-3"></div>
+
+            <div class="col-md-6">
+
+                <form id="doc_data" METHOD="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ doc.pk }}">
+                    {% include 'bs3/docs/application_form.html' %}
+                </form>
+
+            </div>
+
+            <div class="col-md-3"></div>
+
+
+        </div>
+
+    </div>
+
+    {% include 'bs3/spy/object_log.html' %}
+
+{% endblock %}

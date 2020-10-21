@@ -1,0 +1,89 @@
+<script>
+var AnalyzerApp = angular.module('AnalyzerApp', []);
+
+AnalyzerApp.controller('APIController', function APIController($scope, $http, $filter) {
+
+	$scope.isLoading = false;
+
+	$scope.get = function ($url)
+	{
+
+		if($url == "")
+		{
+			$url = "{% url 'api' %}?page=vlans&action=search";
+		}
+
+		$scope.isLoading = true;
+
+		$http.get($url).then(function(value) {
+			$scope.vlans = value.data.vlans;
+			$scope.isLoading = false;
+		});
+
+    $scope.select_vlan = function (vlan)
+    {
+        $("#vlan_id").val(vlan.id);
+        $("#selected_vlan").html(vlan.vlannum + ' ' + vlan.vname);
+        $scope.vlans = "";
+        $("#submit_button").prop('disabled', false);
+
+    }
+
+
+
+	}
+
+});
+</script>
+
+<div ng-app="AnalyzerApp">
+
+    <div ng-controller="APIController">
+
+<div class="row">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+
+                <div class="well well-sm">
+                    <span class="label label-default" id="selected_vlan"></span>
+                </div>
+
+                <input type="hidden" name="vlan_id" id="vlan_id">
+
+                <input class="form-control"
+                       ng-change="get('{% url 'api' %}?page=vlans&action=search&filter=free&search_string=' + filter)"
+                       ng-model-options='{ debounce: 400 }'
+                       data-toggle="tooltip" data-placement="bottom"
+                       type='text' class="form-control" ng-model="filter" placeholder="Filter">
+            </div>
+        </div>
+        <div class="col-md-4">
+        </div>
+</div>
+
+
+
+
+
+                <table class="table table-stripped">
+
+                <tr ng-repeat="vlan in vlans">
+                    <td><b>{% templatetag openvariable %} vlan.vlannum {% templatetag closevariable %}</b></td>
+                    <td>{% templatetag openvariable %} vlan.vname {% templatetag closevariable %}</td>
+                    <td>{% templatetag openvariable %} vlan.comment {% templatetag closevariable %}</td>
+                    <td>
+                        <a href="#" ng-click="select_vlan(vlan)" title="Прицепить">
+                            <span class="glyphicon glyphicon-plus text-primary" aria-hidden="true"></span>
+                        </a>
+                    </td>
+                </tr>
+
+            </table>
+    </div>
+
+
+
+
+</div>

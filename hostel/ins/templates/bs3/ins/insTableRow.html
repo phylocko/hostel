@@ -1,0 +1,49 @@
+{% load hostel_filters %}
+<tr class="{% if incident.progress == 'now' %}warning{% endif %}">
+    <td class="hidden-md hidden-sm hidden-xs active">
+        <div class="color-marker color-ins"></div>
+        <a href="{% url 'incident' incident.pk %}"><b>{{ incident }}</b></a>
+    </td>
+    <td class="hidden-md hidden-sm hidden-xs">
+        {{ incident.rt|ticket }}
+    </td>
+    <td class="hidden-md hidden-sm hidden-xs">
+        {% if incident.provider %}
+            <div class="color-marker color-client"></div>
+            <b>{{ incident.provider.netname }}</b>
+        {% endif %}
+    </td>
+    <td>{{ incident.type|ins_type }}</td>
+    <td>
+        {% if incident.type == 'work' %}
+
+            {% if incident.progress == 'completed' %}
+                <s><a class="text-muted" href="{% url 'ins' %}{{ incident.pk }}"> {{ incident.name }} </a></s>
+            {% else %}
+                <b><a href="{% url 'ins' %}{{ incident.pk }}"> {{ incident.name }} </a></b>
+            {% endif %}
+        {% else %}
+            <b><a href="{% url 'ins' %}{{ incident.pk }}"> {{ incident.name }} </a></b>
+        {% endif %}
+    </td>
+    <td class="hidden-md hidden-sm hidden-xs">{{ incident.time_start|date:'Y-m-d H:i'|default:'—' }}</td>
+    <td class="hidden-md hidden-sm hidden-xs">{{ incident.time_end|date:'Y-m-d H:i'|default:'—' }}</td>
+    <td>
+        {% if incident.type == 'work' %}
+            {% if incident.progress == "waiting" %}
+                <b><span class="text-info">Ожидаются</span></b>
+            {% elif incident.progress == "completed" %}
+                <span class="text-muted">Завершены</span>
+            {% elif incident.progress == "now" %}
+                <progress max="100" value="{{ incident.percent_progress }}"></progress>
+
+            {% endif %}
+        {% endif %}
+    </td>
+
+    <td class="text-muted text-right hidden-md hidden-sm hidden-xs">
+        <b>{{ incident.notifications.count }}</b>
+        <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+    </td>
+
+</tr>

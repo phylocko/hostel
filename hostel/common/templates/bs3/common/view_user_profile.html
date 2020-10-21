@@ -1,0 +1,172 @@
+{% extends 'bs3/base.html' %}
+
+{% block content %}
+
+    {% load static %}
+
+    <div class="container">
+        <div class="page-header text-right">
+            <h2><span class="pull-left">Настройки профиля</span>
+                <input type="submit" form="user_form" class="btn btn-primary" value="Сохранить">
+            </h2>
+        </div>
+
+        <form id="user_form" METHOD="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="row">
+
+
+                <div class="col-md-4 text-center">
+
+                    <h3>Фото</h3>
+
+                    {% if user.photo %}
+                        <img class="img-thumbnail" src="{{ user.photo.url }}" style="width: 50%">
+                    {% else %}
+                        <img class="img-circle" src="{% static '/i/' %}no-photo.png" style="width: 50%">
+                    {% endif %}
+
+                    <div class="form-group {% if form.photo.errors %}has-error{% endif %}">
+                        <label class="control-label">Загрузить</label>
+                        {% for error in form.photo.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}<br>
+                        {{ form.photo }}
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <h3>Персональные данные</h3>
+
+                    <div class="form-group {% if form.username.errors %}has-error{% endif %}">
+                        <label class="control-label">Логин</label><br>
+                        {{ form.username }}
+                        {% for error in form.username.errors %}
+                            <p class="error">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form-group {% if form.first_name.errors %}has-error{% endif %}">
+                        <label class="control-label">Имя</label>
+                        {% for error in form.first_name.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}<br>
+                        {{ form.first_name }}
+                    </div>
+                    <div class="form-group {% if form.last_name.errors %}has-error{% endif %}">
+                        <label class="control-label">Фамилия</label>
+                        {% for error in form.last_name.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}<br>
+                        {{ form.last_name }}
+                    </div>
+                    <div class="form-group {% if form.mid_name.errors %}has-error{% endif %}">
+                        <label class="control-label">Отчество</label>
+                        {% for error in form.mid_name.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}<br>
+                        {{ form.mid_name }}
+                    </div>
+
+                    <div class="form-group {% if form.email.errors %}has-error{% endif %}">
+                        <label class="control-label">Email</label>
+                        {% for error in form.email.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}<br>
+                        {{ form.email }}
+                    </div>
+                    <div class="form-group {% if form.phone.errors %}has-error{% endif %}">
+                        <label class="control-label">Телефон</label>
+                        {% for error in form.phone.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}<br>
+                        {{ form.phone }}
+                    </div>
+                    <div class="form-group {% if form.ext_phone.errors %}has-error{% endif %}">
+                        <label class="control-label">Добавочный телефон</label>
+                        {% for error in form.ext_phone.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}<br>
+                        {{ form.ext_phone }}
+                    </div>
+                    <div class="form-group {% if form.birthday.errors %}has-error{% endif %}">
+                        <label class="control-label">ДР 🎂</label>
+                        {% for error in form.birthday.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}<br>
+                        {{ form.birthday }}
+                    </div>
+                    <div class="form-group {% if form.genter.errors %}has-error{% endif %}">
+                        <label class="control-label">Пол</label>
+                        {% for error in form.gender.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}<br>
+                        {{ form.gender }}
+                    </div>
+                    <script>
+                        $(function () {
+                            $("#id_birthday").datepicker({
+                                "dateFormat": "yy-mm-dd",
+                                changeMonth: true,
+                                changeYear: true,
+                                yearRange: "1940:2000"
+                            });
+                        });
+                    </script>
+
+                    <div class="form-group {% if form.position.errors %}has-error{% endif %}">
+                        <label class="control-label">Должность</label>
+                        {% for error in form.position.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}<br>
+                        {{ form.position }}
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <h3>Настройки Hostel</h3>
+
+                    <div class="form-group {% if form.kind.errors %}has-error{% endif %}">
+                        <label class="control-label">Тип профиля</label>
+                        {% for error in form.kind.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}<br>
+                        {{ form.kind }}
+                    </div>
+                    <div class="form-group {% if form.theme.errors %}has-error{% endif %}">
+                        <label class="control-label">Внешний вид Хостела</label>
+                        {% for error in form.theme.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}<br>
+                        {{ form.theme }}
+                    </div>
+                    <div class="form-group {% if form.pagination_count.errors %}has-error{% endif %}">
+                        <label class="control-label">Объектов на страницу</label>
+                        {% for error in form.pagination_count.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}<br>
+                        {{ form.pagination_count }}
+                    </div>
+
+                </div>
+            </div>
+
+        </form>
+
+
+        {% if mode == "view" %}
+            {% include 'bs3/common/change_password_button.html' %}
+        {% endif %}
+    </div>
+    <!-- Правая колонка -->
+    <div class="col-md-4">
+    </div>
+    </div>
+    </div>
+
+{% endblock %}

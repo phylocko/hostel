@@ -1,0 +1,54 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Звонки{% endblock %}
+{% block content %}
+
+    {% include 'bs3/cc/tabs.html' %}
+
+    <br>
+
+
+    <div class="container">
+
+    {% include 'bs3/tab_search_form.html' %}
+
+        <table class="table table-hover teble-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Клиент</th>
+                <th>Номер</th>
+                <th>Комментарий</th>
+                <th>Блок</th>
+                <th>Спам</th>
+                <th class="text-right">Время</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for call in listing %}
+                <tr>
+                    <td class="text-muted">{{ call.pk }}</td>
+                    <td>
+                        {% if call.phone.client %}
+                            <div class="color-marker color-client"></div>
+                            <b><a href="{% url 'client' call.phone.client.pk %}">{{ call.phone.client }}</a></b>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'number' call.phone.pk %}">{{ call.phone.show_phone }}</a>
+                    </td>
+                    <td class="text-muted">{{ call.phone.description|default:'' }}</td>
+                    <td>{% if call.phone.blacklisted %}<span class="glyphicon glyphicon-ok text-danger"></span>{% endif %}</td>
+                    <td>{% if call.phone.spam %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td>
+                    <td class="text-right">{{ call.time|date:'Y-m-d H:i:s' }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted">Пусто</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+{% endblock %}
+

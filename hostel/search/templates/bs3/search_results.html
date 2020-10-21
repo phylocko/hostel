@@ -1,0 +1,254 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Поиск «{{ search_string }}»{% endblock %}
+{% block content %}
+
+
+<div class="container">
+
+    <ol class="breadcrumb">
+        <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+        <li class="active">Поиск</li>
+        {% if search_string %}
+        <li class="active">«{{ search_string }}»</li>
+        {% endif %}
+    </ol>
+
+</div>
+
+
+<div class="container text-center">
+    {% if count %}
+    <h3 class="text-center">Объектов: {{ count }}</h3>
+    {% else %}
+    <h3 class="text-center">Ничего [почему-то] не найдено</h3>
+    {% endif %}
+</div>
+
+{% if mixed_results.clients %}
+<h3>&nbsp;Клиенты</h3>
+{% if mixed_results.clients.count > 10 %}
+    <div class="help-block">
+        &nbsp;Показано 10 из {{ mixed_results.clients.count }} найденных клиентов.
+        <a href="{% url 'clients' %}?search_string={{ search_string }}">Искать еще</a>
+    </div>
+{% endif %}
+<table class="table">
+    {% for client in mixed_results.clients|slice:':10' %}
+    {% include 'bs3/result_row_client.html' %}
+    {% endfor %}
+</table>
+{% endif %}
+
+{% if mixed_results.companies %}
+<h3>&nbsp;Компании</h3>
+{% if mixed_results.companies.count > 10 %}
+    <div class="help-block">
+        &nbsp;Показано 10 из {{ mixed_results.companies.count }} найденных компаний.
+        <a href="{% url 'companies' %}?search={{ search_string }}">Искать еще</a>
+    </div>
+{% endif %}
+<table class="table">
+    {% for company in mixed_results.companies|slice:':10' %}
+    {% include 'bs3/result_row_company.html' %}
+    {% endfor %}
+</table>
+{% endif %}
+
+
+{% if mixed_results.services %}
+    <h3>&nbsp;Услуги</h3>
+    {% if mixed_results.services.count > 10 %}
+        <div class="help-block">&nbsp;Показано 10 из {{ mixed_results.services.count }} найденных услуг</div>
+    {% endif %}
+    <table class="table">
+        {% for service in mixed_results.services|slice:':10' %}
+        {% include 'bs3/result_row_service.html' %}
+        {% endfor %}
+    </table>
+{% endif %}
+
+
+{% if mixed_results.subservices %}
+    <h3>&nbsp;Подуслуги</h3>
+    {% if mixed_results.subservices.count > 10 %}
+        <div class="help-block">&nbsp;Показано 10 из {{ mixed_results.subservices.count }} найденных услуг</div>
+    {% endif %}
+    <table class="table">
+        {% for subservice in mixed_results.subservices|slice:':10' %}
+        {% include 'bs3/result_row_subservice.html' %}
+        {% endfor %}
+    </table>
+{% endif %}
+
+
+{% if mixed_results.vlans %}
+    <h3>&nbsp;Вланы</h3>
+    {% if mixed_results.vlans.count > 10 %}
+        <div class="help-block">
+            &nbsp;Показано 10 из {{ mixed_results.vlans.count }} найденных вланов.
+            <a href="{% url 'vlan_search' %}?search={{ search_string }}">Искать еще</a>
+        </div>
+    {% endif %}
+    <table class="table">
+        {% for vlan in mixed_results.vlans|slice:':10' %}
+        {% include 'bs3/result_row_vlan.html' %}
+        {% endfor %}
+    </table>
+{% endif %}
+
+{% if mixed_results.autonomous_systems %}
+<h3>&nbsp;Автономки</h3>
+{% if mixed_results.autonomous_systems.count > 10 %}
+    <div class="help-block">
+        &nbsp;Показано 10 из {{ mixed_results.autonomous_systems.count }} найденных автономок.
+    </div>
+{% endif %}
+<table class="table">
+    {% for autonomous_system in mixed_results.autonomous_systems|slice:':10' %}
+    {% include 'bs3/result_row_as.html' %}
+    {% endfor %}
+</table>
+{% endif %}
+
+
+{% if mixed_results.nets %}
+<h3>&nbsp;Сети</h3>
+{% if mixed_results.nets.count > 10 %}
+    <div class="help-block">
+        &nbsp;Показано 10 из {{ mixed_results.nets.count }} найденных сетей.
+        <a href="{% url 'search_net' %}?search={{ search_string }}">Искать еще</a>
+    </div>
+{% endif %}
+<table class="table">
+    {% for net in mixed_results.nets|slice:':10' %}
+    {% include 'bs3/result_row_net.html' %}
+    {% endfor %}
+</table>
+{% endif %}
+
+
+{% if mixed_results.devices %}
+<h3>&nbsp;Девайсы</h3>
+{% if mixed_results.devices.count > 10 %}
+    <div class="help-block">
+        &nbsp;Показано 10 из {{ mixed_results.devices.count }} найденных устройств.
+        <a href="{% url 'devices' %}?search={{ search_string }}">Искать еще</a>
+    </div>
+{% endif %}
+<table class="table">
+    {% for device in mixed_results.devices|slice:':10' %}
+    {% include 'bs3/result_row_device.html' %}
+    {% endfor %}
+</table>
+{% endif %}
+
+{% if mixed_results.bundles %}
+<h3>&nbsp;Бандлы</h3>
+{% if mixed_results.bundles.count > 10 %}
+    <div class="help-block">
+        &nbsp;Показано 10 из {{ mixed_results.bundles.count }} найденных бандлов.
+        <a href="{% url 'search_bundles' %}?search={{ search_string }}">Искать еще</a>
+    </div>
+{% endif %}
+<table class="table">
+    {% for bundle in mixed_results.bundles|slice:':10' %}
+    {% include 'bs3/result_row_bundle.html' %}
+    {% endfor %}
+</table>
+{% endif %}
+
+{% if mixed_results.datacenters %}
+<h3>&nbsp;Площадки</h3>
+{% if mixed_results.datacenters.count > 10 %}
+    <div class="help-block">
+        &nbsp;Показано 10 из {{ mixed_results.datacenters.count }} найденных площадок.
+        <a href="{% url 'search_datacenter' %}?search={{ search_string }}">Искать еще</a>
+    </div>
+{% endif %}
+<table class="table">
+    {% for datacenter in mixed_results.datacenters|slice:':10' %}
+    {% include 'bs3/result_row_datacenter.html' %}
+    {% endfor %}
+</table>
+{% endif %}
+
+{% if mixed_results.leases %}
+<h3>&nbsp;Лизы</h3>
+{% if mixed_results.leases.count > 10 %}
+    <div class="help-block">
+        &nbsp;Показано 10 из {{ mixed_results.leases.count }} найденных лиз.
+        <a href="{% url 'leases' %}?search={{ search_string }}">Искать еще</a>
+    </div>
+{% endif %}
+<table class="table">
+    {% for lease in mixed_results.leases|slice:':10' %}
+    {% include 'bs3/result_row_lease.html' %}
+    {% endfor %}
+</table>
+{% endif %}
+
+
+{% if mixed_results.store_items %}
+<h3>&nbsp;Склад</h3>
+{% if mixed_results.store_items.count > 10 %}
+    <div class="help-block">
+        &nbsp;Показано 10 из {{ mixed_results.store_items.count }} найденных единиц оборудования.
+        <a href="{% url 'search_entry' %}?search={{ search_string }}">Искать еще</a>
+    </div>
+{% endif %}
+<table class="table">
+    {% for entry in mixed_results.store_items|slice:':10' %}
+    {% include 'bs3/result_row_store.html' %}
+    {% endfor %}
+</table>
+{% endif %}
+
+
+{% if mixed_results.docs %}
+<h3>&nbsp;Документы: договоры</h3>
+{% if mixed_results.docs.count > 10 %}
+    <div class="help-block">
+        &nbsp;Показано 10 из {{ mixed_results.docs.count }} найденных документов.
+        <a href="{% url 'agreements' %}?search={{ search_string }}">Искать еще</a>
+    </div>
+{% endif %}
+<table class="table">
+    {% for agreement in mixed_results.docs|slice:':10' %}
+    {% include 'bs3/result_row_agreement.html' %}
+    {% endfor %}
+</table>
+{% endif %}
+
+{% if mixed_results.staff %}
+<h3>&nbsp;Коллеги</h3>
+{% if mixed_results.staff.count > 10 %}
+    <div class="help-block">
+        &nbsp;Показано 10 из {{ mixed_results.staff.count }} найденных коллег.
+    </div>
+{% endif %}
+<table class="table">
+    {% for manager in mixed_results.staff|slice:':10' %}
+    {% include 'bs3/result_row_staff.html' %}
+    {% endfor %}
+</table>
+{% endif %}
+
+{% if mixed_results.incidents %}
+<h3>&nbsp;INS</h3>
+<table class="table">
+    {% for incident in mixed_results.incidents %}
+    {% include 'bs3/result_row_ins.html' %}
+    {% endfor %}
+</table>
+{% endif %}
+
+
+{% if search_string %}
+<script>
+// $("td:icontains('{{ search_string }}')" ).css( "background-color", "#F4F2FF");
+</script>
+{% endif %}
+
+
+
+{% endblock %}

@@ -1,0 +1,103 @@
+{% load hostel_filters %}
+
+<table class="table">
+
+    <tr>
+        <td><label>Логин</label></td>
+        <td><b>{{ shown_user.username }}</b></td>
+    </tr>
+
+    <tr>
+        <td><label>Имя</label></td>
+        <td>{{ shown_user.first_name|default:'' }}</td>
+    </tr>
+
+    <tr>
+        <td><label>Отчество</label></td>
+        <td>{{ shown_user.mid_name|default:'' }}</td>
+    </tr>
+
+    <tr>
+        <td><label>Фамилия</label></td>
+        <td>{{ shown_user.last_name|default:'' }}</td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+            <label>Должность</label>
+            <address>{{ shown_user.position|default:'' }}</address>
+        </td>
+    </tr>
+
+    <tr>
+        <td><label>Группы</label></td>
+        <td>
+            {% for group in shown_user.groups.all %}
+                <label class="label label-default">{{ group|title }}</label>
+            {% empty %}
+                —
+            {% endfor %}
+        </td>
+    </tr>
+
+    <tr>
+        <td><label>Тип</label></td>
+        <th class="active">
+            {{ shown_user.kind|upper }}
+        </th>
+    </tr>
+
+    <tr>
+        <td><label>Пол</label></td>
+        <td>
+            {% if shown_user.gender == 'female' %}
+                Женщина
+            {% else %}
+                Мужчина
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <td><label>Email</label></td>
+        <td>{{ shown_user.emailv }}</td>
+    </tr>
+
+    <tr>
+        <td><label>Телефон</label></td>
+        <td>{{ shown_user.phone|phone }}</td>
+    </tr>
+
+    <tr>
+        <td><label>Добавочный</label></td>
+        <td>{{ shown_user.ext_phone|default:'' }}</td>
+    </tr>
+
+    <tr>
+        <td><label>День Рождения</label></td>
+        <td>{{ shown_user.birthday|date:"Y-m-d H:i" }}</td>
+    </tr>
+
+    <tr>
+        <td><label>Статус</label></td>
+        <td>
+            {% if shown_user.is_active %}
+                <label class="label label-success">Работает</label>
+            {% else %}
+                <label class="label label-danger">Не аботает</label>
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <td><label>Пароль</label></td>
+        <td>
+            {% if shown_user.has_usable_password %}
+                <label class="label label-success">Пароль задан</label>
+            {% else %}
+                <label class="label label-danger">Пароль не задан</label>
+            {% endif %}
+        </td>
+    </tr>
+
+</table>

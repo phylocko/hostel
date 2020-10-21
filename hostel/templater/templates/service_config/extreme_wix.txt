@@ -1,0 +1,3 @@
+configure vlan "wix" add ports {{ bundle.name }} tagged
+{% if net %}{% if net.mac %}create fdb {{ net.mac }} vlan "wix" ports {{ bundle.name }}{% endif %}{% endif %}
+configure ports {{ bundle.name }} vlan "wix" limit-learning 0 action stop-learning

@@ -1,0 +1,15 @@
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Занятые сети в {{ net.network }}</h3>
+                        </div>
+                        <table class="table">
+
+                            {% for child in free_nets %}
+                            <tr>
+                                <td>&nbsp;<a href="?page=net&action=view&id={{ child.pk }}">{{ child.network }}</a></td>
+                                <td>{{ child.description }}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>

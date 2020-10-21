@@ -1,0 +1,37 @@
+{% load hostel_filters %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Звонки 📞</h3>
+    </div>
+
+    <table class="table">
+        {% for call in recent_calls %}
+            <tr>
+                <td class="active">
+                    <a href="{% url 'number' call.phone.pk %}">{{ call.phone.show_phone|phone }}</a>
+                </td>
+                <td>
+                    <small>
+                        {% if call.phone.client %}
+                            <b>{{ call.phone.client|default:'' }}</b>
+                            {{ call.phone.description|default:'—'|truncatechars:20 }}
+                        {% else %}
+                            {{ call.phone.description|default:'—'|truncatechars:30 }}
+                        {% endif %}
+                    </small>
+                </td>
+                <td class="active text-muted text-center hidden-xs">
+                    <small>{{ call.phone.count }}</small>
+                </td>
+                <td class="text-right">
+                    <small><b>{{ call.time|date:'H:i' }}</b></small>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td class="text-muted text-center">Звонков нет</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+</div>

@@ -1,0 +1,30 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<div style="width: 98%; margin: 0 auto;">
+
+    <div class="row">
+
+        <div class="col-md-4">
+            {% include 'bs3/dashboard/panels/recent_clients_panel.html' %}
+        </div>
+
+        <div class="col-md-4">
+            {% include 'bs3/dashboard/panels/testing_services_panel.html' %}
+            {% include 'bs3/dashboard/panels/expired_services_panel.html' %}
+        </div>
+
+
+        <div class="col-md-4">
+            {% include 'bs3/dashboard/panels/birthdays_panel.html' %}
+            {% include 'bs3/dashboard/panels/calls_panel.html' %}
+            {% include 'bs3/dashboard/panels/maintenance_panel.html' %}
+            {% include 'bs3/dashboard/panels/spy_panel.html' %}
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

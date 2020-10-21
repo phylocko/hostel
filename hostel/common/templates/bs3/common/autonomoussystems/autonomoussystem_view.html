@@ -1,0 +1,123 @@
+{% extends 'bs3/base.html' %}
+{% block title %}{{ asn }}{% endblock %}
+{% block content %}
+
+
+    <div class="container">
+
+        {% include 'bs3/common/broadcrumbs_as.html' %}
+
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4><div class="color-marker color-asn"></div> {{ asn }}</h4>
+            </div>
+            <div class="col-md-4 text-right">
+                {% if perms.common.change_autonomoussystem %}
+                    <a class="btn btn-primary" href="{% url 'update_autonomous_system' asn.pk %}">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Редактировать
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-4">
+
+                {% include 'bs3/common/autonomoussystems/as_data.html' %}
+
+                <h4>Опции</h4>
+                <table class="table">
+                    <tr>
+                        <td colspan="2">
+                            <p>
+                                <a href="https://apps.db.ripe.net/db-web-ui/#/query?sources=RIPE_NCC&searchtext=AS{{ asn.asn }}&submit=Search" target="_blank">
+                                    <span class="glyphicon glyphicon-globe" aria-hidden="true"></span> Ripe
+                                </a>
+                            </p>
+
+                            <p>
+                                <a href="https://radar.qrator.net/as{{ asn.asn }}" target="_blank">
+                                    <span class="glyphicon glyphicon-globe" aria-hidden="true"></span> Qrator
+                                </a>
+                            </p>
+
+                        </td>
+                    </tr>
+                </table>
+
+
+                {% with autonomoussystem as object %}
+                    {% include 'bs3/common/created_updated.html' %}
+                {% endwith %}
+
+            </div>
+
+            <div class="col-md-8">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+
+                        <h4 class="panel-title">Услуги
+
+
+                            {% if perms.common.add_service %}
+                                <div class="dropdown pull-right">
+                                    <button class="btn btn-primary btn-xs dropdown-toggle"
+                                            type="button" id="dropdownMenu1" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="true">
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                        {% for our_service_common in our_services_as %}
+                                            <li>
+                                                <a href="{% url 'create_service' %}?service_name={{ our_service_common.name }}&client_id={{ asn.client.pk }}&asn_id={{ asn.pk }}">
+                                                    {{ our_service_common.name|upper }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+
+
+                        </h4>
+                    </div>
+
+                    <table class="table">
+
+                        {% for service in asn.services.all %}
+                            {% include 'bs3/services/table_rows/service_row.html' %}
+                        {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">Услуг нет</td>
+                            </tr>
+                        {% endfor %}
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="well well-sm text-right">
+            {% if perms.common.change_autonomoussystem %}
+                {% include 'bs3/common/autonomoussystems/move_as_button.html' %}
+            {% endif %}
+
+            {% if perms.common.delete_autonomoussystem %}
+                {% include 'bs3/common/autonomoussystems/delete_as_button.html' %}
+            {% endif %}
+        </div>
+
+    </div>
+
+    {% include 'bs3/spy/object_log.html' %}
+
+{% endblock %}

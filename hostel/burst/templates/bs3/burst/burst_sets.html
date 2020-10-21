@@ -1,0 +1,162 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Burst-наборы{% endblock %}
+{% load hostel_filters %}
+{% block content %}
+
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'burst_sets' %}">Burst-наборы</a></li>
+        </ol>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="well well-sm">
+                    <form method="GET" class="form-inline">
+
+                        <div class="form-group {% if filter_form.keywords.errors %}has-error{% endif %}">
+                            {{ filter_form.keywords }}
+                            {{ filter_form.keywords.errors }}
+                        </div>
+
+                        <div class="form-group {% if filter_form.manager.errors %}has-error{% endif %}">
+                            {{ filter_form.manager }}
+                            {{ filter_form.manager.errors }}
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-primary form-control" type="submit" name="action" value="filter">
+                                Отфильтровать
+                            </button>
+                            <button class="btn btn-default form-control" type="submit" name="action" value="clear">
+                                <span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
+                            </button>
+                        </div>
+
+                    </form>
+
+                    <script>
+                        $('#id_city').select2({
+                            placeholder: 'По городам',
+                            width: 260
+                        });
+                        $('#id_manager').select2({
+                            placeholder: 'По менеджеру',
+                            width: 260,
+                        });
+                        $('#id_keywords').focus();
+                    </script>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="well well-sm text-right">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <a class="btn btn-primary" href="{% url 'add_burst_set' %}">Создать Burst-набор</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <form method="get" action="{% url 'calculate' %}" class="form-inline">
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Чей</th>
+                    <th>Клиент</th>
+                    <th>Коммит</th>
+                    <th>Ежемесячно</th>
+                    <th>За Mb/s</th>
+                    <th class="text-center">Порты</th>
+                    <th><input type="checkbox" id="select_all"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for burst_set in burst_sets %}
+                    <tr>
+                        <td class="active">
+                            <a href="{% url 'burst_set' burst_set.pk %}">{{ burst_set.name }}</a>
+                        </td>
+                        <td>
+                            <span class="glyphicon glyphicon-user"></span> {{ burst_set.client.manager|default:'' }}
+                        </td>
+                        <td>
+                            <div class="color-marker color-client"></div>
+                            <b>{{ burst_set.client.netname }}</b>
+                        </td>
+                        <td>{{ burst_set.limit|default:'—' }}</td>
+                        <td>{{ burst_set.subscription_fee|default:'—' }}</td>
+                        <td>{{ burst_set.price|default:'—' }}</td>
+
+                        <td class="text-center">
+                            <label class="label label-primary">{{ burst_set.bundles.count }}</label>
+                        </td>
+
+                        <td>
+                            <input type="checkbox" name="burst_sets" value="{{ burst_set.pk }}">
+                        </td>
+
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td class="text-muted text-center" colspan="5">Burst-сетов не найдено</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="well well-sm">
+
+                <div class="form-group ">
+                    <label>От</label>
+                    <div class="input-group" id="start_date_group">
+                        {{ date_range_form.start_date }}
+                        <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                    </div>
+                </div>
+
+                <div class="form-group ">
+                    <label>&nbsp;До</label>
+                    <div class="input-group" id="end_date_group">
+                        {{ date_range_form.end_date }}
+                        <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-success"
+                            type="submit"
+                            name="action"
+                            value="calculate">
+                        Посчитать Burst'ы
+                    </button>
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <script>
+        $('#start_date_group').datetimepicker({format: 'YYYY-MM-DD'});
+        $('#end_date_group').datetimepicker({format: 'YYYY-MM-DD'});
+        $('#id_client').select2();
+        $('#select_all').change(function () {
+            var checkboxes = $(this).closest('form').find(':checkbox');
+            checkboxes.prop('checked', $(this).is(':checked'));
+        });
+
+    </script>
+
+{% endblock %}

@@ -1,0 +1,20 @@
+<table class="table">
+    <tr>
+        <td colspan="2">
+            <label class="control-label">Площадка</label><br>
+            {% if rack.datacenter %}
+                <a href="{% url 'datacenter' rack.datacenter.pk %}">{{ rack.datacenter }}</a>
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>Высота в юнитах</th>
+        <td>{{ rack.height|default:'—' }}</td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <label>Комментарий</label><br>
+            {{ rack.comment|default:'—' }}
+        </td>
+    </tr>
+</table>

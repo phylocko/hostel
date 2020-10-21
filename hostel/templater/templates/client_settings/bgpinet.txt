@@ -1,0 +1,12 @@
+Настройки для услуги BGP Inet
+
+Service ID: {{ service }}
+VLAN ID:    {{ service.vlan.first.vlannum }}
+{% if service.commercial_status == "on_test" %}Тест до: {{ service.end_time|date:"Y-m-d H:i" }}
+{%endif%}
+Ваш ASN:    {{ service.asn.asn}}
+Наш ASN:    25478
+p2p-сеть:   {{ service.net.first }}
+
+Первый адрес хоста — наш нейбор, второй — ваш.
+

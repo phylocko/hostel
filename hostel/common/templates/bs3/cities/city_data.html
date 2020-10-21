@@ -1,0 +1,23 @@
+<table class="table">
+    <tr>
+        <th>English</th>
+        <td>{{ city.engname|default:'' }}</td>
+    </tr>
+
+    <tr>
+        <th>Community</th>
+        <td>{{ city.community|default:'' }}</td>
+    </tr>
+
+    <tr>
+        <th>Карта</th>
+        <td>
+            {% if city.map %}
+                <a href="{{ city.map }}">
+                   Открыть
+                </a>
+            {% endif %}
+        </td>
+    </tr>
+
+</table>

@@ -1,0 +1,92 @@
+{% extends 'bs3/base.html' %}
+{% block title %}{{ issue }}{% endblock %}
+{% block content %}
+
+{% include 'issues/issues_tabs.html' %}
+
+<style>
+    pre {
+    padding: 0px;
+    padding-left: 20px;
+    padding-bottom: 10px;
+    margin: 0px;
+    border: none;
+    border-radius: none;
+    background: none;
+    }
+</style>
+
+<div class="container" style="width: 100%;">
+
+    <!-- Заголовок странички, кнопка редактирования -->
+    <h2>#{{ issue.pk }} — {{ issue }}
+
+        <div class="pull-right">
+        {% if mode == 'edit' %}
+        <a class="btn btn-default" href="{% url 'issues' %}{{ issue.pk }}">Отмена</a>
+        <button type="submit" form="serviceData" class="btn btn-primary">Сохранить</button>
+        {% else %}
+        <a class="btn btn-default" href="{% url 'issues' %}{{ issue.pk }}/update/">Редактировать</a>
+        {% endif %}
+        </div>
+
+    </h2>
+
+
+    <div class="row">
+
+        <div class="col-md-6">
+
+            <form method="POST" id="serviceData" enctype="multipart/form-data">
+            {% csrf_token %}
+                <input type="hidden" name="id" value="{{ issue.pk }}">
+                {% include 'issues/issue_form.html' %}
+            </form>
+
+            {% with issue as object %}
+            {% include 'bs3/common/created_updated.html' %}
+            {% endwith %}
+
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                  <h3 class="panel-title">Комментарии</h3>
+              </div>
+
+              <table class="table table-striped">
+                {% for comment in issue.comments.all %}
+                    <tr>
+                        <td class="text-muted">
+                            {{ comment.creator|default:"Неизвестный" }}, {{ comment.created|date:"Y-m-d H:i" }}:
+                            <pre>{{ comment }}</pre>
+                        </td>
+                    </tr>
+                {% endfor %}
+              </table>
+
+              <div class="panel-body">
+              <form action="{% url 'issues' %}{{ issue.pk }}/add_comment/" method="POST">
+                  {% csrf_token %}
+                  {{ comment_form.text }}
+                  <br>
+                  <div class="well well-sm text-right">
+                  <input type="submit" value="Добавить комментарий" class="btn btn-primary">
+                  </div>
+              </form>
+              </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% include 'bs3/spy/object_log.html' %}
+
+</div>
+
+{% endblock %}

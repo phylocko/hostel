@@ -1,0 +1,46 @@
+{% extends 'bs3/base.html' %}
+{% block title %}{{ entry }}{% endblock %}
+{% block content %}
+
+    {% include 'bs3/store/store_tabs.html' %}
+
+    <div class="container">
+
+        <br>
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>
+                    <div class="color-marker color-entry"></div>
+                    {{ entry.type|title }} {{ entry.vendor|title }} {{ entry.model }}
+                </h4>
+            </div>
+            <div class="col-md-4 text-right">
+                <a class="btn btn-default" href="{% url 'store' %}{{ entry.pk }}">Отмена</a>
+                <button type="submit" form="entryData" class="btn btn-danger">Сохранить</button>
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-4"></div>
+
+            <div class="col-md-4">
+
+                <form id="entryData" METHOD="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ entry.pk }}">
+                    {% include 'bs3/store/entry_form.html' %}
+                </form>
+
+            </div>
+
+            <div class="col-md-4"></div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'bs3/base.html' %}
+{% block title %}*Создать город{% endblock %}
+{% block content %}
+
+    {% include 'bs3/cities/cities_tabs.html' %}
+
+    <div class="container">
+        <br>
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'cities' %}">Города</a></li>
+            <li class="active">Созать новый город</li>
+        </ol>
+
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px; margin-top: 20px;">
+            <div class="col-md-8">
+                <h4>Создание нового города</h4>
+            </div>
+
+            <div class="col-md-4 text-right">
+                <button type="submit" form="city_form" class="btn btn-primary">Создать</button>
+            </div>
+        </div>
+
+        <!-- Колонка с общими данными клиента -->
+        <div class="row">
+
+            <div class="col-md-4">
+
+                <!-- Данные клиента -->
+                <form id="city_form" METHOD="POST">
+                    {% csrf_token %}
+                    {% include 'bs3/cities/city_form.html' %}
+                </form>
+
+            </div>
+
+            <div class="col-md-8">
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

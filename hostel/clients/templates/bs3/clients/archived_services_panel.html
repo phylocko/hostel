@@ -1,0 +1,15 @@
+<div class="panel panel-default">
+    <div class="panel-heading" style="padding-right: 8px;">
+        <h4 class="panel-title">Архив услуг</h4>
+    </div>
+
+    <table class="table table-striped">
+        {% for service in archived_services %}
+            {% include 'bs3/services/archived_service_row_simple.html' %}
+        {% empty %}
+            <tr>
+                <td colspan="6" class="text-center text-muted">Услуг нет</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>

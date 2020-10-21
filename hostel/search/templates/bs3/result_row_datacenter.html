@@ -1,0 +1,11 @@
+<tr>
+    <td style="width: 60px;" class="hidden-xs hidden-sm text-muted">{{ datacenter.pk }}</td>
+    <td style="width: 180px;">
+        <div class="color-marker color-datacenter"></div>
+        <b><a href="{% url 'datacenter' datacenter.pk %}">{{ datacenter.name }}</a></b>
+    </td>
+    <td style="width: 150px;"><b>{{ datacenter.city.name }}</b></td>
+    <td>
+        {{ datacenter.address|default:'' }}
+    </td>
+</tr>

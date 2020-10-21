@@ -1,0 +1,11 @@
+<div class="well well-sm text-right">
+    <form method="get" class="form-inline">
+        <input type="hidden" name="tab" value="{{ tab }}">
+        <div class="form-group">
+            <input class="form-control" name="search" value="{{ search_string|default:'' }}" placeholder="Поиск">
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-default">Поиск</button>
+        </div>
+    </form>
+</div>

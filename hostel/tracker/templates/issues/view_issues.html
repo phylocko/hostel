@@ -1,0 +1,25 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Порты{% endblock %}
+{% block content %}
+
+{% include 'issues/issues_tabs.html' %}
+
+{% if issues %}
+<table class="table table-striped">
+    {% include 'issues/issues_table_header.html' %}
+    <tbody>
+    {% for issue in issues %}
+    {% include 'issues/issues_table_row.html' %}
+    {% endfor %}
+    </tbody>
+</table>
+
+{% else %}
+
+<div class="container text-center">
+    <h3 class="text-center">Пусто</h3>
+</div>
+
+{% endif %}
+
+{% endblock %}

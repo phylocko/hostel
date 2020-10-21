@@ -1,0 +1,35 @@
+<style>
+    .works_description {
+        padding-left: 30px;
+    }
+</style>
+<div class="panel panel-primary">
+
+    <div class="panel-heading">
+        <h3 class="panel-title">Плановые работы
+            <span id="works_description_trigger" class="pull-right">
+            <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+        </h3>
+    </div>
+
+    {% if incidents %}
+        <table class="table">
+            {% for incident in incidents %}
+                {% include 'bs3/dashboard/panels/incident_table_row.html' %}
+            {% endfor %}
+        </table>
+    {% else %}
+        <div class="panel-body text-center"><span class="text-muted">Не запланировано</span></div>
+    {% endif %}
+
+    <div class="panel-footer text-right">
+        <b><a href="{% url 'ins' %}">INS</a></b>
+    </div>
+
+</div>
+<script>
+    $('.works_description').slideToggle()
+    $('#works_description_trigger').click(function () {
+        $('.works_description').slideToggle()
+    })
+</script>

@@ -1,0 +1,21 @@
+{% load hostel_filters %}
+
+<thead>
+<tr>
+    <td class="hidden-md hidden-sm hidden-xs text-muted">{{ manager.pk }}</td>
+
+    <td class="active">
+        <a class="{% if not manager.is_active %}text-danger{% endif %}" href="{% url 'user' manager.pk %}">
+            <b>{{ manager.username }}</b>
+        </a>
+    </td>
+
+    <td>{{ manager.get_full_name }}</td>
+    <td class="hidden-md hidden-sm hidden-xs">{{ manager.email|default:'' }}</td>
+    <td>{{ manager.phone|phone }}</td>
+    <td class="hidden-md hidden-sm hidden-xs">{{ manager.ext_phone|default:'' }}</td>
+    <td class="hidden-xs">{{ manager.birthday|date:'Y-m-d' }}</td>
+    <td class="hidden-md hidden-sm hidden-xs">{{ manager.position|default:'' }}</td>
+    <td class="hidden-md hidden-sm hidden-xs">{{ manager.last_login|date:'Y-m-d H:i' }}</td>
+</tr>
+</thead>

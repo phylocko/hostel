@@ -1,0 +1,18 @@
+<tr>
+    <td style="width: 60px;" class="hidden-xs hidden-sm text-muted">{{ incident.pk }}</td>
+    <td style="width: 180px;">
+        <div class="color-marker color-ins"></div>
+        <b><a href="{% url 'incident' incident.pk %}">INS-{{ incident.pk }}</a></b></td>
+    <td style="width: 150px;"><b>{{ incident.type }}</b></td>
+    <td>
+        <b>{{ incident.name }}</b><br>
+        {{ incident.time_start|date:'Y-m-d H:i' }} — {{ incident.time_end|date:'Y-m-d H:i' }}
+
+        <small>
+            <div class="text-muted">
+                {{ incident.comment|default:''|linebreaksbr|truncatechars:500 }}<br>
+                {{ incident.fiber|default:''|linebreaksbr }}
+            </div>
+        </small>
+    </td>
+</tr>

@@ -1,0 +1,45 @@
+{% extends 'bs3/base.html' %}
+{% block title %}{{ client.netname }}{% endblock %}
+{% block content %}
+
+    {% include 'bs3/clients/tabs.html' %}
+    <br>
+
+    <div class="container">
+        {% include 'bs3/clients/broadcrumbs_client.html' %}
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>
+                    <div class="color-marker color-client"></div>
+                    #{{ client.pk }} {{ client }}</h4>
+            </div>
+            <div class="col-md-4 text-right">
+                    <a class="btn btn-default" href="{% url 'clients' %}{{ client.pk }}/">Отмена</a>
+                    <button type="submit" form="client_form" class="btn btn-primary">Сохранить</button>
+            </div>
+        </div>
+
+        <!-- Колонка с общими данными клиента -->
+        <div class="row">
+
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+
+                <form id="client_form" METHOD="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ client.pk }}">
+                    {% include 'bs3/clients/client_form.html' %}
+                </form>
+
+            </div>
+
+            <div class="col-md-4"></div>
+
+        </div>
+
+    </div>
+
+
+{% endblock %}

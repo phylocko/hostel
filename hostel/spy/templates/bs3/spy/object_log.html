@@ -1,0 +1,13 @@
+<table class="table">
+
+    {% include 'bs3/spy/spy_itemsTableHeader.html' %}
+
+    {% for spy in logs %}
+    {% include 'bs3/spy/spy_itemsTableRow.html' %}
+    {% empty %}
+    <tr>
+        <td colspan="6" class="text-center text-muted">Событий не обнаружено</td>
+    </tr>
+    {% endfor %}
+
+</table>

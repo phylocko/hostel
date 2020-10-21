@@ -1,0 +1,28 @@
+<table class="table">
+    <tr>
+        <th>Тип</th>
+        <td>{{ entry.type|default:'—' }}</td>
+    </tr>
+    <tr>
+        <th>Вендор</th>
+        <td>{{ entry.vendor|default:'—' }}</td>
+    </tr>
+    <tr>
+        <th>Модель</th>
+        <td>{{ entry.model|default:'—' }}</td>
+    </tr>
+    <tr>
+        <th>Высота (в юнитах)</th>
+        <td>{{ entry.unit_height|default:'—' }}</td>
+    </tr>
+    <tr>
+        <th>Серийник</th>
+        <td>{{ entry.serial|default:'—' }}</td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <label class="control-label">Комментарий</label><br>
+            {{ entry.comment|default:'—' }}
+        </td>
+    </tr>
+</table>

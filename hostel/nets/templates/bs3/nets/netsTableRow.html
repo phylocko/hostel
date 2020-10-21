@@ -1,0 +1,21 @@
+    <tr>
+
+    <td>
+        <a href="{% url 'nets' %}{{ net.pk }}">
+            {{ net.address }}{% if net.netmask < 32 %}/{{ net.netmask }}&nbsp;{% endif %}
+        </a>
+    </td>
+    <td>
+	{% if net.vlan %}
+	<a href="{% url 'vlans' %}{{ net.vlan.pk }}">{{ net.vlan }}</a>
+        {% endif %}
+    </td>
+    <td>
+        {% if net.device %}
+        <a href="{% url 'devices' %}{{ net.device.pk }}">{{ net.device }}</a>
+        {% endif %}
+    </td>
+    <td>{{ net.description }}</td>
+    <td class="text-muted">{{ net.comment }}</td>
+    <td class="text-danger">{{ net.ptr|default:"" }}</td>
+</tr>

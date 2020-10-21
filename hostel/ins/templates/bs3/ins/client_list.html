@@ -1,0 +1,65 @@
+<h3>Список клиентов</h3>
+
+{% if incident.clients.all %}
+    <div class="alert alert-warning" role="alert">
+        К данному INS привязаны клиенты, поэтому уведомление по услугам отключено.
+    </div>
+{% endif %}
+
+<div ng-app="AnalyzerApp">
+
+    <div id="client_list_block" ng-controller="APIController"
+         ng-init="get('{% url 'api' %}?page=ins&id={{ incident.pk }}&action=get_clients')">
+
+        <table id="client_table" class="table table-stripped">
+
+            <tr ng-repeat="client in clients">
+                {% verbatim %}
+                <td><b>{{ client.netname }}</b></td>
+                <td class="text-muted">
+                    <small>{{ client.email }}</small>
+                </td>
+                {% endverbatim %}
+                <td>
+                        <a title="Отцепить" href="
+                                {% url 'ins' %}{{ incident.pk }}/remove_client?client={% templatetag openvariable %} client.id {% templatetag closevariable %}">
+                            <span class="glyphicon glyphicon-trash text-danger" aria-hidden="true"></span>
+                        </a>
+                </td>
+            </tr>
+
+
+        </table>
+
+    </div>
+
+    {% if perms.ins.change_incident %}
+    <div id="client_selection_block" ng-controller="APIController">
+
+        <div class='form-group' id='filter'>
+            <label>Выбор клиентов | <a href="{% url 'choose_ins_clients' incident.pk %}">Выбрать через фильтр
+                параметров</a></label>
+            <input
+                    ng-change="get('{% url 'api' %}?page=clients&action=search&filter=' + filter)"
+                    ng-model-options='{ debounce: 400 }'
+                    data-toggle="tooltip" data-placement="bottom"
+                    type='text' class="form-control" ng-model="filter" placeholder="Filter">
+        </div>
+
+
+        <table id="client_table" class="table table-stripped">
+            <tr ng-repeat="client in clients">
+                <td><b>{% templatetag openvariable %} client.netname {% templatetag closevariable %}</b></td>
+                <td>{% templatetag openvariable %} client.clientname {% templatetag closevariable %}</td>
+                <td>{% templatetag openvariable %} client.email {% templatetag closevariable %}</td>
+                <td>
+                    <a href="#" ng-click="add_client(client.id, {{ incident.pk }})" title="Прицепить">
+                        <span class="glyphicon glyphicon-plus text-primary" aria-hidden="true"></span>
+                    </a>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    {% endif %}
+</div>

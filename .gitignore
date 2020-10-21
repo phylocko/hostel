@@ -1,0 +1,15 @@
+hostel/settings.py
+*.xml
+*.idea
+*.pyc
+*__pycache__*
+*.sql
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+*._*
+.Spotlight-V100
+.Trashes
+root_nets.txt
+media/user_photos/*

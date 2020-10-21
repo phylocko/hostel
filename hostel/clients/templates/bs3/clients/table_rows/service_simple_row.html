@@ -1,0 +1,52 @@
+{% load hostel_filters %}
+
+<tr>
+    <td style="min-width: 90px;">
+        <div class="color-marker color-service"></div>
+        <a href="{% url 'service' service.pk %}" class="{{ service|service_text_class }}"><b>{{ service }}</b></a>
+    </td>
+
+    <td>
+        {% if service.asn %}
+
+            <div class="color-marker color-asn"></div>
+            <b><a href="{% url 'autonomous_system' service.asn.pk %}">{{ service.asn }}</a></b>
+
+        {% else %}
+
+            {% if not service.description %}
+
+                {% if service.cities.all.count == 2 %}
+                    {{ service.cities.first }} — {{ service.cities.last }}
+                {% else %}
+                    {% for city in service.cities.all %}
+                        {{ city }}
+                    {% endfor %}
+                {% endif %}
+
+            {% endif %}
+
+        {% endif %}
+
+        <small class="text-muted">{{ service.description|default:""|truncatechars:60 }}</small>
+    </td>
+
+    <td>
+        {% for vlan in service.vlan.all %}
+            <a href="{% url 'vlans' %}{{ vlan.pk }}"><b>{{ vlan.vlannum }}</b></a></br>
+        {% endfor %}
+    </td>
+
+    <td>
+        {% for net in service.net.all %}
+            <div><a href="{% url 'nets' %}{{ net.pk }}">{{ net.network }}</a></div>
+        {% endfor %}
+    </td>
+
+    <td>
+        {% if service.application %}
+            <span class="glyphicon glyphicon-file text-success"></span>
+        {% endif %}
+    </td>
+
+</tr>

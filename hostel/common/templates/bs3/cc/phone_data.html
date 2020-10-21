@@ -1,0 +1,35 @@
+{% load hostel_filters %}
+<table class="table">
+    <tr>
+        <td colspan="2" class="text-center">
+            <h4>
+                <a href="tel:{{ phone.show_phone }}">{{ phone.show_phone|phone }}</a>
+            </h4>
+            <b>{{ phone.description|default:'' }}</b>
+        </td>
+    </tr>
+    <tr>
+        <td><label>Клиент</label></td>
+        <td>
+            {% if phone.client %}
+                <div class="color-marker color-client"></div>
+                <b><a href="{% url 'client' phone.client.pk %}">{{ phone.client }}</a></b>
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <th>Звонки</th>
+        <td>{{ phone.count }}</td>
+    </tr>
+
+    <tr>
+        <th>В блэклисте</th>
+        <td>{% if phone.blacklisted %}<span class="glyphicon glyphicon-ok"></span> {% endif %}</td>
+    </tr>
+
+    <tr>
+        <th>Спам</th>
+        <td>{% if phone.spam %}<span class="glyphicon glyphicon-ok"></span> {% endif %}</td>
+    </tr>
+</table>

@@ -1,0 +1,15 @@
+<ul class="nav nav-tabs">
+    <li role="presentation" class="{% if tab == "search" %}active{% endif %}"><a href="{% url 'vlans' %}search">Поиск</a></li>
+    <li role="presentation" class="{% if tab == "all" %}active{% endif %}"><a href="{% url 'vlans' %}?tab=all">Все вланы</a></li>
+    <li role="presentation" class="{% if tab == "recent" %}active{% endif %}"><a href="{% url 'vlans' %}?tab=recent">Недавние</a></li>
+    <li role="presentation" class="{% if tab == "unbinded" %}active{% endif %} hidden-xs"><a href="{% url 'vlans' %}?tab=unbinded">Не привязанные</a></li>
+    <li role="presentation" class="{% if tab == "gone" %}active{% endif %} hidden-xs"><a href="{% url 'vlans' %}?tab=gone">Дохляк</a></li>
+
+    {% if perms.vlans.add_vlan %}
+    <li role="presentation" class="{% if tab == "add" %}active{% endif %}">
+        <a href="{% url 'vlans' %}add">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </a>
+    </li>
+    {% endif %}
+</ul>

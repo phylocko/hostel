@@ -1,0 +1,23 @@
+<tr>
+    <td style="width: 60px;" class="hidden-xs hidden-sm text-muted">
+        {{ company.pk }}
+    </td>
+    <td style="width: 180px;">
+        <div class="color-marker color-company"></div>
+        <b><a href="{% url 'company' company.pk %}">{{ company.name|truncatechars:14 }}</a></b>
+    </td>
+    <td style="width: 150px;">
+        {% if company.client %}
+            <div class="color-marker color-client"></div>
+            <b>{{ company.client.netname|default:'' }}</b>
+        {% endif %}
+    </td>
+    <td>
+        {{ company.name }}
+
+        {% if company.city %}
+            <span class="text-muted">/ {{ company.city }}</span>
+        {% endif %}
+
+    </td>
+</tr>

@@ -1,0 +1,56 @@
+{% extends 'bs3/base.html' %}
+{% block title %}{{ asn }}{% endblock %}
+{% block content %}
+
+
+    <div class="container">
+
+        {% include 'bs3/common/broadcrumbs_as.html' %}
+
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>
+                    <div class="color-marker color-asn"></div>
+                    {{ asn }}
+                </h4>
+            </div>
+            <div class="col-md-4 text-right">
+                <a href="{% url 'autonomous_system' asn.pk %}" class="btn btn-default">Отмена</a>
+                <button class="btn btn-primary" type="submit" form="as_form">Сохранить</button>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+
+                <form method="post" id="as_form">
+                    {% csrf_token %}
+                    {% include 'bs3/common/autonomoussystems/as_form.html' %}
+                </form>
+
+            </div>
+
+            <div class="col-md-4"></div>
+
+        </div>
+
+
+        <div class="well well-sm text-right">
+            {% if perms.common.change_autonomoussystem %}
+                {% include 'bs3/common/autonomoussystems/move_as_button.html' %}
+            {% endif %}
+
+            {% if perms.common.delete_autonomoussystem %}
+                {% include 'bs3/common/autonomoussystems/delete_as_button.html' %}
+            {% endif %}
+        </div>
+
+    </div>
+
+    {% include 'bs3/spy/object_log.html' %}
+
+{% endblock %}

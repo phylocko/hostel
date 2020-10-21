@@ -1,0 +1,152 @@
+{% extends 'bs3/base.html' %}
+{% block title %}{{ incident.name }}{% endblock %}
+
+{% block content %}
+
+    {% include 'bs3/ins/ins_tabs.html' %}
+
+    <div class="container">
+
+        <br>
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>
+                    <div class="color-marker color-ins"></div>
+                    {{ incident }} — {{ incident.name }}
+                </h4>
+            </div>
+            <div class="col-md-4 text-right">
+                {% if perms.ins.change_incident %}
+                    <a class="btn btn-primary" href="{% url 'ins' %}{{ incident.pk }}/update/">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Редактировать
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-4">
+
+                {% include 'bs3/ins/warnings.html' %}
+
+                {% include 'bs3/ins/ins_data.html' %}
+
+                {% with incident as object %}
+                    {% include 'bs3/common/created_updated.html' %}
+                {% endwith %}
+
+            </div>
+
+
+            <div class="col-md-8">
+
+                {% include 'bs3/ins/tabs.html' %}
+
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane {% if tab == 'clients' %}active{% endif %}">
+
+                        <h3 class="text-right">
+                            <a class="btn btn-xs btn-primary"
+                               href="{% url 'choose_ins_clients' incident.pk %}">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </a>
+                        </h3>
+
+                        {% include 'bs3/ins/table_clients.html' %}
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane {% if tab == 'services' %}active{% endif %}">
+                        <form method="post">
+                            {% csrf_token %}
+                            <h3 class="text-right">
+                                <button class="btn btn-xs btn-success" name="action" value="get_services_from_leases">
+                                    <span class="glyphicon glyphicon-duplicate"></span>
+                                    Взять из лиз
+                                </button>
+                                <a class="btn btn-xs btn-primary"
+                                   href="{% url 'choose_ins_clients' incident.pk %}">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </a>
+                            </h3>
+                        </form>
+
+                        {% if incident.clients.all %}
+                            <div class="alert alert-info" role="alert">
+                                Оповещение по услугам выключено если привязаны клиенты
+                            </div>
+                        {% else %}
+                            {% include 'bs3/ins/table_services.html' %}
+                        {% endif %}
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane {% if tab == 'subservices' %}active{% endif %}">
+                        <form method="post">
+                            {% csrf_token %}
+                            <h3 class="text-right">
+                                <button class="btn btn-xs btn-success" name="action" value="get_subservices_from_leases">
+                                    <span class="glyphicon glyphicon-duplicate"></span>
+                                    Взять из лиз
+                                </button>
+                                <a class="btn btn-xs btn-primary"
+                                   href="{% url 'choose_ins_subservices' incident.pk %}">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </a>
+                            </h3>
+                        </form>
+
+                        {% if incident.clients.all %}
+                            <div class="alert alert-info" role="alert">
+                                Оповещение по подуслугам выключено если привязаны клиенты
+                            </div>
+                        {% else %}
+                            {% include 'bs3/ins/table_subservices.html' %}
+                        {% endif %}
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane {% if tab == 'leases' %}active{% endif %}">
+                        <h3 class="text-right">
+                            <a class="btn btn-primary btn-xs"
+                               href="{% url 'choose_ins_leases' incident.pk %}">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </a>
+                        </h3>
+                        {% include 'bs3/ins/table_leases.html' %}
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane {% if tab == 'messages' %}active{% endif %}">
+                        <h3>Оповещения</h3>
+                        {% include 'bs3/ins/notifications.html' %}
+
+                    </div>
+                </div>
+
+                <br>
+
+            </div>
+
+
+        </div>
+
+        <div class="well well-sm text-right">
+
+            {% if not incident.rt %}
+                {% include 'bs3/ins/disturb_provider.html' %}
+            {% endif %}
+
+            {% include 'bs3/ins/duplicate_ins.html' %}
+
+            {% if perms.ins.delete_incident %}
+                {% include 'bs3/ins/delete_button.html' %}
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <hr>
+
+    {% include 'bs3/spy/object_log.html' %}
+
+{% endblock %}

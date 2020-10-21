@@ -1,0 +1,19 @@
+<div class="panel panel-warning">
+
+    <div class="panel-heading"><h3 class="panel-title">Услуги на тесте</h3></div>
+
+    {% if tested_services %}
+
+    <table class="table">
+        {% for service in tested_services %}
+        {% include 'bs3/dashboard/panels/testing_service_row.html' %}
+        {% endfor %}
+    </table>
+
+    {% else %}
+        <div class="panel-body text-center">
+        <span class="text-muted">Никто не тестируется</span>
+        </div>
+    {% endif %}
+
+</div>

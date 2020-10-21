@@ -1,0 +1,18 @@
+<ol class="breadcrumb">
+    <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+    <li><a href="{% url 'devices' %}">Девайсы</a></li>
+
+    {% if device %}
+    <li class="active">{{ device.netname }}</li>
+    {% endif %}
+
+    {% if tab == 'add' %}
+    <li class="active">Создание девайса</li>
+    {% endif %}
+
+    {% if tab == 'search '%}
+    <li>Поиск</li>
+    <li>{{ search_text }}</li>
+    {% endif %}
+
+</ol>

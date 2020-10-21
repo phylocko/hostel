@@ -1,0 +1,48 @@
+<script src="/static/hostel/apps/choose/controller.js"></script>
+<link href="/static/css/choose.css" rel="stylesheet">
+
+<div ng-app="Choose">
+
+    <div ng-controller="APIController">
+
+        <div class="form-group">
+
+            <input class="form-control"
+                   ng-change="get('/api/?page=search&object=port&q=' + filter)"
+                   placeholder="Девайс, дескрипшн или имя"
+                   ng-model-options='{ debounce: 400 }'
+                   class="form-control"
+                   autocomplete="off"
+                   ng-model="filter"
+                   id="filter"
+                   type='text'>
+
+        </div>
+
+        {% verbatim %}
+
+        <ul class="list-group">
+
+            <li class="list-group-item heighted" ng-repeat="port in objects">
+
+                <b>
+                    <a  class="netname" href="#" ng-click="choose_object(port, port.fields.name)" title="Прицепить">{{ port.fields.name }}</a>
+                </b>
+                <span class="text-muted">{{ port.fields.description }}</span>
+
+
+
+                <a target="blank"
+                   title="Просмотреть порт (откроется в новом окне)"
+                   href="/ports/{{ port.pk }}">
+                    <span class="glyphicon glyphicon-new-window pull-right" aria-hidden="true"></span>
+                </a>
+
+            </li>
+
+        </ul>
+
+        {% endverbatim %}
+
+    </div>
+</div>

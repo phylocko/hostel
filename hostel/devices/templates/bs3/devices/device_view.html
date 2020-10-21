@@ -1,0 +1,130 @@
+{% extends 'bs3/base.html' %}
+{% block title %}{{ device }}{% endblock %}
+{% block content %}
+
+    {% include 'bs3/devices/devices_tabs.html' %}
+
+    {% if device.type == 'switch' and device.status == '+' %}
+        {% if not device.store_entry %}
+            <div class="container">
+                <br>
+                <div class="alert alert-danger" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    Внимание! BURST по услугам, поданным с этого устройства, не сможет быть посчитан, т.к. не указан
+                    складской юнит.
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+
+    <div class="container">
+    &nbsp;
+    {% include 'bs3/devices/broadcrumbs_devices.html' %}
+
+    <!-- Заголовок, кнопка редактирования -->
+    <div class="row" style="margin-bottom: 16px;">
+        <div class="col-md-8">
+            <h4>
+                <div class="color-marker color-device"></div>
+                {{ device.netname }}
+            </h4>
+        </div>
+
+        <div class="col-md-4 text-right">
+            {% if mode == 'edit' %}
+                <a class="btn btn-default" href="{% url 'devices' %}{{ device.pk }}/?tab={{ tab }}">Отмена</a>
+                <button type="submit" form="deviceData" class="btn btn-primary">Сохранить</button>
+
+            {% else %}
+                {% if perms.devices.change_device %}
+                    <a class="btn btn-primary" href="{% url 'devices' %}{{ device.pk }}/update/?tab={{ tab }}">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Редактировать</a>
+                {% endif %}
+
+            {% endif %}
+        </div>
+
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-4">
+            {% if mode == "edit" %}
+                <form id="deviceData" METHOD="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ device.pk }}">
+                    {% include 'bs3/devices/device_form.html' %}
+                </form>
+
+            {% else %}
+                {% include 'bs3/devices/device_data.html' %}
+
+            {% endif %}
+
+            {% with device as object %}
+                {% include 'bs3/common/created_updated.html' %}
+            {% endwith %}
+
+
+        </div>
+
+        <div class="col-md-8">
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+
+                <li role="presentation" {% if tab == 'bundles' %}class="active"{% endif %}>
+                    <a href="{% url 'device' device.pk %}?tab=bundles">Бандлы</a>
+                </li>
+
+                <li role="presentation" {% if tab == 'nets' %}class="active"{% endif %}>
+                    <a href="{% url 'device' device.pk %}?tab=nets">Сети</a>
+                </li>
+
+                <li role="presentation" {% if tab == 'bursts' %}class="active"{% endif %}>
+                    <a href="{% url 'device' device.pk %}?tab=bursts">Burst</a>
+                </li>
+
+            </ul>
+
+            <br>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+
+                <div class="tab-pane active">
+
+                    {% if tab == 'bundles' %}
+                        {% include 'bs3/devices/bundles_block.html' %}
+
+                    {% elif tab == 'nets' %}
+                        {% include 'bs3/devices/nets_block.html' %}
+
+                    {% elif tab == 'bursts' %}
+                        {% include 'bs3/devices/bursts_block.html' %}
+
+                    {% endif %}
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="row">
+
+        {% if perms.devices.delete_device %}
+            {% if mode == 'view' %}
+                {% include 'bs3/devices/delete_button.html' %}
+            {% endif %}
+        {% endif %}
+
+    </div>
+
+    {% include 'bs3/spy/object_log.html' %}
+
+{% endblock %}

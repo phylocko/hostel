@@ -1,0 +1,46 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Управление сотрудниками{% endblock %}
+{% block content %}
+
+    {% include 'bs3/users/tabs.html' %}
+
+    <div class="container text-center">
+        <br>
+        <form method="GET" class="form-inline">
+            <div class="form-group">
+                <input type="text" id="page_search" name="search"
+                       value="{{ search_string }}" class="form-control"
+                       placeholder="Поиск по сотрудникам">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary form-control">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                </button>
+            </div>
+        </form>
+        <script>
+            $('#page_search').focus();
+        </script>
+    </div>
+
+
+    {% if managers %}
+        <table class="table table-hover">
+            {% include 'bs3/users/users_table_header.html' %}
+            <tbody>
+            {% for manager in managers %}
+                {% include 'bs3/users/users_table_row.html' %}
+            {% endfor %}
+            </tbody>
+        </table>
+
+    {% else %}
+
+        <div class="container text-center">
+            <h3 class="text-center">Пусто</h3>
+        </div>
+
+    {% endif %}
+
+{% endblock %}
+

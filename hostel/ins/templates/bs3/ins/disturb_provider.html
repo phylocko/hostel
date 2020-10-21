@@ -1,0 +1,67 @@
+<a class="btn btn-primary" data-toggle="modal" data-target="#disturb_client">
+    <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+</a>
+
+<div class="modal fade text-left" id="disturb_client" tabindex="-1" role="dialog">
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Создать обращение к поставщику</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="alert alert-success" role="alert">
+                        <ol>
+                            <li>Будет создан тикет RT с указанной темой и адресатами</li>
+                            <li>В тикет будет добавлен ответ с заданным ниже текстом</li>
+                            <li>Тикет RT будет привязан к этому инциденту</li>
+                            <li>Номер INS-{{ incident.pk }} будет привязан к тикету RT</li>
+                            <li>Кнопка с конвертом пропадет из данного INS</li>
+                        </ol>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_subject">Тема сообщения</label>
+                        <input class="form-control" name="subject" id="id_subject" value="{{ incident.name }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_support_email">Email</label>
+                        <input class="form-control" name="email" id="id_support_email"
+                               value="{{ incident.provider.support_email|default:'' }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_message">Текст сообщения</label>
+                        <textarea class="form-control" name="message" id="id_message" rows="8">
+Добрый день.
+Фиксируем падение арендуемых услуг:
+{% for lease in incident.leases.all %}{% if lease.identity %}{{ lease.identity }}
+{% endif %}{% if lease.agreement %}{{ lease.agreement }}
+{% endif %}{% endfor %}{% if incident.fiber %}{{ incident.fiber|default:'' }}
+{% endif %}
+Время аварии: {{ incident.time_start|date:'Y-m-d H:i:s' }}
+
+Просим проверить вашу ЗО и сообщить причину.
+Заранее спасибо!
+
+{{ request.user.first_name }} {{ request.user.last_name }}</textarea>
+                        <div class="help-block">Если оставить поле пустым, будет создан тикет без сообщения.</div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary" name="action" value="disturb_provider">
+                        <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Написать поставщику
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

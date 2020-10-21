@@ -1,0 +1,90 @@
+{% extends 'bs3/base.html' %}
+{% block title %}{{ client.clientname }}{% endblock %}
+{% block content %}
+
+    {% include 'bs3/clients/tabs.html' %}
+    <br>
+    <div class="container">
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'clients' %}">Клиенты</a></li>
+            <li><a href="{% url 'client' client.pk %}">{{ client.netname }}</a></li>
+            <li class="active">Запрос на услугу</li>
+        </ol>
+
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>
+                    <div class="color-marker color-client"></div>
+                    #{{ client.pk }} {{ client.netname }}</h4>
+            </div>
+            <div class="col-md-4 text-right">
+                <a class="btn btn-default" href="{% url 'clients' %}{{ client.pk }}/">Отмена</a>
+            </div>
+        </div>
+
+        <!-- Колонка с общими данными клиента -->
+        <div class="row">
+
+            <div class="col-md-3">
+            </div>
+
+            <!-- Широкая колонка с услугами и графиками -->
+            <div class="col-md-6">
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+
+                    <li role="presentation" {% if tab == 'bgp' %}class="active"{% endif %}>
+                        <a href="{% url 'request_service' client.pk %}?tab=bgp">BGP</a>
+                    </li>
+
+                    <li role="presentation" {% if tab == 'l2' %}class="active"{% endif %}>
+                        <a href="{% url 'request_service' client.pk %}?tab=l2">L2-канал</a>
+                    </li>
+
+                </ul>
+
+                <br>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+
+                    <div class="tab-pane active">
+
+                        <form method="post" action="{% url 'request_service' client.pk %}?tab={{ tab }}">
+                        {% csrf_token %}
+
+                            {% if tab == 'bgp' %}
+                                {% include 'bs3/clients/request_service/bgp_form.html' %}
+
+                            {% elif tab == 'l2' %}
+                                {% include 'bs3/clients/request_service/l2_form.html' %}
+
+                            {% endif %}
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Создать запрос</button>
+                        </div>
+
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+        </div>
+
+
+    </div>
+
+    <br>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% load hostel_filters %}
+<tr {% if datacenter.device.count == 0 %}class="active text-muted" {% endif %}>
+    <td class="active">
+        <div class="color-marker color-datacenter"></div>
+        <a href="{% url 'datacenters' %}{{ datacenter.pk }}"><b>{{ datacenter.name|default:"" }}</b></a>
+    </td>
+    <td>
+        {% if datacenter.city %}
+            <a href="{% url 'city' datacenter.city.pk %}">{{ datacenter.city }}</a>
+        {% endif %}
+    </td>
+    <td class="hidden-sm hidden-xs">
+        {{ datacenter.address|default:"" }}
+    </td>
+    <td class="hidden-sm hidden-xs">
+        {% if datacenter.organization %}
+            <div class="color-marker color-client"></div>
+            <b>
+            <a href="{% url 'client' datacenter.organization.pk %}">
+                {{ datacenter.organization.netname }}
+            </a>
+            </b>
+        {% endif %}
+    </td>
+    <td class="text-right">
+        <b>{{ datacenter.device.count|default:'' }}</b>
+    </td>
+</tr>

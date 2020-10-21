@@ -1,0 +1,35 @@
+<tr>
+    <td style="min-width: 90px;">
+        <div class="color-marker color-service"></div>
+        <a href="{% url 'archived_service' service.pk %}"><b><s>{{ service }}</s></b></a>
+    </td>
+
+    <td>
+        {% if service.params_dict.asn %}
+
+            <div class="color-marker color-asn"></div>
+            <b>{{ service.params_dict.asn }}</b>
+
+        {% else %}
+
+            <small>{{ service.params_dict.description|truncatechars:50|default:'' }}</small>
+
+        {% endif %}
+
+        <small class="text-muted">{{ service.params_dicts.description|default:""|truncatechars:60 }}</small>
+
+    </td>
+
+    <td>
+        {% for vlan in service.params_dict.vlans %}
+            <b>{{ vlan }}</b></br>
+        {% endfor %}
+    </td>
+
+    <td>
+        {% for net in service.params_dict.nets %}
+            <div>{{ net }}</div>
+        {% endfor %}
+    </td>
+
+</tr>

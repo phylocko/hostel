@@ -1,0 +1,41 @@
+{% load hostel_filters %}
+
+<tr>
+    <td style="min-width: 90px;">
+        <span class="glyphicon glyphicon-triangle-right"></span>
+        <div class="color-marker color-subservice"></div>
+        <a href="{% url 'subservice' service.pk subservice.pk %}"><b>{{ subservice }}</b></a>
+    </td>
+
+    <td>
+        {% if not subservice.description %}
+
+            {% if subservice.cities.all.count == 2 %}
+                {{ subservice.cities.first }} — {{ subservice.cities.last }}
+            {% else %}
+                {% for city in subservice.cities.all %}
+                    {{ city }}
+                {% endfor %}
+            {% endif %}
+
+        {% endif %}
+
+        <small class="text-muted">{{ subservice.description|default:""|truncatechars:60 }}</small>
+    </td>
+
+    <td>
+        {% for vlan in subservice.vlans.all %}
+            <a href="{% url 'vlans' %}{{ vlan.pk }}"><b>{{ vlan.vlannum }}</b></a></br>
+        {% endfor %}
+    </td>
+
+    <td>
+        {% for net in subservice.nets.all %}
+            <div><a href="{% url 'nets' %}{{ net.pk }}">{{ net.network }}</a></div>
+        {% endfor %}
+    </td>
+
+    <td>
+    </td>
+
+</tr>

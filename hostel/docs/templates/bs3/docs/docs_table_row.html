@@ -1,0 +1,56 @@
+<tbody>
+<tr>
+    {% if agreement.partner_type == "client" %}
+        <td class="text-danger"><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span></td>
+    {% elif agreement.partner_type == "provider" %}
+        <td class="text-muted"><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span></td>
+    {% else %}
+        <td></td>
+    {% endif %}
+
+    <td class="active">
+        <div class="color-marker color-agreement"></div>
+        <b>{{ agreement.agreement_number|default:"<i>Не указан</i>" }}</b><br>
+        <div class="text-muted" style="padding-left: 18px;">
+            <small>
+                Создан {{ agreement.created|date:'Y-m-d H:i' }}<br>
+                {% if not agreement.created|date:'Y-m-d H:i' == agreement.updated|date:'Y-m-d H:i' %}
+                Обновлен {{ agreement.updated|date:'Y-m-d H:i' }}<br>
+                {% endif %}
+                {% if agreement.company.client.manager %}
+                    Менеджер: {{ agreement.company.client.manager.first_name }} {{ agreement.company.client.manager.last_name }}
+                {% endif %}
+            </small>
+        </div>
+    </td>
+    <td>
+        <a href="{% url 'companies' %}{{ agreement.company.pk }}">{{ agreement.company.name|truncatechars:50 }}</a><br>
+        {% if agreement.company.comment %}
+            <small class="text-muted">{{ agreement.company.comment }}</small>
+        {% endif %}
+    </td>
+    <td class="text-muted">
+        <ul class="list-unstyled">
+            <li>{% include 'bs3/docs/agreement_repr.html' %}</li>
+            <li>
+                <ul>
+                    {% for application in agreement.applications.all %}
+                        <li class="list-unstyled">
+                            {% include 'bs3/docs/application_repr.html' %}
+                        </li>
+                    {% endfor %}
+
+                    <li class="list-unstyled">
+                        <small>
+                            <span class="glyphicon glyphicon-plus text-success" aria-hidden="true"></span>
+                            <a class="text-success"
+                               href="{% url 'add_application' agreement.pk %}">
+                                Добавить приложение для этого договора</a>
+                        </small>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </td>
+</tr>
+</tbody>

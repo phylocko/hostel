@@ -1,0 +1,8 @@
+Настройки для интернета:
+
+Service ID:	{{ service }}
+Сеть:		{{ service.net.first.network }}
+vlan-id:	{{ service.vlan.first.vlannum }}
+
+Первый свободный адрес хоста в сети является шлюзом по-умолчанию.
+Остальные адреса — ваши.

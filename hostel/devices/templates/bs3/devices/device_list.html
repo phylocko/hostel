@@ -1,0 +1,30 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Девайсы{% endblock %}
+{% block content %}
+
+    {% include 'bs3/devices/devices_tabs.html' %}
+
+    <br>
+
+    {% include 'bs3/search_and_paginator.html' %}
+
+    <table class="table table-hover">
+
+        {% include 'bs3/devices/devicesTableHeader.html' %}
+
+        <tbody>
+
+        {% for device in listing %}
+            {% include 'bs3/devices/devicesTableRow.html' %}
+        {% empty %}
+            <td colspan="9" class="text-muted text-center">Пусто</td>
+        {% endfor %}
+
+
+        </tbody>
+
+    </table>
+
+
+{% endblock %}
+

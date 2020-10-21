@@ -1,0 +1,50 @@
+<a class="btn btn-danger" data-toggle="modal" data-target="#delete_service">
+    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+</a>
+
+<div class="modal fade text-left" id="delete_service" tabindex="-1" role="dialog">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Удалить подуслугу {{ subservice.name }}?</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" value="{{ service.pk }}">
+                    <p>Действие необратимо</p>
+
+                    {% if subservice.nets.all.count > 0 %}
+                        <h4>Сети</h4>
+                        <ul class="list-unstyled">
+                            {% for net in subservice.nets.all %}
+                                <li class="list-item">— {{ net }}</li>
+                            {% endfor %}
+                        </ul>
+                        <input type="checkbox" checked name="delete_nets" value="1" id="id_delete_nets">
+                        <label for="id_delete_nets">Удалить сети</label>
+                    {% endif %}
+
+
+                    {% if subservice.vlans.all.count > 0 %}
+                        <h4>Вланы</h4>
+                        <ul class="list-unstyled">
+                            {% for vlan in subservice.vlans.all %}
+                                <li class="list-item">— <b>{{ vlan.vlannum }}</b> {{ vlan.vname }}</li>
+                            {% endfor %}
+                        </ul>
+                        <input type="checkbox" checked name="delete_vlans" value="1" id="id_delete_vlans">
+                        <label for="id_delete_nets">Удалить вланы</label>
+                    {% endif %}
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Я еще подумаю...</button>
+                    <button type="submit" name="action" value="delete_subservice" class="btn btn-danger">Удалить</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

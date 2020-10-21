@@ -1,0 +1,52 @@
+<a class="btn btn-danger" data-toggle="modal" data-target="#delete_client">
+    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+</a>
+
+<div class="modal fade text-left" id="delete_client" tabindex="-1" role="dialog">
+    <form method="POST" action="{% url 'delete_client' %}">
+        {% csrf_token %}
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Удалить клиента {{ client }}?</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" placeholder="client id" value="{{ client.pk }}">
+
+                    <b>Также будут затронуты следующие сущности:</b>
+
+                    <table class="table table-condensed">
+
+                        <tr>
+                            <td><div class="color-marker color-service"></div> Услуги</td>
+                            <th>{{ client.services.all.count }}</th>
+                            <td class="danger">Будут удалены</td>
+                        </tr>
+
+                        <tr>
+                            <td><div class="color-marker color-asn"></div> Автономные системы</td>
+                            <th>{{ client.asns.all.count }}</th>
+                            <td class="danger">Будут удалены</td>
+                        </tr>
+
+                        <tr>
+                            <td><div class="color-marker color-lease"></div> Лизы</td>
+                            <th>{{ client.lease_set.all.count }}</th>
+                            <td class="success">Будут сохранены без указания клиента</td>
+                        </tr>
+
+                    </table>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Я еще подумаю...</button>
+                    <input type="submit" class="btn btn-danger" value="Удалить">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

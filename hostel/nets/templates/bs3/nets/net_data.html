@@ -1,0 +1,75 @@
+{% load hostel_filters %}
+
+<table class="table">
+
+    {% if net.service %}
+    <tr>
+        <th>Услуга</th>
+        <td>
+            <div class="color-marker color-service"></div>
+            <a href="{% url 'service' net.service.pk %}">
+            <b>{{ net.service }}</b>
+            </a>
+        </td>
+    </tr>
+    {% endif %}
+
+    <tr>
+        <th>Vlan</th>
+        <td>
+            {% if net.vlan %}
+            <div class="color-marker color-vlan"></div>
+            <a href="{% url 'vlans' %}{{ net.vlan.pk }}">{{ net.vlan|default:"" }}</a>
+            {% endif %}
+        </td>
+
+    </tr>
+    <tr>
+        <th>Девайс</th>
+        <td>
+            {% if net.device %}
+            <div class="color-marker color-device"></div>
+            <a href="{% url 'devices' %}{{ net.device.pk }}">{{ net.device|default:"" }}</a>
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <th>Статус</th>
+        <td>{{ net.status|status }}</td>
+    </tr>
+
+    {% if net.netmask == 32 %}
+    <tr>
+        <th>MAC-адрес</th>
+        <td><label class="label label-default">{{ net.mac|default:''}}</label></td>
+    </tr>
+    {% endif %}
+
+
+    <tr>
+        <th>Город</th>
+        <td><a href="{% url 'cities' %}{{ net.city.pk }}">{{ net.city|default:"" }}</td>
+    </tr>
+
+    <tr>
+        <th>RT#</th>
+        <td>{{ net.rt|ticket }}</td>
+    </tr>
+
+    <tr>
+        <th>PTR</th>
+        <td>{{ net.ptr|default:'' }}</td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+            <b>Описание</b><br>
+            <address>{{ net.description|default:"" }}</address>
+
+            <b>Комментарий</b>
+            <address>{{ net.comment|default:"" }}</address>
+        </td>
+    </tr>
+
+</table>

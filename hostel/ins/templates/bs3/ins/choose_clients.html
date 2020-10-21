@@ -1,0 +1,173 @@
+{% extends 'bs3/base.html' %}
+{% load hostel_filters %}
+{% block title %}Добавление клиентов в INS {{ incident.pk }}{% endblock %}
+{% block content %}
+
+    {% include 'bs3/ins/ins_tabs.html' %}
+
+    <div class="container">
+
+        <div class="page-header">
+            <h3>Выбрать клиентов для INS#{{ incident.pk }} [<a
+                    href="{% url 'incident' incident.pk %}">{{ incident.name }}</a>]</h3>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-4">
+
+                <div class="alert alert-info" role="alert">
+                    Фильтр не показывает транзитные услуги!
+                </div>
+
+                <form id="choose_clients_form" METHOD="POST">
+                    {% csrf_token %}
+
+                    <div class="form-group {% if filter_form.client.errors %}has-error{% endif %}">
+                        <label>Клиент</label>
+                        {{ filter_form.client.errors }}
+                        {{ filter_form.client }}
+                    </div>
+
+                    <div class="form-group {% if filter_form.city.errors %}has-error{% endif %}">
+                        <label>Города</label>
+                        {{ filter_form.city.errors }}
+                        {{ filter_form.city }}
+                    </div>
+
+                    <div class="form-group {% if filter_form.service_name.errors %}has-error{% endif %}">
+                        <label>Название услуги</label>
+                        {{ filter_form.service_name.errors }}
+                        {{ filter_form.service_name }}
+                    </div>
+
+                    <div class="form-group {% if filter_form.device.errors %}has-error{% endif %}">
+                        <label>Девайсы</label>
+                        {{ filter_form.device.errors }}
+                        {{ filter_form.device }}
+                    </div>
+
+                    <div class="form-group {% if filter_form.device_negative.errors %}has-error{% endif %}">
+                        <label>Исключить девайсы</label>
+                        {{ filter_form.device_negative.errors }}
+                        {{ filter_form.device_negative }}
+                    </div>
+
+                    <div class="form-group {% if filter_form.keywords.errors %}has-error{% endif %}">
+                        <label>Ключевые слова</label>
+                        {{ filter_form.keywords.errors }}
+                        {{ filter_form.keywords }}
+                    </div>
+
+                    <div class="form-group {% if filter_form.from_leases.errors %}has-error{% endif %}">
+                        {{ filter_form.from_leases.errors }}
+                        {{ filter_form.from_leases }}
+                        <label for="id_from_leases">Взять из Lease</label>
+                    </div>
+
+                    <div class="form-group">
+                        <button class="btn btn-default form-control" type="submit"
+                                name="action" value="filter_services">Отфильтровать
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="col-md-8">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="well well-sm text-right">
+                        <button class="btn btn-primary" {% if not clients %}disabled{% endif %} type="submit"
+                                name="action"
+                                value="add_clients">
+                            Добавить {{ clients_count }} клиентов в INS {{ incident.pk }}
+                        </button>
+                    </div>
+
+                    <input type="hidden" name="incident" value="{{ incident.pk }}">
+
+                    <table class="table">
+                        {% for client in clients|dictsort:"netname" %}
+                            <tr>
+                                <td><label><input type="checkbox" name="client" value="{{ client.pk }}"
+                                                  checked> {{ client.netname }}</label></td>
+                                <td><a href="{% url 'clients' %}{{ client.pk }}">{{ client.clientname }}</a></td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+
+                <h3>Услуги</h3>
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <table class="table">
+                        <tr>
+                            <th style="min-width: 120px;"><input type="checkbox" id="select_all" checked> Услуга</th>
+                            <th style="min-width: 120px;">Клиент</th>
+                            <th style="min-width: 160px;">Влан</th>
+                            <th></th>
+                        </tr>
+                        {% for service in services %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" id="service_{{ service.pk }}"
+                                           name="service"
+                                           value="{{ service.pk }}" checked>
+                                    <label for="service_{{ service.pk }}" class="{{ service|service_text_class }}">{{ service }}</label>
+                                </td>
+                                <td>
+                                    <div class="color-marker color-client"></div>
+                                    <b>{{ service.client.netname }}</b>
+                                </td>
+                                <td>
+                                    {% for vlan in service.vlan.all %}
+                                        <a href="{% url 'vlan' vlan.pk %}" target="_blank">{{ vlan }}<br></a>
+                                    {% endfor %}
+
+                                </td>
+                                <td>
+                                        {{ service.description|default:""|truncatechars:80|linebreaksbr }}<br>
+                                    <small>
+                                        <span class="text-muted pull-right">{{ service.cities.all|join:', ' }}</span>
+                                    </small>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+
+                    <div class="well well-sm text-right">
+                        <button class="btn btn-primary" name="action" value="add_services">Добавить выбранные услуги
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        $('#id_city').select2();
+        $('#id_service_name').select2();
+        $('#id_device').select2();
+        $('#id_device_negative').select2();
+        $('#id_client').select2();
+
+        $('#select_all').change(function () {
+            var checkboxes = $(this).closest('form').find(':checkbox');
+            checkboxes.prop('checked', $(this).is(':checked'));
+        });
+    </script>
+
+{% endblock %}

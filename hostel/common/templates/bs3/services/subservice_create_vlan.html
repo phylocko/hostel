@@ -1,0 +1,51 @@
+{% extends 'bs3/base.html' %}
+{% block title %}*Создать vlan для {{ service }}{% endblock %}
+{% block content %}
+
+
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'client' service.client.pk %}">{{ service.client }}</a></li>
+            <li><a href="{% url 'service' service.pk %}">{{ service }}</a></li>
+            <li><a href="{% url 'subservice' service.pk subservice.pk %}">{{ subservice }}</a></li>
+            <li class="active">Создать влан для подуслуги</li>
+        </ol>
+
+
+        <button type="submit" form="vlan_form" class="btn btn-primary pull-right">Создать Vlan</button>
+
+
+        <div class="row">
+
+            <div class="col-md-4">
+                {% if free_vlans %}
+                    <h4>Свободные диапазоны</h4>
+                    <ul class="list-group">
+                        {% for vlan in free_vlans %}
+                            <li class="list-group-item">
+                                <a href="#" class="text-warning" onclick="$('#id_vlannum').val('{{ vlan.vlannum }}')">
+                                    {{ vlan.vlannum }} — {{ vlan.freeUpTo }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <div class="col-md-4">
+
+                <form id="vlan_form" METHOD="POST">
+                    {% csrf_token %}
+                    {% include 'bs3/vlans/vlan_form.html' %}
+                </form>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+{% endblock %}

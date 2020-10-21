@@ -1,0 +1,17 @@
+<tr>
+    <td class="color-td color-client"></td>
+
+    <td><b><a name="client_{{ client.pk }}" href="?page=client&action=view&id={{ client.clientid }}">{{ client.netname }}</a></b></td>
+
+    <td class="hidden-xs"><a name="client_{{ client.pk }}" href="?page=client&action=view&id={{ client.clientid }}">
+        {{ client.clientname|truncatewords:6 }}</a></td>
+    <td class="hidden-md hidden-sm hidden-xs">{{ client.email|urlize }}</td>
+    <td class="text-right">
+
+        <a title="Отцепить" href="../ins/?page=incident&id={{ incident.pk }}&action=remove_client&client={{ client.pk }}">
+        <span class="glyphicon glyphicon-trash text-danger" aria-hidden="true"></span>
+        </a>
+
+    </td>
+
+</tr>

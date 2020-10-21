@@ -1,0 +1,31 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Название</th>
+        <th>Клиент</th>
+        <th>Бандлы</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for burst in bursts %}
+
+        <tr>
+            <td class="text-muted">
+                <a href="{% url 'burst_set' burst.pk %}">{{ burst.name }}</a>
+            </td>
+            <td>
+                <div class="color-marker color-client"></div>
+                {{ burst.client }}
+            </td>
+            <td>
+                {% for bundle in burst.bundles.all %}
+                    <div class="color-marker color-bundle"></div>
+                    {{ bundle }}<br>
+                {% endfor %}
+            </td>
+        </tr>
+
+
+    {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,26 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Коллеги{% endblock %}
+{% block content %}
+
+<h3>&nbsp;Список сотрудников</h3>
+
+{% if managers %}
+<table class="table table-hover">
+    {% include 'bs3/staff/managers_table_header.html' %}
+    <tbody>
+    {% for manager in managers %}
+    {% include 'bs3/staff/managers_table_row.html' %}
+    {% endfor %}
+    </tbody>
+</table>
+
+{% else %}
+
+<div class="container text-center">
+    <h3 class="text-center">Пусто</h3>
+</div>
+
+{% endif %}
+
+{% endblock %}
+

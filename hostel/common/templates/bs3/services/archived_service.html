@@ -1,0 +1,162 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Услуга {{ service }}{% endblock %}
+{% block content %}
+    {% load hostel_filters %}
+
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="{% url 'clients' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'client' service.client.pk %}?tab=archive">{{ service.client }}</a></li>
+
+            <li class="active">{{ service }}</li>
+        </ol>
+
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>
+                    <div class="color-marker color-service"></div>
+                    <s class="text-muted">{{ service }}</s>
+                </h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+
+                <table class="table">
+                    <tr>
+                        <th>Тип</th>
+                        <th>{{ params.servicetype|upper }}</th>
+                    </tr>
+                    <tr>
+                        <th>Статус</th>
+                        <th>{{ params.status|upper }}</th>
+                    </tr>
+                    <tr>
+                        <td><b>Комм. статус</b><br>
+                            <small>На время удаления</small>
+                        </td>
+                        <th>{{ params.commercial_status|upper }}</th>
+                    </tr>
+                    <tr>
+                        <th>RT#</th>
+                        <td>{{ service.rt|ticket }}</td>
+                    </tr>
+                    <tr>
+                        <th>Города</th>
+                        <td>
+                            {% for city in params.cities %}
+                                <label class="label label-default">{{ city }}</label>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Старт услуги</th>
+                        <td>{{ params.start_time|default:'' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Окончание услуги</th>
+                        <td>{{ params.end_time|default:'' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Создана</th>
+                        <td>{{ params.created }}</td>
+                    </tr>
+                    <tr>
+                        <th>Обновлена</th>
+                        <td>{{ params.updated|default:'' }}</td>
+                    </tr>
+                </table>
+
+
+
+                {% with service as object %}
+                    {% include 'bs3/common/created_updated.html' %}
+                {% endwith %}
+            </div>
+
+            <div class="col-md-8">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Параметры услуги</h3>
+                    </div>
+                    <table class="table">
+                        <tr>
+                            <th>ASN</th>
+                            <td>
+                                {% if params.asn %}
+                                    <div class="color-marker color-asn"></div>{{ params.asn }}
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Описание</th>
+                            <td>{{ params.description|default:'—' }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Комментарий</th>
+                            <td>{{ params.comment|default:'—' }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Вланы</th>
+                            <td>
+                                {% for vlan in params.vlans %}
+                                    <div class="color-marker color-vlan"></div>{{ vlan }}<br>
+                                {% empty %}
+                                    —
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Бандлы</th>
+                            <td>
+                                {% for bundle_vlan in params.bundle_vlans %}
+                                    <div class="color-marker color-bundle"></div>{{ bundle_vlan }}<br>
+                                {% empty %}
+                                    —
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Сети</th>
+                            <td>
+                                {% for net in params.nets %}
+                                    <div class="color-marker color-net"></div>{{ net }}<br>
+                                {% empty %}
+                                    —
+                                {% endfor %}
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Лизы</th>
+                            <td>
+                                {% for lease in params.leases %}
+                                    <div class="color-marker color-lease"></div>{{ lease }}<br>
+                                {% empty %}
+                                    —
+                                {% endfor %}
+
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    {% include 'bs3/spy/object_log.html' %}
+
+{% endblock %}

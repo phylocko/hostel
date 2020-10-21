@@ -1,0 +1,52 @@
+{% extends 'bs3/base.html' %}
+{% block title %}*Создать железку на складе{% endblock %}
+{% block content %}
+
+{% include 'bs3/store/store_tabs.html' %}
+
+<div class="container">
+
+
+    <br>
+    <!-- Заголовок, кнопка редактирования -->
+    <div class="row" style="margin-bottom: 16px;">
+        <div class="col-md-8">
+	        <h4>
+                <div class="color-marker color-entry"></div>
+                Добавление новой единицы на склад
+            </h4>
+        </div>
+        <div class="col-md-4 text-right">
+            <button type="submit" form="entryData" class="btn btn-primary pull-right">Создать</button>
+        </div>
+    </div>
+
+
+
+    <!-- Колонка с общими данными клиента -->
+    <div class="row">
+
+
+        <div class="col-md-2">
+        </div>
+
+
+        <div class="col-md-8">
+
+
+            <!-- Данные клиента -->
+            <form id="entryData" METHOD="POST">
+                {% csrf_token %}
+                {% include 'bs3/store/entry_form.html' %}
+            </form>
+
+
+        </div>
+
+        <div class="col-md-2">
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

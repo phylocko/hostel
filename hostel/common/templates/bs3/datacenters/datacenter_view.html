@@ -1,0 +1,158 @@
+{% extends 'bs3/base.html' %}
+{% block title %}{{ datacenter }}{% endblock %}
+{% block content %}
+
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'datacenters' %}">Площадки</a></li>
+            <li class="active">{{ datacenter }}</li>
+        </ol>
+
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>
+                    <div class="color-marker color-datacenter"></div>
+                    {{ datacenter.name }}
+                </h4>
+            </div>
+            <div class="col-md-4 text-right">
+                {% if mode == 'edit' %}
+                    <a class="btn btn-default" href="{% url 'datacenter' datacenter.pk %}">Отмена</a>
+                    <button type="submit" form="datacenter_form" class="btn btn-primary">Сохранить</button>
+                {% else %}
+                    {% if perms.common.change_datacenter %}
+                        <a class="btn btn-primary" href="{% url 'update_datacenter' datacenter.pk %}">
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Редактировать
+                        </a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-4">
+
+                {% if mode == "edit" %}
+                    <form method="POST" id="datacenter_form">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{ datacenter.pk }}">
+                        {% include 'bs3/datacenters/datacenter_form.html' %}
+                    </form>
+                {% else %}
+                    {% include 'bs3/datacenters/datacenter_data.html' %}
+                {% endif %}
+
+                {% with datacenter as object %}
+                    {% include 'bs3/common/created_updated.html' %}
+                {% endwith %}
+
+
+            </div>
+
+            <div class="col-md-8">
+
+                {% include 'bs3/datacenters/tabs.html' %}
+
+                <div class="tab-content">
+
+                    <br>
+
+                    {% if tab == 'devices' %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h1 class="panel-title">Девайсы на площадке</h1>
+                            </div>
+
+                            <table class="table">
+                                <tr>
+                                    <th>Netname</th>
+                                    <th>Модель</th>
+                                    <th>Расположение</th>
+                                </tr>
+                                {% for device in devices %}
+
+                                    <tr>
+                                        <td>
+                                            <div class="color-marker color-device"></div>
+                                            <b><a href="{% url 'devices' %}{{ device.pk }}">{{ device.netname }}</a></b>
+                                        </td>
+
+                                        <td class="hidden-md hidden-sm hidden-xs">
+                                            {% if device.store_entry %}
+                                                <a href="{% url 'store' %}{{ device.store_entry.pk }}">
+                                                    {{ device.store_entry.vendor|title }}
+                                                    {{ device.store_entry.model|default:"" }}
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-muted">{{ device.place|default:"" }}</td>
+
+                                    </tr>
+
+                                {% endfor %}
+                            </table>
+
+                        </div>
+                    {% endif %}
+
+                    {% if tab == 'racks' %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h1 class="panel-title">Стойки на площадке</h1>
+                            </div>
+
+                            <table class="table">
+                                <tr>
+                                    <th>Расположение</th>
+                                    <th class="text-center active">Высота</th>
+                                    <th class="text-center">Девайсов</th>
+                                </tr>
+
+                                {% for rack in racks %}
+                                    <tr>
+                                        <td><a href="{% url 'rack' rack.pk %}">{{ rack.location }}</a></td>
+                                        <td class="text-center active">{{ rack.height }}</td>
+                                        <td class="text-muted text-center">{{ rack.devices.count|default:0 }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="3" class="text-muted text-center">Пусто</td>
+                                    </tr>
+                                {% endfor %}
+
+                            </table>
+
+                        </div>
+                    {% endif %}
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% if mode == 'view' %}
+
+            <div class="panel panel-default">
+                <div class="panel-body text-right">
+
+                    {% include 'bs3/datacenters/disturb_datacenter_button.html' %}
+
+                    {% if perms.common.delete_datacenter %}
+                        {% include 'bs3/datacenters/delete_datacenter_button.html' %}
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+
+    </div>
+
+    {% include 'bs3/spy/object_log.html' %}
+
+{% endblock %}

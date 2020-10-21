@@ -1,0 +1,97 @@
+{% extends 'bs3/base.html' %}
+
+{% block content %}
+
+
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'clients' %}{{ service.client.pk }}">{{ service.client }}</a></li>
+            <li><a href="{% url 'service' service.pk %}">{{ service }}</a></li>
+            <li><a href="{% url 'subservice' service.pk subservice.pk %}?tab=leases">{{ subservice }}</a></li>
+            <li class="active">Выбор лизы для услуги</li>
+        </ol>
+    </div>
+
+
+    <div class="container text-center">
+        <form method="GET" class="form-inline">
+
+            <div class="form-group">
+                <input type="text"
+                       name="search"
+                       value="{{ search_string|default:'' }}"
+                       placeholder="Поиск"
+                       class="form-control"
+                       id="page_search"
+                       autocomplete="off">
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary form-control">
+                    <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
+                </button>
+            </div>
+        </form>
+        <script>
+            $('#page_search').focus();
+        </script>
+
+    </div>
+
+    <br>
+
+    <div class="container">
+
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Лиза</th>
+                <th>Описание</th>
+                <th>Услуги</th>
+                <th>Подуслуги</th>
+            </tr>
+            </thead>
+
+            {% for lease in leases %}
+
+                <tr>
+
+                    <td class="text-muted">{{ lease.pk }}</td>
+                    <td>
+                        <div class="color-marker color-lease"></div>
+                        <b><a href="{% url 'leases' %}{{ lease.pk }}">{{ lease }}</a></b><br>
+                    </td>
+
+                    <td>
+                        <small class="text-muted">{{ lease.identity|truncatechars:73 }}</small>
+                    </td>
+
+                    <td class="success text-center"><b>{{ lease.services.count|default:'' }}</b></td>
+                    <td class="text-center"><b>{{ lease.subservices.count|default:'' }}</b></td>
+
+                    <td class="text-right">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="lease_id" value="{{ lease.pk }}">
+                            <input type="submit" value="Привязать" class="btn btn-default btn-xs">
+                        </form>
+
+                    </td>
+
+                </tr>
+
+            {% empty %}
+                <tr>
+                    <td class="text-muted text-center">Лиз нет</td>
+                </tr>
+
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends 'bs3/base.html' %}{% block title %}{{ company.name }}{% endblock %}
+{% block content %}
+
+    {% include 'bs3/companies/company_tabs.html' %}
+    <br>
+
+    <div class="container-fluid">
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'companies' %}">Компании</a></li>
+            <li class="active">{{ company.name }}</li>
+        </ol>
+        <!-- Заголовок, кнопка редактирования -->
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>
+                    <div class="color-marker color-company"></div>
+                    {{ company.name }}
+                </h4>
+            </div>
+            <div class="col-md-4 text-right">
+                {% if perms.companies.change_company %}
+                    <a class="btn btn-primary" href="{% url 'update_company' company.pk %}">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Редактировать </a>
+                {% endif %}
+            </div>
+        </div>
+        <!-- Колонка с общими данными компании -->
+        <div class="row">
+            <div class="col-md-4">
+                {% include 'bs3/companies/company_data.html' %}
+
+                {% with company as object %}
+                    {% include 'bs3/common/created_updated.html' %}
+                {% endwith %}
+            </div>
+            <!-- Широкая колонка с договорами -->
+            <div class="col-md-8">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Договоры с {{ company.name }}</h3>
+                    </div>
+
+                    <table class="table">
+                        {% for agreement in company.agreements.all %}
+                            <tr>
+                                <td>
+                                    <div class="color-marker color-agreement"></div>
+                                    <a href="{% url 'agreement' agreement.pk %}">
+                                        <b>{{ agreement.agreement_number }} | {{ agreement.name }}</b>
+                                    </a>
+                                    <ul>
+                                        {% for application in agreement.docs.all %}
+                                            <li>{% include 'bs3/docs/application_repr.html' %}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                                <td class="text-muted text-right">{{ agreement.agreement_date|date:'Y-m-d' }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td class="text-muted text-center">
+                                    Пусто
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+
+                    <div class="panel-footer">
+                        <span class="glyphicon glyphicon-plus text-success"></span>
+                        <a href="{% url 'add_agreement' %}?company={{ company.pk }}">Загрузить договор</a>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                {% if mode == 'view' %}
+                    <div class="well well-sm text-right">
+                        {% if perms.companies.delete_company %}
+                            {% include 'bs3/companies/delete_button.html' %}
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+    {% include 'bs3/spy/object_log.html' %}
+
+{% endblock %}
