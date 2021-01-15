@@ -671,12 +671,20 @@ def view_user(request, user_id):
 
     if request.method == "POST":
         action = request.POST.get('action')
+        back = reverse('user', args=[shown_user.pk])
 
         if action == 'delete_user' and request.user.has_perm('common.delete_user'):
             Spy().deleted(instance=shown_user, request=request)
             shown_user.delete()
             messages.success(request, 'Пользователь удален')
             return redirect(reverse('users'))
+
+        elif action == 'set_password':
+            password = request.POST.get('password')
+            shown_user.set_password(password)
+            shown_user.save()
+            messages.success(request, 'Пароль установлен')
+            return redirect(back)
 
     logs = Spy.objects.filter(object_name='user', object_id=shown_user.pk).order_by('-time')
     context['logs'] = logs

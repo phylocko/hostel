@@ -45,19 +45,19 @@
             {% endfor %}<br>
             {{ form.first_name }}
         </div>
-        <div class="form-group {% if form.last_name.errors %}has-error{% endif %}">
-            <label class="control-label">Фамилия</label>
-            {% for error in form.last_name.errors %}
-                <span class="error">{{ error }}</span>
-            {% endfor %}<br>
-            {{ form.last_name }}
-        </div>
         <div class="form-group {% if form.mid_name.errors %}has-error{% endif %}">
             <label class="control-label">Отчество</label>
             {% for error in form.mid_name.errors %}
                 <span class="error">{{ error }}</span>
             {% endfor %}<br>
             {{ form.mid_name }}
+        </div>
+        <div class="form-group {% if form.last_name.errors %}has-error{% endif %}">
+            <label class="control-label">Фамилия</label>
+            {% for error in form.last_name.errors %}
+                <span class="error">{{ error }}</span>
+            {% endfor %}<br>
+            {{ form.last_name }}
         </div>
 
         <div class="form-group {% if form.position.errors %}has-error{% endif %}">
