@@ -512,7 +512,7 @@ def lease_choose_for_service(request):
 
 # == ==
 @login_required(login_url=LOGIN_URL)
-@permission_required('common.change_manager')
+@permission_required('common.change_user')
 def user_list_view(request):
     context = {'tab': 'all', 'app': 'managers'}
     managers = User.objects.all().order_by('username')
@@ -534,7 +534,7 @@ def employes_view(request):
 
 
 @login_required(login_url=LOGIN_URL)
-@permission_required('common.add_manager')
+@permission_required('common.add_user')
 def create_user(request):
     context = {}
 
@@ -561,7 +561,7 @@ def view_map(request):
 
 
 @login_required(login_url=LOGIN_URL)
-@permission_required('common.change_manager')
+@permission_required('common.change_user')
 def set_user_password(request):
     manager = get_object_or_404(User, pk=request.POST.get('id', None))
     password = request.POST.get('password')
