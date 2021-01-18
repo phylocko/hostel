@@ -31,7 +31,7 @@ class Client(models.Model):
     email = models.CharField(max_length=255, blank=True, null=True, validators=[validate_mail_list])
     support_email = models.CharField(max_length=255, blank=True, null=True, validators=[validate_mail_list])
     url = models.URLField(max_length=255, blank=True, null=True)
-    ticket = models.CharField(max_length=20, blank=False, null=True)
+    ticket = models.CharField(max_length=20, blank=True, null=True)
     is_consumer = models.BooleanField(default=True)
     is_provider = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
