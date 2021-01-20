@@ -41,12 +41,12 @@ def delete_net(request):
 @login_required(login_url=LOGIN_URL)
 @permission_required('nets.add_net')
 def add_net(request):
-    # initial data
+    context = {'app': 'nets', 'tab': 'add'}
+
     selected_address = request.GET.get("address", "")
     selected_netmask = request.GET.get("mask", "")
     selected_device = request.GET.get("device", "")
     selected_vlan = request.GET.get("vlan", "")
-    selected_allocated_for = request.GET.get("allocated_for", "internal")
     return_to = request.GET.get('return_to')
     return_net = request.GET.get('return_net')
 
@@ -56,8 +56,19 @@ def add_net(request):
         choice = (vlan.pk, "%s - %s" % (vlan.vlannum, vlan.vname))
         vlans_choices.append(choice)
 
-    if request.method == "POST":  # Пришли данные для рабты
+    initial = {
+        'address': selected_address,
+        'netmask': selected_netmask,
+        'vlan': selected_vlan,
+        'device': selected_device
+    }
+    form = NetForm(initial=initial)
+    context['form'] = form
+
+    if request.method == "POST":
         form = NetForm(request.POST)
+        context['form'] = form
+
         if form.is_valid():
             try:
                 form.save()
@@ -69,18 +80,6 @@ def add_net(request):
                 if return_to == 'net' and return_net:
                     return redirect(view_net, net_id=return_net)
                 return redirect(view_net, net_id=form.instance.pk)
-
-    else:
-
-        form = NetForm(initial={'allocated_for': selected_allocated_for,
-                                'address': selected_address,
-                                'netmask': selected_netmask,
-                                'vlan': selected_vlan,
-                                'device': selected_device})
-
-    context = {'form': form,
-               'app': 'nets',
-               'tab': 'add'}
 
     return render(request, 'bs3/nets/add_net.html', context)
 

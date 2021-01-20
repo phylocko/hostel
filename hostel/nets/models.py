@@ -258,7 +258,7 @@ class Net(models.Model):
 
     comment = models.CharField(max_length=2048, blank=True, null=False)
     ptr = models.CharField(max_length=255, blank=True, null=True)
-    ticket = models.CharField(max_length=20, blank=False, null=True)
+    ticket = models.CharField(max_length=20, blank=True, null=True)
     protected = models.BooleanField(default=False)
     is_allocation = models.BooleanField(default=False)
     allocated_for = models.CharField(max_length=15,
