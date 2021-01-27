@@ -377,6 +377,12 @@ class UserForm(forms.ModelForm):
     )
     photo = forms.ImageField(required=False, widget=forms.FileInput(attrs=ATTRS))
 
+    groups = forms.ModelMultipleChoiceField(
+        required=False,
+        queryset=Group.objects.all(),
+        widget=forms.SelectMultiple(attrs=ATTRS)
+    )
+
     class Meta:
         model = User
 
@@ -417,11 +423,6 @@ class UserForm(forms.ModelForm):
             'gender': forms.Select(attrs=attrs),
             'is_active': forms.CheckboxInput(),
         }
-
-    def disable(self):
-        for field in self.fields:
-            self.fields[field].widget.attrs['readonly'] = True
-            self.fields[field].widget.attrs['disabled'] = True
 
 
 class GroupForm(forms.ModelForm):

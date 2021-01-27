@@ -60,6 +60,17 @@
             {{ form.last_name }}
         </div>
 
+        <div class="form-group {% if form.groups.errors %}has-error{% endif %}">
+            <label class="control-label">Группы</label>
+            {% for error in form.groups.errors %}
+                <span class="error">{{ error }}</span>
+            {% endfor %}<br>
+            {{ form.groups }}
+        </div>
+        <script>
+            $("#id_groups").select2();
+        </script>
+
         <div class="form-group {% if form.position.errors %}has-error{% endif %}">
             <label class="control-label">Должность</label>
             {% for error in form.position.errors %}

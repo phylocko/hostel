@@ -659,7 +659,6 @@ def group_update(request, group_id):
 
 
 @login_required(login_url=LOGIN_URL)
-@permission_required('common.view_user')
 def view_user(request, user_id):
     context = {}
 
