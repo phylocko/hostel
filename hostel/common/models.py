@@ -708,7 +708,7 @@ class Autonomoussystem(models.Model):
 
     comment = models.TextField(max_length=2048, blank=True, null=True)
     asset6 = models.CharField(max_length=25, blank=True, null=True)
-    ticket = models.CharField(max_length=20, blank=False, null=True)
+    ticket = models.CharField(max_length=20, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -1368,6 +1368,18 @@ class Ourservice(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Photo(models.Model):
+    id = models.AutoField(primary_key=True)
+    src = models.ImageField(upload_to='photos')
+    name = models.CharField(max_length=20, blank=True, null=True, unique=True)
+    comment = models.CharField(max_length=255, blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        managed = True
+        db_table = 'photos'
 
 
 class ServiceSearch:

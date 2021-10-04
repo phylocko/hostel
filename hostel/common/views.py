@@ -881,7 +881,7 @@ def autonomoussystem_list(request):
 def autonomoussystem_create(request):
     context = {'app': 'autonomoussystems'}
     client = get_object_or_404(Client, pk=request.GET.get('client'))
-    form = ASForm(request.POST or None, initial={'engname': client.netname, 'rt': client.rt})
+    form = ASForm(request.POST or None, initial={'engname': client.netname})
     if form.is_valid():
         form.instance.client = client
         form.save()

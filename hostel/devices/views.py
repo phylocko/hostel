@@ -11,6 +11,7 @@ from hostel.spy.models import Spy
 from hostel.store.models import Entry
 from .forms import DeviceForm, CreateDeviceForm
 from .models import Device, DeviceSearch
+from hostel.common.forms import PhotoForm
 
 
 @login_required(login_url=LOGIN_URL)
@@ -35,6 +36,29 @@ def device_view(request, device_id):
         bundles = BundleSearch(queryset=bundles).local_search(search_string)
         context['search_string'] = search_string
     context['bundles'] = bundles
+
+    photo_form = PhotoForm()
+    context['photo_form'] = photo_form
+
+    if request.POST:
+        back = reverse('device', args=[device_id])
+        action = request.POST.get('action')
+
+        if action == 'upload_photo':
+            photo_form = PhotoForm(request.POST, request.FILES)
+            context['photo_form'] = photo_form
+            if photo_form.is_valid():
+                photo = photo_form.save()
+                device.photos.add(photo)
+                messages.success(request, 'Фото загружено')
+                return redirect(back + '?tab=photos')
+
+        elif action == "delete_photo":
+            photo_id = request.POST.get('photo_id')
+            photo = get_object_or_404(device.photos, pk=photo_id)
+            photo.delete()
+            messages.success(request, 'Фото удалено')
+            return redirect(back + '?tab=photos')
 
     return render(request, 'bs3/devices/device_view.html', context)
 

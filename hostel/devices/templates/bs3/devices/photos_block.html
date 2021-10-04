@@ -1,0 +1,70 @@
+<style>
+    .photo_frame {
+        width: 120px;
+        max-height: 120px;
+    }
+</style>
+
+<div class="well well-sm">
+
+    <form class="form-inline" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group {% if photo_form.src.errors %}has-error{% endif %}">
+            <label class="control-label">Фото</label>
+            {% for error in photo_form.src.errors %}
+                <span class="error">{{ error }}</span>
+            {% endfor %}<br>
+            {{ photo_form.src }}
+        </div>
+        <div class="form-group {% if photo_form.comment.errors %}has-error{% endif %}">
+            <label class="control-label">Комментарий</label>
+            {% for error in photo_form.comment.errors %}
+                <span class="error">{{ error }}</span>
+            {% endfor %}<br>
+            {{ photo_form.comment }}
+        </div>
+        <div class="form-group">
+            <label class="control-label">&nbsp;</label><br>
+            <button type="submit" name="action" value="upload_photo" class="btn btn-primary">Загрузить</button>
+        </div>
+    </form>
+</div>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Фото</th>
+        <th>Дата</th>
+        <th>Описание</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for photo in device.photos.all %}
+
+        <tr>
+            <td class="text-muted">
+                {% if photo.src %}
+                    <a href="{{ photo.src.url }}">
+                        <img src="{{ photo.src.url }}" alt="{{ photo.src }}" class="photo_frame">
+                    </a>
+                {% endif %}
+            </td>
+            <td>{{ photo.created|date:'Y-m-d H:m:s' }}</td>
+            <td>{{ photo.comment|default:''|truncatechars:40 }}</td>
+            <td class="text-right">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="photo_id" value="{{ photo.id }}">
+                    <button class="btn btn-xs btn-danger" name="action" value="delete_photo">Удалить</button>
+                </form>
+            </td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td colspan="100%" class="text-muted text-center">Пусто</td>
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+</table>

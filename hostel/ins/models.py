@@ -27,7 +27,7 @@ class Incident(models.Model):
     name = models.CharField(max_length=250, blank=False, null=False, default='')
     type = models.TextField(blank=False, null=False, choices=TYPES, default='other')
     closed = models.BooleanField(blank=False, default=False)
-    ticket = models.CharField(max_length=20, blank=False, null=True)
+    ticket = models.CharField(max_length=20, blank=True, null=True)
     time_start = models.DateTimeField(blank=False, null=False)
     time_end = models.DateTimeField(blank=False, null=False)
     outage_period = models.IntegerField(blank=True, null=True)  # overrides calculated value

@@ -60,6 +60,8 @@ class Device(models.Model):
 
     type = models.CharField(max_length=20, blank=False, null=True, choices=TYPES)  # deprecated
 
+    photos = models.ManyToManyField('common.Photo')
+
     status = models.CharField(max_length=20, blank=True, null=True, choices=STATUSES, default=STATUSES[0][0])
     comment = models.CharField(max_length=2048, blank=True, null=True)
     community = models.CharField(max_length=40, blank=True, null=True)

@@ -88,6 +88,10 @@
                     <a href="{% url 'device' device.pk %}?tab=bursts">Burst</a>
                 </li>
 
+                <li role="presentation" {% if tab == 'photos' %}class="active"{% endif %}>
+                    <a href="{% url 'device' device.pk %}?tab=photos">Фото</a>
+                </li>
+
             </ul>
 
             <br>
@@ -105,6 +109,9 @@
 
                     {% elif tab == 'bursts' %}
                         {% include 'bs3/devices/bursts_block.html' %}
+
+                    {% elif tab == 'photos' %}
+                        {% include 'bs3/devices/photos_block.html' %}
 
                     {% endif %}
                 </div>

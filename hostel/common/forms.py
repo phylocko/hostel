@@ -7,7 +7,7 @@ from hostel.service.variables import lease_types
 from datetime import datetime
 from .models import (Service, SubService, Autonomoussystem, User,
                      Datacenter, Lease, City, BurstSet, LeaseGroup,
-                     Ourservice, Phone, Rack)
+                     Ourservice, Phone, Rack, Photo)
 
 ATTRS = {'class': 'form-control'}
 
@@ -246,6 +246,7 @@ class ServiceTestEndForm(forms.Form):
 
 
 class ASForm(forms.ModelForm):
+
     class Meta:
         model = Autonomoussystem
 
@@ -260,11 +261,6 @@ class ASForm(forms.ModelForm):
             'ticket': forms.TextInput(attrs={'class': 'form-control'}),
             'comment': forms.Textarea(attrs={'class': 'form-control'}),
         }
-
-    def disable(self):
-        for field in self.fields:
-            self.fields[field].widget.attrs['readonly'] = True
-            self.fields[field].widget.attrs['disabled'] = True
 
 
 class LeaseForm(forms.ModelForm):
@@ -565,3 +561,12 @@ class UserProfileForm(forms.ModelForm):
             'theme': forms.Select(attrs=ATTRS),
             'pagination_count': forms.NumberInput(attrs=ATTRS),
         }
+
+
+class PhotoForm(forms.ModelForm):
+    src = forms.ImageField(required=True, widget=forms.FileInput(attrs=ATTRS))
+    comment = forms.CharField(required=False, widget=forms.TextInput(attrs=ATTRS))
+
+    class Meta:
+        model = Photo
+        fields = ['src', 'comment']
