@@ -246,7 +246,6 @@ class ServiceTestEndForm(forms.Form):
 
 
 class ASForm(forms.ModelForm):
-
     class Meta:
         model = Autonomoussystem
 
@@ -266,20 +265,29 @@ class ASForm(forms.ModelForm):
 class LeaseForm(forms.ModelForm):
     default_attrs = {'class': 'form-control'}
 
-    ticket = forms.IntegerField(required=False, widget=forms.NumberInput(attrs=default_attrs))
+    ticket = forms.IntegerField(
+        required=False,
+        widget=forms.TextInput(attrs=default_attrs))
 
-    type = forms.ChoiceField(required=False, choices=lease_types, widget=forms.Select(attrs=default_attrs))
+    type = forms.ChoiceField(
+        required=False,
+        choices=lease_types,
+        widget=forms.Select(attrs=default_attrs))
 
-    organization = forms.ModelChoiceField(required=True,
-                                          queryset=Client.objects.all().order_by('netname'),
-                                          widget=forms.Select(attrs=default_attrs))
-    group = forms.ModelChoiceField(required=False,
-                                   queryset=LeaseGroup.objects.all().order_by('description'),
-                                   widget=forms.Select(attrs=default_attrs))
+    organization = forms.ModelChoiceField(
+        required=True,
+        queryset=Client.objects.all().order_by('netname'),
+        widget=forms.Select(attrs=default_attrs))
 
-    cities = forms.ModelMultipleChoiceField(required=True,
-                                            queryset=City.objects.all().order_by('name'),
-                                            widget=forms.SelectMultiple(attrs=default_attrs))
+    group = forms.ModelChoiceField(
+        required=False,
+        queryset=LeaseGroup.objects.all().order_by('description'),
+        widget=forms.Select(attrs=default_attrs))
+
+    cities = forms.ModelMultipleChoiceField(
+        required=True,
+        queryset=City.objects.all().order_by('name'),
+        widget=forms.SelectMultiple(attrs=default_attrs))
 
     identity = forms.CharField(required=True, widget=forms.TextInput(attrs=default_attrs))
     addresses = forms.CharField(required=False, widget=forms.Textarea(attrs=default_attrs))

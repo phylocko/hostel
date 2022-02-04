@@ -1,9 +1,7 @@
 from .models import *
-from hostel.devices.models import Device
-from hostel.common.models import Service, City
+from hostel.common.models import Service, Lease
 from hostel.vlans.models import Vlan
 from django.shortcuts import get_object_or_404, render, redirect
-from django import forms
 from .forms import NetForm
 from hostel.common.views import service_view
 from django.contrib import messages
@@ -11,6 +9,7 @@ from hostel.spy.models import Spy
 import hostel.common.helper_functions as h
 from django.contrib.auth.decorators import login_required, permission_required
 from hostel.settings import LOGIN_URL
+from django.shortcuts import reverse
 
 
 @login_required(login_url=LOGIN_URL)
@@ -116,7 +115,7 @@ def create_for_service(request):
     service = get_object_or_404(Service, pk=request.GET.get('service_id'))
     context['service'] = service
 
-    initial = {'allocated_for': 'service', 'rt': service.rt or None, 'status': '+'}
+    initial = {'allocated_for': 'service', 'ticket': service.ticket or None, 'status': '+'}
 
     params = service.params()
     if params.get('min_mask') == 32:

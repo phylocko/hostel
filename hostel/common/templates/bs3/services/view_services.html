@@ -103,7 +103,7 @@
                     <td>
                         <div class="color-marker color-client"></div>
                         {{ service.client.netname }}</td>
-                    <td>{{ service.rt|ticket }}</td>
+                    <td>{{ service.ticket|ticket }}</td>
                     <td class="text-muted">
                         <small>{{ service.description|default:''|truncatechars:100 }}</small>
                     </td>

@@ -171,7 +171,7 @@
             </div>
         </div>
         <div class="well text-right">
-            {% if service.rt and not service.status == 'on' %}
+            {% if service.ticket and not service.status == 'on' %}
                 {% if service.name == 'inet2' or service.name == 'wix' %}
                     {% if service.client.enabled %}
                         {% include 'bs3/services/extend_test_period_button.html' %}

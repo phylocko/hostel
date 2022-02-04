@@ -7,7 +7,7 @@
         <a href="{% url 'client' service.client.pk %}">{{ service.client }}</a>
     </td>
     <td class="hidden-md hidden-sm hidden-xs">
-        {{ service.rt|ticket }}
+        {{ service.ticket|ticket }}
     </td>
     <td class="text-muted">{{ service.client.manager|default:'—' }}</td>
     <td class="text-right text-muted"><small>{{ service.end_time|date:'Y-m-d' }}</small></td>

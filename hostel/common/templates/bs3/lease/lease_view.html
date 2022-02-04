@@ -70,21 +70,28 @@
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs">
                     <li {% if tab == 'services' %}class="active"{% endif %}>
-                        <a href="{% url 'lease' lease.pk %}?tab=services">
+                        <a href="{% url 'lease_services' lease.pk %}">
                             <div class="color-marker color-service"></div>
                             Услуги <label class="badge badge-primary">{{ lease.services.count }}</label>
                         </a>
                     </li>
 
                     <li {% if tab == 'subservices' %}class="active"{% endif %}>
-                        <a href="{% url 'lease' lease.pk %}?tab=subservices">
+                        <a href="{% url 'lease_subservices' lease.pk %}">
                             <div class="color-marker color-service"></div>
                             Подуслуги <label class="badge badge-primary">{{ lease.subservices.count }}</label>
                         </a>
                     </li>
 
+                    <li {% if tab == 'vlans' %}class="active"{% endif %}>
+                        <a href="{% url 'lease_vlans' lease.pk %}">
+                            <div class="color-marker color-vlan"></div>
+                            VLANs <label class="badge badge-primary">{{ lease.vlans.count }}</label>
+                        </a>
+                    </li>
+
                     <li {% if tab == 'ins' %}class="active"{% endif %}>
-                        <a href="{% url 'lease' lease.pk %}?tab=ins">
+                        <a href="{% url 'lease_ins' lease.pk %}">
                             <div class="color-marker color-ins"></div>
                             INS <label class="badge badge-primary">{{ lease.incident_set.count }}</label>
                         </a>
@@ -143,6 +150,45 @@
                             </div>
 
                         </div>
+                    {% endif %}
+
+                    {% if tab == 'vlans' %}
+                        <div class="tab-pane active" id="vlans">
+                            {% with lease.vlans.all as vlans %}
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Вланы [{{ vlans.count }}]
+                                            <span id="vlans_table_trigger" class="pull-right">
+                                                    <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                                                </span>
+                                        </h3>
+                                    </div>
+
+                                    {% include 'bs3/services/vlans_table_inpanel.html' %}
+
+                                    {% if perms.common.change_service %}
+                                        <div class="panel-footer text-right">
+                                            <a class="btn btn-sm btn-default"
+                                               href="{% url 'vlans' %}create-for-lease/?lease={{ lease.pk }}&ticket={{ service.ticket }}&description={{ service.description }}">
+                                                Создать
+                                            </a>
+                                            <a class="btn btn-sm btn-default" href="{% url 'lease_choose_vlan' lease.pk %}">Выбрать</a>
+                                        </div>
+                                    {% endif %}
+
+                                </div>
+
+                                <script>
+                                    $('#vlans_table_trigger').click(function () {
+                                        $('#vlan_table').fadeToggle();
+                                    })
+                                </script>
+
+                            {% endwith %}
+
+                        </div>
+
                     {% endif %}
 
                     {% if tab == 'ins' %}

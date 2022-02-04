@@ -51,28 +51,33 @@
                 <ul class="nav nav-tabs" role="tablist">
 
                     <li role="presentation" {% if tab == 'services' %}class="active"{% endif %}>
-                        <a href="{% url 'vlan' vlan.pk %}?tab=services">
+                        <a href="{% url 'vlan_services' vlan.pk %}">
                             <div class="color-marker color-service"></div>
                             Услуги
                         </a>
                     </li>
 
                     <li role="presentation" {% if tab == 'nets' %}class="active"{% endif %}>
-                        <a href="{% url 'vlan' vlan.pk %}?tab=nets">
+                        <a href="{% url 'vlan_nets' vlan.pk %}">
                             <div class="color-marker color-net"></div>
                             Сети
                         </a>
                     </li>
 
+                    <li role="presentation" {% if tab == 'leases' %}class="active"{% endif %}>
+                        <a href="{% url 'vlan_leases' vlan.pk %}">
+                            <div class="color-marker color-lease"></div> Лизы
+                        </a>
+                    </li>
+
                     <li role="presentation" {% if tab == 'bundles' %}class="active"{% endif %}>
-                        <a href="{% url 'vlan' vlan.pk %}?tab=bundles">
-                            <div class="color-marker color-bundle"></div>
-                            Бандлы
+                        <a href="{% url 'vlan_bundles' vlan.pk %}">
+                            <div class="color-marker color-bundle"></div> Бандлы
                         </a>
                     </li>
 
                     <li role="presentation" {% if tab == 'map' %}class="active"{% endif %}>
-                        <a href="{% url 'vlan' vlan.pk %}?tab=map">Схема</a>
+                        <a href="{% url 'vlan_map' vlan.pk %}"><span class="glyphicon glyphicon-map-marker"></span> Схема</a>
                     </li>
 
                 </ul>
@@ -168,6 +173,42 @@
                             </table>
 
                         </div>
+                    {% endif %}
+
+                    {% if tab == 'leases' %}
+                        <div class="tab-pane active" id="vlans">
+                            {% with vlan.leases.all as leases %}
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Лизы [{{ leases.count }}]
+                                            <span id="leases_table_trigger" class="pull-right">
+                                                    <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                                                </span>
+                                        </h3>
+                                    </div>
+
+                                    {% include 'bs3/services/leases_table_inpanel.html' %}
+
+                                    {% if perms.common.change_service %}
+                                        <div class="panel-footer text-right">
+                                            <a class="btn btn-sm btn-default" href="{% url 'vlan_create_lease' vlan.pk %}">Создать</a>
+                                            <a class="btn btn-sm btn-default" href="{% url 'vlan_choose_lease' vlan.pk %}">Выбрать</a>
+                                        </div>
+                                    {% endif %}
+
+                                </div>
+
+                                <script>
+                                    $('#vlans_table_trigger').click(function () {
+                                        $('#vlan_table').fadeToggle();
+                                    })
+                                </script>
+
+                            {% endwith %}
+
+                        </div>
+
                     {% endif %}
 
                     {% if tab == 'bundles' %}

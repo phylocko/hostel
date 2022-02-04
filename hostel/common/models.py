@@ -132,8 +132,6 @@ class CitySearch(Search):
     queryset = City.objects.all().order_by('name')
     arguments = [
         'name__icontains',
-        'engname__icontains',
-        'community__icontains',
     ]
 
 
@@ -341,6 +339,7 @@ class Lease(models.Model):
     type = models.CharField(max_length=50, blank=False, null=False, choices=lease_types)
     organization = models.ForeignKey('clients.Client', blank=True, null=True, on_delete=models.SET_NULL)
     cities = models.ManyToManyField('common.City', related_name='leases')
+    vlans = models.ManyToManyField('vlans.Vlan', related_name='leases')
     group = models.ForeignKey('common.LeaseGroup', related_name='leases',
                               blank=True, null=True, on_delete=models.PROTECT)
     application = models.ForeignKey('docs.Application', related_name='leases', on_delete=models.SET_NULL, null=True)
@@ -1058,7 +1057,7 @@ class ArchivedService(models.Model):
 
         if service:
             self.pk = service.pk
-            self.rt = service.rt
+            self.ticket = service.ticket
             self.name = service.name
             self.client = service.client
             self.created = datetime.datetime.now()

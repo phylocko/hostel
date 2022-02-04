@@ -1,0 +1,44 @@
+{% extends 'bs3/base.html' %}
+
+{% block content %}
+
+
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+            <li><a href="{% url 'vlans' %}">Вланы</a></li>
+            <li><a href="{% url 'vlan_leases' vlan.pk %}">{{ vlan }}</a></li>
+            <li class="active">Создать лизу</li>
+        </ol>
+    </div>
+
+    <div class="container">
+
+        <br>
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>
+                    <div class="color-marker color-lease"></div> Создание лизы
+                </h4>
+            </div>
+            <div class="col-md-4 text-right">
+                <button type="submit" form="lease_form" name="action" value="create_lease" class="btn btn-primary">Создать</button>
+                <a href="{% url 'vlan_leases' vlan.pk %}" class="btn btn-default">Отмена</a>
+            </div>
+
+
+        </div>
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <form id="lease_form" method="post">
+                    {% csrf_token %}
+                    {% include 'bs3/lease/lease_form.html' %}
+                </form>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>
+
+{% endblock %}

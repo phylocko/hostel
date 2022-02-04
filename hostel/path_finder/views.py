@@ -139,7 +139,7 @@ def select_path(request):
             service.client = client
             service.status = 'on'
             service.name = 'l2'
-            service.rt = service_form.cleaned_data['rt']
+            service.ticket = service_form.cleaned_data['ticket']
             service.comment = service_form.cleaned_data['comment']
             service.servicetype = service_form.cleaned_data['service_type']
             service.description = service_form.cleaned_data['description']

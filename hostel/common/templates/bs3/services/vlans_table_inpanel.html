@@ -8,7 +8,7 @@
             </td>
             <td><a href="{% url 'vlans' %}{{ vlan.pk }}"><b>{{ vlan.vname }}</b></a></td>
             <td class="text-muted">{{ vlan.comment|default:""|truncatechars:55 }}</td>
-            <td>{{ vlan.rt|ticket }}</td>
+            <td>{{ vlan.ticket|ticket }}</td>
             <td class="text-right">
                 {% if perms.common.change_service %}
                     <form method="POST">

@@ -205,71 +205,97 @@ def view_services(request):
 
 @login_required(login_url=LOGIN_URL)
 def lease_view(request, lease_id):
-    context = {'app': 'lease', 'mode': 'view'}
+    services_page = reverse('lease_services', args=[lease_id])
+    return redirect(services_page)
 
-    tab = request.GET.get('tab', 'services')
-    context['tab'] = tab
+@login_required(login_url=LOGIN_URL)
+def lease_services_view(request, lease_id):
+    context = {'app': 'lease', 'tab': 'services'}
+    lease = get_object_or_404(Lease, pk=lease_id)
+    context['lease'] = lease
+    logs = Spy.objects.filter(object_name='lease', object_id=lease.pk).order_by('-time')
+    context['logs'] = logs
+
+    services = lease.services.all().order_by('pk')
+    context['services'] = services
+
+    return render(request, 'bs3/lease/lease_view.html', context)
+
+
+@login_required(login_url=LOGIN_URL)
+def lease_subservices_view(request, lease_id):
+    context = {'app': 'lease', 'tab': 'subservices'}
 
     lease = get_object_or_404(Lease, pk=lease_id)
     context['lease'] = lease
     logs = Spy.objects.filter(object_name='lease', object_id=lease.pk).order_by('-time')
     context['logs'] = logs
 
-    if tab == 'ins':
-        incidents = lease.incident_set.all().order_by('-time_start')[0:100]
-        context['incidents'] = incidents
+    subservices = lease.subservices.all().order_by('pk')
+    context['subservices'] = subservices
 
-    if tab == 'services':
-        services = lease.services.all().order_by('pk')
-        context['services'] = services
+    return render(request, 'bs3/lease/lease_view.html', context)
 
-    if tab == 'subservices':
-        subservices = lease.subservices.all().order_by('pk')
-        context['subservices'] = subservices
 
-    action = request.POST.get('action')
-    if action == 'disturb_provider':
-        subject = request.POST.get('subject')
-        support_email = request.POST.get('support_email')
-        parent_id = request.POST.get('parent_rt')
-        message = request.POST.get('message', '')
-        message = message.strip()
+@login_required(login_url=LOGIN_URL)
+def lease_vlans_view(request, lease_id):
+    context = {'app': 'lease', 'tab': 'vlans'}
+    lease = get_object_or_404(Lease, pk=lease_id)
+    context['lease'] = lease
+    logs = Spy.objects.filter(object_name='lease', object_id=lease.pk).order_by('-time')
+    context['logs'] = logs
 
-        if not subject or not support_email or not messages:
-            messages.add_message(request, messages.ERROR, 'Не указаны данные')
-            return redirect(lease_view, lease_id=lease.pk)
+    if request.POST:
+        back = reverse('lease_vlans', args=[lease.pk])
+        action = request.POST.get('action')
 
-        try:
-            tracker = Rt()
-        except Rt.LoginError as e:
-            messages.add_message(request, messages.ERROR, e)
-            return redirect(lease_view, lease_id=lease.pk)
+        if action == 'release_vlan':
+            vlan_id = request.POST.get('vlan_id')
+            vlan = get_object_or_404(Vlan, pk=vlan_id)
+            lease.vlans.remove(vlan)
+            messages.add_message(request, messages.SUCCESS, 'Vlan отвязан от лизы')
+            return redirect(back)
 
-        ticket_id = tracker.create_ticket(Subject=subject, Requestors=support_email)
-        if request.user.profile.email:
-            tracker.edit_ticket(ticket_id, AdminCc=request.user.profile.email)
+    return render(request, 'bs3/lease/lease_view.html', context)
 
-        if message:
-            tracker.reply(ticket_id, text=message)
 
-        if parent_id:
-            tracker.edit_link(ticket_id, 'MemberOf', parent_id)
+@login_required(login_url=LOGIN_URL)
+def lease_choose_vlan_view(request, lease_id):
+    context = {'app': 'lease'}
+    lease = get_object_or_404(Lease, pk=lease_id)
+    context['lease'] = lease
 
-        report_client = request.POST.get('report_client_check')
-        if report_client:
-            report_text = request.POST.get('report_text')
-            if report_text:
-                tracker.reply(parent_id, text=report_text)
+    vlans = Vlan.objects.exclude(vlanid__in=lease.vlans.all())
+    search_string = request.GET.get('search')
+    if search_string:
+        search = VlanSearch(queryset=vlans)
+        vlans = search.search(search_string)
+    context['vlans'] = vlans
 
-        messages.add_message(request, messages.SUCCESS, 'Тикет RT#%s успешно создан.' % ticket_id)
-        return redirect(lease_view, lease_id=lease.pk)
+    if request.POST:
+        lease_page = reverse('lease_vlans', args=[lease.pk])
+        action = request.POST.get('action')
+        if action == 'choose_vlan':
+            vlan_id = request.POST.get('object_id')
+            vlan = get_object_or_404(Vlan, pk=vlan_id)
+            lease.vlans.add(vlan)
+            messages.success(request, 'Влан привязан')
+            return redirect(lease_page)
 
-    if action == 'release_application':
-        lease.application = None
-        lease.save()
-        messages.add_message(request, messages.SUCCESS, 'Документ отвязан от лизы')
-        return redirect(reverse('lease', args=[lease.pk]))
+    return render(request, 'bs3/lease/choose_vlan.html', context)
 
+
+@login_required(login_url=LOGIN_URL)
+def lease_ins_view(request, lease_id):
+    context = {'app': 'lease', 'tab': 'ins'}
+
+    lease = get_object_or_404(Lease, pk=lease_id)
+    context['lease'] = lease
+    logs = Spy.objects.filter(object_name='lease', object_id=lease.pk).order_by('-time')
+    context['logs'] = logs
+
+    incidents = lease.incident_set.all().order_by('-time_start')[0:100]
+    context['incidents'] = incidents
     return render(request, 'bs3/lease/lease_view.html', context)
 
 
@@ -1081,9 +1107,9 @@ def service_view(request, service_id):
             report_text = 'Услуга %s переведена в коммерцию пользователем %s.\r\n' % (service, request.user.username)
             report_text += 'Закрываю.'
 
-            tracker.comment(service.rt, text=report_text)
+            tracker.comment(service.ticket, text=report_text)
             try:
-                tracker.edit_ticket(service.rt, Status='Resolved')
+                tracker.edit_ticket(service.ticket, Status='Resolved')
             except tracker.APISyntaxError:  # thrown when changing 'resolved' to 'resolved'
                 pass
             return redirect(service_view, service_id=service.pk)
@@ -1235,7 +1261,7 @@ def subservice_create_lease_view(request, service_id, subservice_id):
     subservice = get_object_or_404(service.subservices, pk=subservice_id)
     context['subservice'] = subservice
 
-    initial = {'rt': subservice.rt, 'cities': subservice.cities.all()}
+    initial = {'ticket': subservice.ticket, 'cities': subservice.cities.all()}
     form = LeaseForm(request.POST or None, initial=initial)
     if form.is_valid():
         lease = form.save()

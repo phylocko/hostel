@@ -3,25 +3,25 @@ import random
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import Count
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, reverse
 
-from hostel.common.models import Service, BundleVlan
+from hostel.common.models import Service, BundleVlan, Lease, LeaseSearch
 from hostel.common.views import service_view
+from hostel.common.forms import LeaseForm
 from hostel.settings import LOGIN_URL
 from hostel.spy.models import Spy
 from .forms import VlanForm
 from .models import Vlan, VlanSearch
 
 
-# == Vlan ==
 @login_required(login_url=LOGIN_URL)
 def vlan_view(request, vlan_id):
-    context = {'app': 'vlans'}
+    return redirect(reverse('vlan_nets', args=[vlan_id]))
 
-    tab = request.GET.get('tab', 'services')
-    if tab not in {'services', 'nets', 'bundles', 'map'}:
-        tab = 'services'
-    context['tab'] = tab
+
+@login_required(login_url=LOGIN_URL)
+def vlan_services_view(request, vlan_id):
+    context = {'app': 'vlans', 'tab': 'services'}
 
     vlan = get_object_or_404(Vlan, pk=vlan_id)
     context['vlan'] = vlan
@@ -29,8 +29,125 @@ def vlan_view(request, vlan_id):
     logs = Spy.objects.filter(object_name='vlan', object_id=vlan.pk).order_by('-time')
     context['logs'] = logs
 
+    return render(request, 'bs3/vlans/vlan_view.html', context)
+
+
+@login_required(login_url=LOGIN_URL)
+def vlan_nets_view(request, vlan_id):
+    context = {'app': 'vlans', 'tab': 'nets'}
+
+    vlan = get_object_or_404(Vlan, pk=vlan_id)
+    context['vlan'] = vlan
+
+    logs = Spy.objects.filter(object_name='vlan', object_id=vlan.pk).order_by('-time')
+    context['logs'] = logs
+
+    return render(request, 'bs3/vlans/vlan_view.html', context)
+
+
+@login_required(login_url=LOGIN_URL)
+def vlan_leases_view(request, vlan_id):
+    context = {'app': 'vlans', 'tab': 'leases'}
+
+    vlan = get_object_or_404(Vlan, pk=vlan_id)
+    context['vlan'] = vlan
+
+    logs = Spy.objects.filter(object_name='vlan', object_id=vlan.pk).order_by('-time')
+    context['logs'] = logs
+
+    if request.POST:
+        action = request.POST.get('action')
+        back = reverse('vlan_leases', args=[vlan.pk])
+
+        if action == 'release_lease':
+            lease_id = request.POST.get('lease_id')
+            lease = get_object_or_404(Lease, pk=lease_id)
+            vlan.leases.remove(lease)
+            messages.success(request, 'Лиза успешно отвязана')
+            return redirect(back)
+
+    return render(request, 'bs3/vlans/vlan_view.html', context)
+
+
+@login_required(login_url=LOGIN_URL)
+def vlan_choose_lease_view(request, vlan_id):
+    context = {'app': 'vlans'}
+
+    vlan = get_object_or_404(Vlan, pk=vlan_id)
+    context['vlan'] = vlan
+
+    leases = Lease.objects.exclude(id__in=vlan.leases.all())
+    search_string = request.GET.get('search')
+    if search_string:
+        lease_search = LeaseSearch(queryset=leases)
+        leases = lease_search.search(search_string)
+    context['leases'] = leases
+
+    if request.POST:
+        action = request.POST.get('action')
+        vlan_page = reverse('vlan_leases', args=[vlan.pk])
+
+        if action == 'choose_lease':
+            object_id = request.POST.get('object_id')
+            lease = get_object_or_404(Lease, pk=object_id)
+            vlan.leases.add(lease)
+            messages.success(request, 'Лиза успешно привязана')
+            return redirect(vlan_page)
+
+    return render(request, 'bs3/vlans/choose_lease.html', context)
+
+
+@login_required(login_url=LOGIN_URL)
+def vlan_create_lease_view(request, vlan_id):
+    context = {'app': 'vlans'}
+
+    vlan = get_object_or_404(Vlan, pk=vlan_id)
+    context['vlan'] = vlan
+
+    form = LeaseForm()
+    context['form'] = form
+
+    if request.POST:
+        action = request.POST.get('action')
+        vlan_page = reverse('vlan_leases', args=[vlan.pk])
+
+        if action == 'create_lease':
+            form = LeaseForm(request.POST)
+            context['form'] = form
+            if form.is_valid():
+                lease = form.save()
+                vlan.leases.add(lease)
+                messages.success(request, 'Лиза успешно создана')
+                return redirect(vlan_page)
+
+    return render(request, 'bs3/vlans/create_lease.html', context)
+
+
+@login_required(login_url=LOGIN_URL)
+def vlan_bundles_view(request, vlan_id):
+    context = {'app': 'vlans', 'tab': 'bundles'}
+
+    vlan = get_object_or_404(Vlan, pk=vlan_id)
+    context['vlan'] = vlan
+
     bundle_vlans = BundleVlan.objects.filter(vlan=vlan)
     context['bundle_vlans'] = bundle_vlans
+
+    logs = Spy.objects.filter(object_name='vlan', object_id=vlan.pk).order_by('-time')
+    context['logs'] = logs
+
+    return render(request, 'bs3/vlans/vlan_view.html', context)
+
+
+@login_required(login_url=LOGIN_URL)
+def vlan_map_view(request, vlan_id):
+    context = {'app': 'vlans', 'tab': 'map'}
+
+    vlan = get_object_or_404(Vlan, pk=vlan_id)
+    context['vlan'] = vlan
+
+    logs = Spy.objects.filter(object_name='vlan', object_id=vlan.pk).order_by('-time')
+    context['logs'] = logs
 
     return render(request, 'bs3/vlans/vlan_view.html', context)
 

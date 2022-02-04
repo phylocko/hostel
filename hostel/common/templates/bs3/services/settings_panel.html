@@ -12,7 +12,7 @@
 
         <div class="text-right">
 
-            {% if service.rt and settings %}
+            {% if service.ticket and settings %}
                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">
                     <span class="glyphicon glyphicon-envelope"></span> Выслать через RT
                 </button>
@@ -26,7 +26,7 @@
                                 <h4 class="modal-title" id="myModalLabel">Отправка настроек клиенту</h4>
                             </div>
                             <div class="modal-body">
-                                <label>Следующий текст будет добавлен ответом в тикет {{ service.rt|ticket }}:</label>
+                                <label>Следующий текст будет добавлен ответом в тикет {{ service.ticket|ticket }}:</label>
                                 <pre>{{ settings }}</pre>
                             </div>
                             <div class="modal-footer">

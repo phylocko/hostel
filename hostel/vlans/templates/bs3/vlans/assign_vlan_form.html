@@ -8,7 +8,7 @@ AnalyzerApp.controller('APIController', function APIController($scope, $http, $f
 	$scope.get = function ($url)
 	{
 
-		if($url == "")
+		if($url === "")
 		{
 			$url = "{% url 'api' %}?page=vlans&action=search";
 		}
