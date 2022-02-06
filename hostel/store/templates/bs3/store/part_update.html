@@ -1,5 +1,5 @@
 {% extends 'bs3/base.html' %}
-{% block title %}{{ entry }}{% endblock %}
+{% block title %}{{ part }}{% endblock %}
 {% block content %}
 
     {% include 'bs3/store/store_tabs.html' %}
@@ -12,13 +12,13 @@
         <div class="row" style="margin-bottom: 16px;">
             <div class="col-md-8">
                 <h4>
-                    <div class="color-marker color-entry"></div>
-                    {{ entry.type|title }} {{ entry.vendor|title }} {{ entry.model }}
+                    <div class="color-marker color-part"></div>
+                    {{ part.type|title }} {{ part.vendor|title }} {{ part.model }}
                 </h4>
             </div>
             <div class="col-md-4 text-right">
-                <a class="btn btn-default" href="{% url 'entry' entry.pk %}">Отмена</a>
-                <button type="submit" form="entryData" class="btn btn-danger">Сохранить</button>
+                <a class="btn btn-default" href="{% url 'part' part.pk %}">Отмена</a>
+                <button type="submit" form="partData" class="btn btn-danger">Сохранить</button>
             </div>
         </div>
 
@@ -29,10 +29,10 @@
 
             <div class="col-md-4">
 
-                <form id="entryData" METHOD="POST">
+                <form id="partData" METHOD="POST">
                     {% csrf_token %}
-                    <input type="hidden" name="id" value="{{ entry.pk }}">
-                    {% include 'bs3/store/entry_form.html' %}
+                    <input type="hidden" name="id" value="{{ part.pk }}">
+                    {% include 'bs3/store/part_form.html' %}
                 </form>
 
             </div>

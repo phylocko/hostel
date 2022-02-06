@@ -1,16 +1,16 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Entry, EntrySearch
-from .forms import EntryForm
+from .models import Entry, EntrySearch, Part, PartSearch
+from .forms import EntryForm, PartForm
 from django.contrib import messages
 from hostel.spy.models import Spy
 from django.contrib.auth.decorators import login_required, permission_required
 from hostel.settings import LOGIN_URL
+from django.shortcuts import reverse
 
 
-# == Entry ==
 @login_required(login_url=LOGIN_URL)
 def entry_view(request, entry_id):
-    context = {'app': 'entry'}
+    context = {'app': 'store'}
     entry = get_object_or_404(Entry, pk=entry_id)
     context['entry'] = entry
 
@@ -23,7 +23,7 @@ def entry_view(request, entry_id):
 @login_required(login_url=LOGIN_URL)
 @permission_required('store.change_entry')
 def entry_update(request, entry_id):
-    context = {'app': 'entry', 'mode': 'edit'}
+    context = {'app': 'store', 'mode': 'edit'}
     entry = get_object_or_404(Entry, pk=entry_id)
     if request.method == "POST":
         form = EntryForm(request.POST, instance=entry)
@@ -43,7 +43,7 @@ def entry_update(request, entry_id):
 @login_required(login_url=LOGIN_URL)
 @permission_required('store.add_entry')
 def entry_create(request):
-    context = {'app': 'entry', 'tab': 'add'}
+    context = {'app': 'store', 'tab': 'add_entry'}
     form = EntryForm(request.POST or None)
     if form.is_valid():
         form.save()
@@ -56,7 +56,7 @@ def entry_create(request):
 
 @login_required(login_url=LOGIN_URL)
 def entry_list(request):
-    context = {'tab': 'all'}
+    context = {'app': 'store', 'tab': 'entries'}
     entries = Entry.objects.all().order_by("type").order_by("vendor")
     entries = entries.prefetch_related('device')
 
@@ -70,10 +70,64 @@ def entry_list(request):
 
 
 @login_required(login_url=LOGIN_URL)
-@permission_required('store.delete_entry')
-def entry_delete(request):
-    entry = get_object_or_404(Entry, pk=request.POST.get('id'))
-    Spy().log(object=entry, form=None, user=request.user, action=Spy.DELETE)
-    entry.delete()
-    messages.add_message(request, messages.SUCCESS, 'Оборудование удалено со склада')
-    return redirect(entry_list)
+def part_list(request):
+    context = {'app': 'store', 'tab': 'parts'}
+    parts = Part.objects.all().order_by("type").order_by("vendor")
+    parts = parts.prefetch_related('entry', 'entry__device')
+
+    search_string = request.GET.get('search', None)
+    if search_string:
+        context['search_string'] = search_string
+        parts = PartSearch(queryset=parts).search(search_string)
+
+    context['parts'] = parts
+    return render(request, 'bs3/store/part_list.html', context)
+
+
+@login_required(login_url=LOGIN_URL)
+@permission_required('store.add_part')
+def part_create(request):
+    context = {'app': 'store', 'tab': 'add_part'}
+    form = PartForm(request.POST or None)
+    if form.is_valid():
+        part = form.save()
+        Spy().created(form.instance, form, request)
+        messages.add_message(request, messages.SUCCESS, "Запчасть добавлена на склад")
+        return redirect(reverse('part', args=[part.pk]))
+    context['form'] = form
+    return render(request, 'bs3/store/part_create.html', context)
+
+
+@login_required(login_url=LOGIN_URL)
+@permission_required('store.change_part')
+def part_update(request, part_id):
+    context = {'app': 'store', 'mode': 'edit'}
+    part = get_object_or_404(Part, pk=part_id)
+    context['part'] = part
+
+    form = PartForm(instance=part)
+    context['form'] = form
+
+    if request.method == "POST":
+        form = PartForm(request.POST, instance=part)
+        context['form'] = form
+        if form.is_valid():
+            old_object = Part.objects.get(pk=part.pk)
+            Spy().changed(part, old_object, form, request)
+            form.save()
+            messages.add_message(request, messages.SUCCESS, 'Данные запчасти обновлены')
+            return redirect(reverse('part', args=[part.pk]))
+
+    return render(request, 'bs3/store/part_update.html', context)
+
+
+@login_required(login_url=LOGIN_URL)
+def part_view(request, part_id):
+    context = {'app': 'store'}
+    part = get_object_or_404(Part, pk=part_id)
+    context['part'] = part
+
+    logs = Spy.objects.filter(object_name='part', object_id=part.pk).order_by('-time')
+    context['logs'] = logs
+
+    return render(request, 'bs3/store/part_view.html', context)

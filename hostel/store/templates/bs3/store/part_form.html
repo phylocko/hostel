@@ -1,0 +1,51 @@
+<div class="form-group {% if form.type.errors %}has-error{% endif %}">
+    <label class="control-label">Тип устройства</label><br>
+    {{ form.type }}
+    {% for error in form.type.errors %}
+        <p class="error">{{ error }}</p>
+    {% endfor %}
+</div>
+
+<div class="form-group {% if form.vendor.errors %}has-error{% endif %}">
+    <label class="control-label">Вендор</label><br>
+    {{ form.vendor }}
+    {% for error in form.vendor.errors %}
+        <p class="error">{{ error }}</p>
+    {% endfor %}
+</div>
+
+<div class="form-group {% if form.model.errors %}has-error{% endif %}">
+    <label class="control-label">Модель</label><br>
+    {{ form.model }}
+    {% for error in form.model.errors %}
+        <p class="error">{{ error }}</p>
+    {% endfor %}
+</div>
+
+<div class="form-group {% if form.entry.errors %}has-error{% endif %}">
+    <label class="control-label">Где используется</label><br>
+    {{ form.entry }}
+    {% for error in form.entry.errors %}
+        <p class="error">{{ error }}</p>
+    {% endfor %}
+</div>
+
+<div class="form-group {% if form.serial.errors %}has-error{% endif %}">
+    <label class="control-label">Серийник</label><br>
+    {{ form.serial }}
+    {% for error in form.serial.errors %}
+        <p class="error">{{ error }}</p>
+    {% endfor %}
+</div>
+
+<div class="form-group {% if form.comment.errors %}has-error{% endif %}">
+    <label class="control-label">Комментарий</label><br>
+    {{ form.comment }}
+    {% for error in form.comment.errors %}
+        <p class="error">{{ error }}</p>
+    {% endfor %}
+</div>
+
+<script>
+    $('#id_entry').select2();
+</script>

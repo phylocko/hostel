@@ -1,0 +1,59 @@
+{% extends 'bs3/base.html' %}
+{% block title %}{{ part }}{% endblock %}
+{% block content %}
+
+    {% include 'bs3/store/store_tabs.html' %}
+
+    <div class="container">
+
+        <br>
+
+        <div class="row" style="margin-bottom: 16px;">
+            <div class="col-md-8">
+                <h4>
+                    <div class="color-marker color-entry"></div> {{ part }}
+                </h4>
+            </div>
+            <div class="col-md-4 text-right">
+                {% if mode == 'edit' %}
+                    <a class="btn btn-default" href="{% url 'store' %}{{ part.pk }}">Отмена</a>
+                    <button type="submit" form="partData" class="btn btn-danger">Сохранить</button>
+
+                {% else %}
+                    {% if perms.store.change_part %}
+                        <a class="btn btn-primary" href="{% url 'part_update' part.pk %}">
+                            <span class="glyphicon glyphicon-edit"></span> Редактировать</a>
+                    {% endif %}
+
+                {% endif %}
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-4">
+
+                {% include 'bs3/store/part_data.html' %}
+
+                {% with part as object %}
+                    {% include 'bs3/common/created_updated.html' %}
+                {% endwith %}
+
+            </div>
+
+            <div class="col-md-8"></div>
+
+        </div>
+
+        {% if mode == 'view' %}
+            {% if perms.store.delete_part %}
+                {% include 'bs3/store/delete_button.html' %}
+            {% endif %}
+        {% endif %}
+
+    </div>
+
+    {% include 'bs3/spy/object_log.html' %}
+
+{% endblock %}

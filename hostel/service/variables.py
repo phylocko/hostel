@@ -57,21 +57,6 @@ DEVICE_TYPES = (
     ("other", "Непонятное"),
 )
 
-DEVICE_VENDORS = (
-    ("juniper", "Juniper Networks"),
-    ("extreme", "Extreme Networks"),
-    ("cisco", "Cisco Systems"),
-    ("edjecore", "Edgecore Networks"),
-    ("huawei", "Huawei"),
-    ("ubiquity", "Ubiquiti Networks"),
-    ("t8", "T8"),
-    ("dlink", "D-link"),
-    ("lofis", "Lofis"),
-    ("mikrotik", "Mikrotik"),
-    ("opticin", "Opticin"),
-    ("other", "Другое"),
-)
-
 lease_types = (
     ('dwdm', 'L1 Лямбда DWDM'),
     ("fiber", "L1 Волокно"),

@@ -1,0 +1,83 @@
+{% extends 'bs3/base.html' %}
+{% block title %}Склад{% endblock %}
+{% block content %}
+
+    <style>
+        pre {
+            padding-top: 2px !important;
+            padding-bottom: 2px !important;
+            border-radius: 0;
+            margin: 0;
+            background-color: #222222;
+            color: #cccccc;
+            border: none;
+        }
+    </style>
+
+    {% include 'bs3/store/store_tabs.html' %}
+
+    <div class="container text-center">
+        <br>
+        {% include 'bs3/page_search.html' %}
+    </div>
+
+    {% if parts %}
+
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th class="hidden-md hidden-sm hidden-xs">#</th>
+                <th>Модель</th>
+                <th class="hidden-md hidden-sm hidden-xs">Вендор</th>
+                <th class="hidden-md hidden-sm hidden-xs">Тип</th>
+                <th>Где используется</th>
+                <th>Девайс</th>
+                <th class="hidden-md hidden-sm hidden-xs">Серийник</th>
+                <th class="hidden-md hidden-sm hidden-xs">Комментарий</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            {% for part in parts %}
+                <tr>
+                    <td class="hidden-md hidden-sm hidden-xs text-muted">{{ part.pk }}</td>
+                    <td class="active">
+                        <div class="color-marker color-entry"></div>
+                        <b><a href="{% url 'part' part.pk %}">{{ part.model }}</a></b>
+                    </td>
+                    <td class="hidden-md hidden-sm hidden-xs"><b>{{ part.vendor|default:"" }}</b></td>
+                    <td class="hidden-md hidden-sm hidden-xs">{{ part.type|default:"" }}</td>
+                    <td>
+                        {% if part.entry %}
+                            <a href="{% url 'entry' part.entry_id %}">{{ part.entry }}</a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if part.entry.device %}
+                            <a href="{% url 'device' part.entry.device.pk %}">{{ part.entry.device }}</a>
+                        {% endif %}
+                    </td>
+                    <td class="hidden-md hidden-sm hidden-xs">
+                        <small>{{ part.serial|default:"" }}</small>
+                    </td>
+                    <td class="hidden-md hidden-sm hidden-xs text-muted">
+                        {{ part.comment|truncatechars:30|default:""|linebreaksbr }}
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    {% else %}
+
+        <div class="container text-center">
+            <h3 class="text-center">На складе [почему-то] нет запчастей</h3>
+        </div>
+
+    {% endif %}
+
+{% endblock %}
+

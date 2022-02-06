@@ -18,12 +18,12 @@
             </div>
             <div class="col-md-4 text-right">
                 {% if mode == 'edit' %}
-                    <a class="btn btn-default" href="{% url 'store' %}{{ entry.pk }}">Отмена</a>
+                    <a class="btn btn-default" href="{% url 'store_entries' %}{{ entry.pk }}">Отмена</a>
                     <button type="submit" form="entryData" class="btn btn-danger">Сохранить</button>
 
                 {% else %}
                     {% if perms.store.change_entry %}
-                        <a class="btn btn-primary" href="{% url 'store' %}{{ entry.pk }}/update/">
+                        <a class="btn btn-primary" href="{% url 'entry_update' entry.pk %}">
                             <span class="glyphicon glyphicon-edit"></span> Редактировать</a>
                     {% endif %}
 

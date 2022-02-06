@@ -1,11 +1,26 @@
 <ul class="nav nav-tabs">
-    <li role="presentation" {% if tab == "all" %}class="active"{% endif %}><a href="{% url 'store' %}">Склад</a></li>
+    <li role="presentation" {% if tab == "entries" %}class="active"{% endif %}>
+        <a href="{% url 'store_entries' %}">Склад девайсов</a>
+    </li>
 
     {% if perms.store.add_entry %}
-        <li role="presentation" {% if tab == "add" %}class="active"{% endif %}>
-            <a href="{% url 'store' %}add">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        <li role="presentation" {% if tab == "add_entry" %}class="active"{% endif %}>
+            <a href="{% url 'add_entry' %}">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Создать девайс
             </a>
         </li>
     {% endif %}
+
+    <li role="presentation" {% if tab == "parts" %}class="active"{% endif %}>
+        <a href="{% url 'store_parts' %}">Склад запчастей</a>
+    </li>
+
+    {% if perms.store.add_part %}
+        <li role="presentation" {% if tab == "add_part" %}class="active"{% endif %}>
+            <a href="{% url 'add_part' %}">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Создать запчасть
+            </a>
+        </li>
+    {% endif %}
+
 </ul>

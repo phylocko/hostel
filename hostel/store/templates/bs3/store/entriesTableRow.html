@@ -1,9 +1,9 @@
 <tr>
-    <td class="hidden-md hidden-sm hidden-xs text-muted">{{ entry.pk }}</a></b></td>
+    <td class="hidden-md hidden-sm hidden-xs text-muted">{{ entry.pk }}</td>
 
     <td class="active">
         <div class="color-marker color-entry"></div>
-        <b><a href="{% url 'store' %}{{ entry.pk }}">{{ entry.model }}</a></b>
+        <b><a href="{% url 'entry' entry.pk %}">{{ entry.model }}</a></b>
     </td>
     <th>{% if entry.unit_height %}{{ entry.unit_height }}U{% endif %}</th>
 

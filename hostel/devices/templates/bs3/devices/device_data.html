@@ -62,7 +62,9 @@
         <td>
             {% if device.store_entry %}
                 <div class="color-marker color-entry"></div>
-                <a href="{% url 'store' %}{{ device.store_entry.pk }}">{{ device.store_entry.model|default:"—" }}</a>
+                <a href="{% url 'entry' device.store_entry_id %}">
+                    {{ device.store_entry.model|default:"—" }}
+                </a>
             {% endif %}
         </td>
     </tr>

@@ -1,0 +1,35 @@
+<table class="table">
+    <tr>
+        <th>Где</th>
+        <td>
+            {% if part.entry %}
+                <a href="{% url 'entry' part.entry_id %}">{{ part.entry }}</a>
+            {% else %}
+                <b>Лежит отдельно</b>
+            {% endif %}
+
+        </td>
+    </tr>
+    <tr>
+        <th>Тип</th>
+        <td>{{ part.type|default:'—' }}</td>
+    </tr>
+    <tr>
+        <th>Вендор</th>
+        <td>{{ part.vendor|default:'—' }}</td>
+    </tr>
+    <tr>
+        <th>Модель</th>
+        <td>{{ part.model|default:'—' }}</td>
+    </tr>
+    <tr>
+        <th>Серийник</th>
+        <td>{{ part.serial|default:'—' }}</td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <label class="control-label">Комментарий</label><br>
+            {{ part.comment|default:'—' }}
+        </td>
+    </tr>
+</table>
