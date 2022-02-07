@@ -43,6 +43,12 @@
             {% endif %}
 
         </td>
+        <td class="text-muted">
+            {% for lease in vlan.leases.all %}
+                <div class="color-marker color-lease"></div>
+                <a href="{% url 'lease_vlans' lease.pk %}">{{ lease|truncatechars:70 }}</a><br>
+            {% endfor %}
+        </td>
         <td class="hidden-xs hidden-sm">
             {% if vlan.comment %}
                 <pre style="overflow: hidden; width: 100%;">{{ vlan.comment|truncatechars:80 }}</pre>
@@ -66,6 +72,7 @@
         <td class="warning hidden-xs hidden-sm"></td>
         <td class="warning hidden-xs hidden-sm"></td>
         <td class="warning"></td>
+        <td class="warning hidden-xs hidden-sm"></td>
         <td class="warning hidden-xs hidden-sm"></td>
         <td class="warning hidden-xs hidden-sm"></td>
     </tr>
