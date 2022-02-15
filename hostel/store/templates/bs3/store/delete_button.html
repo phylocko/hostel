@@ -5,7 +5,7 @@
         </div>
 
         <div class="modal fade" id="delete_device" tabindex="-1" role="dialog">
-        <form method="POST" action="{% url 'delete_entry' %}">
+        <form method="POST">
             {% csrf_token %}
 
             <div class="modal-dialog" role="document">
@@ -25,7 +25,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Я еще подумаю...</button>
-                        <input type="submit" class="btn btn-danger" value="Удалить">
+                        <button name="action" value="delete_entry" type="submit" class="btn btn-danger">Удалить</button>
                     </div>
                 </div>
             </div>

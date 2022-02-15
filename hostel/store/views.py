@@ -17,6 +17,14 @@ def entry_view(request, entry_id):
     logs = Spy.objects.filter(object_name='entry', object_id=entry.pk).order_by('-time')
     context['logs'] = logs
 
+    if request.POST:
+        action = request.POST.get('action')
+        back = reverse('store_entries')
+        if action == 'delete_entry':
+            entry.delete()
+            messages.success(request, 'Юнит удалён')
+            return redirect(back)
+
     return render(request, 'bs3/store/entry_view.html', context)
 
 

@@ -56,10 +56,8 @@
 
         </div>
 
-        {% if mode == 'view' %}
-            {% if perms.store.delete_entry %}
-                {% include 'bs3/store/delete_button.html' %}
-            {% endif %}
+        {% if perms.store.delete_entry %}
+            {% include 'bs3/store/delete_button.html' %}
         {% endif %}
 
     </div>
