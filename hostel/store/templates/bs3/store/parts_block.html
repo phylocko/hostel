@@ -1,0 +1,22 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Компонент</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for part in parts %}
+
+        <tr>
+
+            <td>
+                <div class="color-marker color-entry"></div>
+                <b><a href="{% url 'part' part.pk %}">{{ part }}</a></b>
+            </td>
+
+
+        </tr>
+
+    {% endfor %}
+    </tbody>
+</table>

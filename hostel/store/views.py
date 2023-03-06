@@ -14,6 +14,8 @@ def entry_view(request, entry_id):
     entry = get_object_or_404(Entry, pk=entry_id)
     context['entry'] = entry
 
+    context['tab'] = 'components'
+
     logs = Spy.objects.filter(object_name='entry', object_id=entry.pk).order_by('-time')
     context['logs'] = logs
 

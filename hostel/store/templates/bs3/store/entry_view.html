@@ -52,7 +52,35 @@
 
             </div>
 
-            <div class="col-md-8"></div>
+            <div class="col-md-8">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+
+                    <li role="presentation" {% if tab == 'components' %}class="active"{% endif %}>
+                        <a href="{% url 'entry' entry.pk %}?tab=components">Компоненты</a>
+                    </li>
+
+                </ul>
+
+                <br>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+
+                    <div class="tab-pane active">
+
+                        {% if tab == 'components' %}
+                            {% with parts=entry.part_set.all %}
+                            {% include 'bs3/store/parts_block.html' %}
+                            {% endwith %}
+
+                        {% endif %}
+                    </div>
+
+                </div>
+
+
+            </div>
 
         </div>
 
