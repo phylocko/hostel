@@ -813,7 +813,9 @@ def bundle_search(request):
     context = {'app': 'bundles', 'tab': 'search'}
     search_string = request.GET.get('search', None)
     context['search_string'] = search_string
-    bundles = BundleSearch().search(search_string)
+    bundles = []
+    if search_string:
+        bundles = BundleSearch().search(search_string)
     context['bundles'] = bundles
     return render(request, 'bs3/bundles/bundle_list.html', context)
 

@@ -1484,7 +1484,11 @@ class SubServiceSearch:
 
 
 class PortSearch(Search):
-    queryset = Port.objects.all().order_by('bundle__device__netname')
+
+    @property
+    def queryset(self):
+        return Port.objects.all().order_by('bundle__device__netname')
+
     arguments = [
         'name__icontains',
         'description__icontains',
@@ -1494,7 +1498,11 @@ class PortSearch(Search):
 
 
 class BundleSearch(Search):
-    queryset = Bundle.objects.all().order_by('device__netname', 'iface_index')
+
+    @property
+    def queryset(self):
+        return Bundle.objects.all().order_by('device__netname', 'iface_index')
+
     arguments = [
         'name__icontains',
         'description__icontains',
@@ -1510,7 +1518,11 @@ class BundleSearch(Search):
 
 
 class BurstSetSearch(Search):
-    queryset = BurstSet.objects.all().order_by('client__netname')
+
+    @property
+    def queryset(self):
+        return BurstSet.objects.all().order_by('client__netname')
+
     arguments = [
         'name__icontains',
         'client__netname__icontains',
@@ -1519,7 +1531,10 @@ class BurstSetSearch(Search):
 
 
 class AutonomousSystemSearch(Search):
-    queryset = Autonomoussystem.objects.all()
+
+    @property
+    def queryset(self):
+        return Autonomoussystem.objects.all()
 
     def search(self, search_string):
         search_string = search_string.strip()
