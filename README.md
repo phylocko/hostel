@@ -18,11 +18,20 @@ Made with Python and Django. MySQL as a DB
 These instructions will get you a copy of the project up and running 
 on your local machine for development and testing purposes.
 
+> Tested with **Python 3.10.11**
+
+### Install some system packages
+
+```
+apt install pkg-config virtualenv libmysqlclient-dev
+```
+
 ### Create a virtual env
 
 ```
+apt install virtualenv
 mkdir -p venv/hostel
-virtualenv --python=python3 venv/hostel
+virtualenv venv/hostel
 source venv/hostel/bin/activate
 ```
 
@@ -30,7 +39,7 @@ source venv/hostel/bin/activate
 
 ```
 mkdir hostel
-git clone <this repo URL> hostel
+git clone git@github.com:phylocko/hostel.git hostel
 ```
 
 ### Installing the requirements
@@ -48,7 +57,7 @@ vi hostel/settings.py
 
 ### Creating database and a DB user
 
-We assuming that you have MySQL already installed in your system. Don't use the password from the example.
+We're assuming that you have MySQL already installed in your system. Don't use the password from the example.
 ```
 $ mysql
 mysql> CREATE DATABASE hostel;
@@ -63,7 +72,8 @@ Open hostel/settings.py and make following steps:
 
 * Define SECRET_KEY. It is recommended to be >= 50 characters long.
 * Define DATABASE settings
-* Run command that creates DB tables
+* Run command the following command to create the DB tables
+
 ```
 $ python manage.py migrate
 ```
