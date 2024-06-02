@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class TemplaterConfig(AppConfig):
-    name = 'templater'
+    name = 'hostel.templater'
